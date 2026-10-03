@@ -20,6 +20,13 @@ class CapValue(BaseModel):
     c_use: float
     curve_source: CurveSource
     v_dc: float
+    curve_id: str | None = None
+
+
+class PhysicsFinding(BaseModel):
+    code: str
+    severity: Literal["fail", "warn"]
+    detail: str
 
 
 class PhysicsValues(BaseModel):
@@ -29,3 +36,5 @@ class PhysicsValues(BaseModel):
     conduction: Literal["ccm", "dcm", "not_a_switcher"] | None = None
     p_diss_w: float | None = None
     tj_estimate_c: float | None = None
+    heat_note: str | None = None
+    findings: list[PhysicsFinding] = Field(default_factory=list)

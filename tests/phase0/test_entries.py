@@ -16,7 +16,6 @@ from extrude.ir.models import CircuitIR
 from extrude.learn import propose_offline
 from extrude.memory import record
 from extrude.memory.models import AttributionEvent, PrimaryCause
-from extrude.physics import derive
 from extrude.physics.models import PhysicsValues
 from extrude.sim import run_allowed
 
@@ -37,7 +36,6 @@ def test_every_entry_says_not_built():
         (cover, (spec,)),
         (save, (design, Path("design.json"))),
         (load, (Path("design.json"),)),
-        (derive, (design, spec)),
         (run_allowed, ("",)),
         (emit_cir, (design, PhysicsValues())),
         (

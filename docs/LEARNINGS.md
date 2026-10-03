@@ -46,3 +46,9 @@ Things that showed up while building and were not in the phase plan. Append only
 - Phase: 2
 - What showed up that was not planned: A second pass found three misses. A capacitor on 3.3 V was treated as covering the 5 V pin, because the check walked through ground into the other rail. Two ideal sources on 5 V were ignored when their pins were not labeled plus. A tie that named GND only in the tie list, with every pin on VSS, did not count as ground. Those three are fixed.
 - Does a later phase change? no
+
+## 2026-10-03
+
+- Phase: 3
+- What showed up that was not planned: The retest did not find a wrong number. A negative bias uses the same curve as a positive one. A curve name that is not in the repo falls back to the generic screen and only warns. A buck is not given an LDO temperature, and equal input and output do not produce a ripple.
+- Does a later phase change? no

@@ -1,9 +1,86 @@
-"""Shared-numbers entry. The body stays refused until Phase 3."""
+"""Shared numbers. Ripple and a later deck must read c_use from this result."""
 
 from extrude.intake.models import FrozenSpec
 from extrude.ir.models import CircuitIR
-from extrude.physics.models import PhysicsValues
+from extrude.physics.derate import derate_capacitor, load_curves, minimum_capacitance
+from extrude.physics.models import PhysicsFinding, PhysicsValues
+from extrude.physics.ripple import buck_ripple
+
+_STILL_AIR = "estimate_still_air_datasheet"
+_AMBIENT_C = 25.0
 
 
 def derive(ir: CircuitIR, spec: FrozenSpec) -> PhysicsValues:
-    raise NotImplementedError("not built")
+    curves = load_curves()
+    caps = []
+    findings: list[PhysicsFinding] = []
+    for part in ir.parts:
+        if part.kind != "capacitor" or part.capacitance is None:
+            continue
+        bias = part.bias_v if part.bias_v is not None else _bias_from_spec(spec)
+        cap, notes = derate_capacitor(part, bias, curves)
+        caps.append(cap)
+        findings.extend(notes)
+    findings_or_none = minimum_capacitance(caps, spec.values_si.get("c_min"))
+    if findings_or_none is not None:
+        findings.append(findings_or_none)
+    inductance = _first(ir, "inductor", "inductance")
+    esr = sum(part.esr or 0.0 for part in ir.parts if part.kind == "capacitor")
+    c_use = sum(cap.c_use for cap in caps) if caps else None
+    ripple, mode = buck_ripple(
+        spec.values_si.get("vin"),
+        spec.values_si.get("vout"),
+        spec.values_si.get("i_load"),
+        ir.f_sw,
+        inductance,
+        c_use,
+        esr,
+    )
+    switching = ir.f_sw is not None or inductance is not None
+    if switching and mode == "dcm":
+        findings.append(
+            PhysicsFinding(
+                code="ripple_not_covered",
+                severity="warn",
+                detail="inductor current reaches zero, so continuous-conduction ripple is not used",
+            )
+        )
+    power, tj, note = _heat(ir, spec)
+    return PhysicsValues(
+        caps=caps,
+        vout_dc=spec.values_si.get("vout"),
+        ripple_pp=ripple if switching else None,
+        conduction=mode if switching else None,
+        p_diss_w=power,
+        tj_estimate_c=tj,
+        heat_note=note,
+        findings=findings,
+    )
+
+
+def _bias_from_spec(spec: FrozenSpec) -> float | None:
+    if "v_rail" in spec.values_si:
+        return spec.values_si["v_rail"]
+    return spec.values_si.get("vout")
+
+
+def _first(ir: CircuitIR, kind: str, field: str) -> float | None:
+    for part in ir.parts:
+        if part.kind == kind:
+            value = getattr(part, field)
+            if value is not None:
+                return value
+    return None
+
+
+def _heat(ir: CircuitIR, spec: FrozenSpec) -> tuple[float | None, float | None, str | None]:
+    if spec.task_class != "ldo":
+        return None, None, None
+    vin = spec.values_si.get("vin")
+    vout = spec.values_si.get("vout")
+    i_load = spec.values_si.get("i_load")
+    theta = _first(ir, "ic", "theta_ja")
+    if vin is None or vout is None or i_load is None or theta is None or vin <= vout:
+        return None, None, None
+    power = (vin - vout) * i_load
+    return power, _AMBIENT_C + power * theta, _STILL_AIR

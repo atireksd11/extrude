@@ -1,0 +1,15 @@
+{
+  "id": "strategy_holdup_22u_4v7",
+  "source": "vendor_table",
+  "manufacturer": "example",
+  "series": "holdup-demo",
+  "case": "0805",
+  "voltage_rating": 10,
+  "dielectric": "X7R",
+  "capacitance": 2.2e-5,
+  "points": [
+    {"v": 0, "ratio": 1},
+    {"v": 4.7, "ratio": 0.518181818182},
+    {"v": 10, "ratio": 0.2}
+  ]
+}
