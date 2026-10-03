@@ -37,3 +37,12 @@ class AttributionEvent(BaseModel):
     cause: PrimaryCause
     spec_hash: str
     detail: str
+    spec_confirmed: bool = True
+    identity: ElectricalIdentity | None = None
+    orderable: str | None = None
+    check_id: str = ""
+    checker_version: str = ""
+    v_fail: float | None = None
+    i_fail: float | None = None
+    measured: float = 0
+    limit: float = 0

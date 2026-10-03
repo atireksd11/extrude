@@ -70,3 +70,9 @@ Things that showed up while building and were not in the phase plan. Append only
 - Phase: 4
 - What showed up that was not planned: A negative capacitance was still sent to ngspice, and a part named Bank was written as a device that is not a capacitor. Zero or negative capacitance is now refused before a process starts. The device name is forced to start with C, and the original name stays in the comment.
 - Does a later phase change? no
+
+## 2026-10-03
+
+- Phase: 5
+- What showed up that was not planned: The follow-up pass did not find a miss filed in the wrong notebook. A 12 V block starts again at 10.8 V, which is 90 percent of the failed voltage, and not at 10.79 V. An over-current block does not fire from a voltage alone.
+- Does a later phase change? no

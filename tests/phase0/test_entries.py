@@ -13,8 +13,6 @@ from extrude.intake.models import FrozenSpec
 from extrude.ir import load, save
 from extrude.ir.models import CircuitIR
 from extrude.learn import propose_offline
-from extrude.memory import record
-from extrude.memory.models import AttributionEvent, PrimaryCause
 from extrude.physics.models import PhysicsValues
 ROOT = Path(__file__).resolve().parents[2]
 BAD_STRINGS = {"PASS", "passed", "design is good"}
@@ -33,10 +31,6 @@ def test_every_entry_says_not_built():
         (cover, (spec,)),
         (save, (design, Path("design.json"))),
         (load, (Path("design.json"),)),
-        (
-            record,
-            (AttributionEvent(cause=PrimaryCause.tooling, spec_hash="phase0", detail=""),),
-        ),
         (run, ("",)),
         (score, (RunResult(),)),
         (propose_offline, ()),
