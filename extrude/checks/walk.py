@@ -25,24 +25,23 @@ def inspect_design(ir: CircuitIR) -> PreflightReport:
     for pin in ir.pins:
         if pin.state == "nc":
             continue
-        if pin.state == "open" or not pin.net:
+        if pin.state == "open" or not (pin.net and pin.net.strip()):
             blocking.append(f"hanging_pin:{pin.refdes}.{pin.name}")
-
-    blocking.extend(_source_conflicts(ir, kind_of, canon))
-    blocking.extend(_driver_conflicts(ir, canon))
 
     graph, capacitors = _dc_graph(ir, kind_of, canon)
     grounds = _grounds(ir, canon)
+    blocking.extend(_source_conflicts(ir, kind_of, canon, grounds))
+    blocking.extend(_driver_conflicts(ir, canon))
     reachable = {ground: _reachable(graph, ground) for ground in grounds}
     ground_reach = set().union(*reachable.values()) if reachable else set()
 
     for pin in ir.pins:
-        if pin.role != "power" or pin.state != "connected" or not pin.net:
+        if pin.role != "power" or pin.state != "connected" or not (pin.net and pin.net.strip()):
             continue
         node = canon(pin.net)
         if node not in ground_reach:
             blocking.append(f"power_pin_no_dc_path:{pin.refdes}.{pin.name}")
-        caps_on_rail = _capacitors_on(node, graph, capacitors)
+        caps_on_rail = _capacitors_on(node, graph, capacitors, grounds)
         if not caps_on_rail:
             blocking.append(f"power_rail_has_no_capacitor:{pin.refdes}.{pin.name}")
         elif not any(side == node for _part, side, _other in caps_on_rail):
@@ -75,20 +74,19 @@ def _canon_of(groups: list[list[str]]):
     return find
 
 
-def _source_conflicts(ir: CircuitIR, kind_of: dict[str, str], canon) -> list[str]:
-    positives: dict[str, list[str]] = defaultdict(list)
+def _source_conflicts(ir: CircuitIR, kind_of: dict[str, str], canon, grounds: set[str]) -> list[str]:
+    by_net: dict[str, set[str]] = defaultdict(set)
     for pin in ir.pins:
         if kind_of.get(pin.refdes) != "ideal_voltage_source":
             continue
         if not pin.net or pin.state != "connected":
             continue
-        if pin.role == "positive" or pin.name.upper() in {"+", "POS", "P"}:
-            positives[canon(pin.net)].append(pin.refdes)
+        by_net[canon(pin.net)].add(pin.refdes)
     found = []
-    for net, parts in positives.items():
-        unique = sorted(set(parts))
-        if len(unique) > 1:
-            found.append(f"voltage_sources_on_one_node:{'+'.join(unique)}:{net}")
+    for net, parts in by_net.items():
+        if net in grounds or len(parts) < 2:
+            continue
+        found.append(f"voltage_sources_on_one_node:{'+'.join(sorted(parts))}:{net}")
     return found
 
 
@@ -138,10 +136,17 @@ def _dc_graph(ir: CircuitIR, kind_of: dict[str, str], canon):
 def _grounds(ir: CircuitIR, canon) -> set[str]:
     found = set()
     for pin in ir.pins:
-        if pin.role == "ground" and pin.net and pin.state == "connected":
+        if not pin.net or not pin.net.strip():
+            continue
+        if pin.role == "ground" and pin.state == "connected":
             found.add(canon(pin.net))
-        elif pin.net and canon(pin.net) in _GROUND_NAMES:
+        if pin.net.strip().upper() in _GROUND_NAMES:
             found.add(canon(pin.net))
+    for group in ir.tied_nets:
+        if any(name.strip().upper() in _GROUND_NAMES for name in group):
+            for name in group:
+                if name.strip():
+                    found.add(canon(name))
     return found
 
 
@@ -157,9 +162,28 @@ def _reachable(graph: dict[str, set[str]], start: str) -> set[str]:
     return seen
 
 
-def _capacitors_on(node: str, graph: dict[str, set[str]], capacitors: list[tuple[str, str, str]]):
-    rail = _reachable(graph, node) | {node}
+def _capacitors_on(
+    node: str,
+    graph: dict[str, set[str]],
+    capacitors: list[tuple[str, str, str]],
+    grounds: set[str],
+):
+    rail = _rail(graph, node, grounds)
     return [item for item in capacitors if item[1] in rail or item[2] in rail]
+
+
+def _rail(graph: dict[str, set[str]], start: str, grounds: set[str]) -> set[str]:
+    """Copper tied to the power pin. Do not walk through ground into another rail."""
+    seen = {start}
+    stack = [start]
+    while stack:
+        node = stack.pop()
+        for nxt in graph.get(node, ()):
+            if nxt in seen or nxt in grounds:
+                continue
+            seen.add(nxt)
+            stack.append(nxt)
+    return seen
 
 
 def _ac_bias(capacitors, graph, grounds: set[str]) -> list[str]:

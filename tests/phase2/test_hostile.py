@@ -147,6 +147,69 @@ def test_an_inductor_does_count_as_a_dc_path():
     assert _rules(design) == set()
 
 
+def test_a_capacitor_on_another_rail_does_not_cover_this_one():
+    design = CircuitIR(
+        parts=[
+            Part(refdes="U1", kind="ic"),
+            Part(refdes="V1", kind="ideal_voltage_source"),
+            Part(refdes="V2", kind="ideal_voltage_source"),
+            Part(refdes="C2", kind="capacitor"),
+        ],
+        pins=[
+            _pin("U1", "VDD", "5V", role="power"),
+            _pin("U1", "GND", "GND", role="ground"),
+            _pin("V1", "+", "5V", role="positive"),
+            _pin("V1", "-", "GND", role="negative"),
+            _pin("V2", "+", "3V3", role="positive"),
+            _pin("V2", "-", "GND", role="negative"),
+            _pin("C2", "A", "3V3"),
+            _pin("C2", "B", "GND"),
+        ],
+    )
+    assert "power_rail_has_no_capacitor" in _rules(design)
+
+
+def test_two_sources_on_one_net_do_not_need_a_plus_label():
+    design = CircuitIR(
+        parts=[
+            Part(refdes="U1", kind="ic"),
+            Part(refdes="V1", kind="ideal_voltage_source"),
+            Part(refdes="V2", kind="ideal_voltage_source"),
+            Part(refdes="C1", kind="capacitor"),
+        ],
+        pins=[
+            _pin("U1", "VDD", "5V", role="power"),
+            _pin("U1", "GND", "GND", role="ground"),
+            _pin("V1", "A", "5V"),
+            _pin("V1", "B", "GND"),
+            _pin("V2", "A", "5V"),
+            _pin("V2", "B", "GND"),
+            _pin("C1", "A", "5V"),
+            _pin("C1", "B", "GND"),
+        ],
+    )
+    assert "voltage_sources_on_one_node" in _rules(design)
+
+
+def test_a_tie_to_gnd_makes_vss_ground_even_if_no_pin_is_named_gnd():
+    design = CircuitIR(
+        parts=[
+            Part(refdes="U1", kind="ic"),
+            Part(refdes="R1", kind="resistor"),
+            Part(refdes="C1", kind="capacitor"),
+        ],
+        pins=[
+            _pin("U1", "VDD", "3V3", role="power"),
+            _pin("R1", "A", "3V3"),
+            _pin("R1", "B", "VSS"),
+            _pin("C1", "A", "3V3"),
+            _pin("C1", "B", "VSS"),
+        ],
+        tied_nets=[["VSS", "GND"]],
+    )
+    assert _rules(design) == set()
+
+
 def test_drivers_on_two_names_for_one_wire_still_collide():
     design = CircuitIR(
         parts=[

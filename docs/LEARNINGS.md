@@ -40,3 +40,9 @@ Things that showed up while building and were not in the phase plan. Append only
 - Phase: 2
 - What showed up that was not planned: A capacitor between VSS and GND looks connected and is not a DC path, so the power pin still fails until the design says those names are the same net. A bead followed by a bulk capacitor does not fail; it only warns that the capacitor is not on the pin's own net.
 - Does a later phase change? no
+
+## 2026-10-03
+
+- Phase: 2
+- What showed up that was not planned: A second pass found three misses. A capacitor on 3.3 V was treated as covering the 5 V pin, because the check walked through ground into the other rail. Two ideal sources on 5 V were ignored when their pins were not labeled plus. A tie that named GND only in the tie list, with every pin on VSS, did not count as ground. Those three are fixed.
+- Does a later phase change? no

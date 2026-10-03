@@ -30,3 +30,4 @@ Passed 2026-10-03. `tests/phase0`, `tests/phase1`, and `tests/phase2` are green.
 - GND and VSS stay separate until the design says they are tied. A capacitor between them is not, by itself, a DC path.
 - A bead then a bulk capacitor does not block. It warns that the capacitor is not on the power pin's own net.
 - The report has no ripple field and does not say the board is ready. A hanging pin does not call the simulator or the physics.
+- A capacitor on 3.3 V does not count for a 5 V pin. Two ideal sources on one net are caught even when neither pin is labeled plus. Tying VSS to GND makes VSS ground even if no pin is named GND.
