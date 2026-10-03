@@ -1,7 +1,8 @@
-"""Simulator entry. The body stays refused until Phase 4."""
+"""Simulator entry. Switching decks never start a process."""
 
 from extrude.sim.models import SimResult
+from extrude.sim.runner import run_deck
 
 
 def run_allowed(deck: str) -> SimResult:
-    raise NotImplementedError("not built")
+    return run_deck(deck)

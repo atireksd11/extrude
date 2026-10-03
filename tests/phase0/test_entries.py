@@ -6,7 +6,6 @@ from pathlib import Path
 import pytest
 
 from extrude.coverage import cover
-from extrude.emit import emit_cir
 from extrude.eval import score
 from extrude.harness import run
 from extrude.harness.models import RunResult
@@ -17,8 +16,6 @@ from extrude.learn import propose_offline
 from extrude.memory import record
 from extrude.memory.models import AttributionEvent, PrimaryCause
 from extrude.physics.models import PhysicsValues
-from extrude.sim import run_allowed
-
 ROOT = Path(__file__).resolve().parents[2]
 BAD_STRINGS = {"PASS", "passed", "design is good"}
 
@@ -36,8 +33,6 @@ def test_every_entry_says_not_built():
         (cover, (spec,)),
         (save, (design, Path("design.json"))),
         (load, (Path("design.json"),)),
-        (run_allowed, ("",)),
-        (emit_cir, (design, PhysicsValues())),
         (
             record,
             (AttributionEvent(cause=PrimaryCause.tooling, spec_hash="phase0", detail=""),),

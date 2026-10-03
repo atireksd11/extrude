@@ -58,3 +58,9 @@ Things that showed up while building and were not in the phase plan. Append only
 - Phase: 3
 - What showed up that was not planned: A later pass found five wrong numbers. A ceramic at 0 V was cut in half. A tolerance of 20, meaning percent, became a negative capacitance. A space after X7R skipped the curve. A generic 100 µF part hid a vendor part that was actually short. An input capacitor was added into the buck ripple. Those five are fixed.
 - Does a later phase change? no
+
+## 2026-10-03
+
+- Phase: 4
+- What showed up that was not planned: ngspice prints a measurement as `v_hold = 2.16e-62 at= 3.5e-03`, with text after the number. The first parser required the number to end the line, so a real run was called a tool failure. The parser now keeps the number and ignores the `at=` note. The console program is `ngspice_con.exe`, found only through `NGSPICE_PATH` or PATH.
+- Does a later phase change? no

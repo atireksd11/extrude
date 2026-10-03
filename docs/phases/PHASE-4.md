@@ -17,3 +17,13 @@
 - A crash does not decrement a design retry and does not write a ban
 - Tests skip cleanly when ngspice is not installed. They must not pretend the simulation passed
 - A deck that still simulates the nominal capacitance fails the test
+
+## Checkpoint
+
+Passed 2026-10-03. 75 tests passed, including one real ngspice 47 console run.
+
+- The hold-up deck places `C_use` on the capacitor line and leaves the nominal value in a comment. ngspice measured `v_hold` below the starting 4.7 V.
+- A switch, a fast pulse, or a transient step aimed at a switching edge is refused and does not start a process. A slow hold-up pulse is allowed. A short pulse written only in a comment is ignored.
+- A singular matrix or a timeout is `tooling`. It does not spend a design try and does not call the notebook.
+- If `NGSPICE_PATH` points at a missing file, the result is `unavailable`, not a measured pass.
+- A missing ESR is not this phase. Two capacitors each keep their own use-value.
