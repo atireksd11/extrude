@@ -30,3 +30,4 @@ Passed 2026-10-03, then retested. `tests/phase0` through `tests/phase3` are gree
 - Two calls return the same result. A light-load buck leaves ripple empty instead of inventing a continuous-conduction number. A heavy-load ripple is computed from the use-value, not the nominal value.
 - C0G, film, and electrolytic keep their nominal capacitance. A missing curve name falls back to a warning. A buck is not given a linear-regulator temperature. Equal input and output do not produce a fake ripple.
 - Heat, when it is an LDO, is labeled a still-air estimate.
+- A ceramic at zero volts keeps its nominal value. A tolerance written as 20 instead of 0.2 does not become a negative capacitance. A generic part cannot fill a hole left by a real curve. Buck ripple uses the output capacitor, not an input capacitor on another voltage.

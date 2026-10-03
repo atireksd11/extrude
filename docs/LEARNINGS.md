@@ -52,3 +52,9 @@ Things that showed up while building and were not in the phase plan. Append only
 - Phase: 3
 - What showed up that was not planned: The retest did not find a wrong number. A negative bias uses the same curve as a positive one. A curve name that is not in the repo falls back to the generic screen and only warns. A buck is not given an LDO temperature, and equal input and output do not produce a ripple.
 - Does a later phase change? no
+
+## 2026-10-03
+
+- Phase: 3
+- What showed up that was not planned: A later pass found five wrong numbers. A ceramic at 0 V was cut in half. A tolerance of 20, meaning percent, became a negative capacitance. A space after X7R skipped the curve. A generic 100 µF part hid a vendor part that was actually short. An input capacitor was added into the buck ripple. Those five are fixed.
+- Does a later phase change? no

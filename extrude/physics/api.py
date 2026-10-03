@@ -12,12 +12,12 @@ _AMBIENT_C = 25.0
 
 def derive(ir: CircuitIR, spec: FrozenSpec) -> PhysicsValues:
     curves = load_curves()
+    capacitors = [part for part in ir.parts if part.kind == "capacitor" and part.capacitance is not None]
+    borrowed = _bias_from_spec(spec) if len(capacitors) == 1 else None
     caps = []
     findings: list[PhysicsFinding] = []
-    for part in ir.parts:
-        if part.kind != "capacitor" or part.capacitance is None:
-            continue
-        bias = part.bias_v if part.bias_v is not None else _bias_from_spec(spec)
+    for part in capacitors:
+        bias = part.bias_v if part.bias_v is not None else borrowed
         cap, notes = derate_capacitor(part, bias, curves)
         caps.append(cap)
         findings.extend(notes)
@@ -25,8 +25,13 @@ def derive(ir: CircuitIR, spec: FrozenSpec) -> PhysicsValues:
     if findings_or_none is not None:
         findings.append(findings_or_none)
     inductance = _first(ir, "inductor", "inductance")
-    esr = sum(part.esr or 0.0 for part in ir.parts if part.kind == "capacitor")
-    c_use = sum(cap.c_use for cap in caps) if caps else None
+    ripple_caps = _output_caps(caps, spec)
+    esr = sum(
+        part.esr or 0.0
+        for part in ir.parts
+        if part.refdes in {cap.refdes for cap in ripple_caps}
+    )
+    c_use = sum(cap.c_use for cap in ripple_caps) if ripple_caps else None
     ripple, mode = buck_ripple(
         spec.values_si.get("vin"),
         spec.values_si.get("vout"),
@@ -56,6 +61,14 @@ def derive(ir: CircuitIR, spec: FrozenSpec) -> PhysicsValues:
         heat_note=note,
         findings=findings,
     )
+
+
+def _output_caps(caps, spec: FrozenSpec):
+    vout = spec.values_si.get("vout")
+    if vout is None or len(caps) <= 1:
+        return caps
+    window = max(0.05, 0.02 * abs(vout))
+    return [cap for cap in caps if abs(cap.v_dc - vout) <= window]
 
 
 def _bias_from_spec(spec: FrozenSpec) -> float | None:

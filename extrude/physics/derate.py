@@ -21,14 +21,25 @@ def load_curves() -> list[dict]:
 def derate_capacitor(part: Part, bias_v: float | None, curves: list[dict]) -> tuple[CapValue, list[PhysicsFinding]]:
     nominal = part.capacitance or 0.0
     tolerance = part.tolerance or 0.0
-    dielectric = (part.dielectric or "").upper()
+    dielectric = (part.dielectric or "").strip().upper()
     findings: list[PhysicsFinding] = []
+    if tolerance < 0 or tolerance > 1:
+        findings.append(
+            PhysicsFinding(
+                code="tolerance_unreadable",
+                severity="warn",
+                detail=f"{part.refdes} tolerance {tolerance} is not a fraction between 0 and 1",
+            )
+        )
+        tolerance = 0.0
     if not _is_class_ii(dielectric):
         c_eff = nominal
         return (
             _cap(part, bias_v or 0.0, c_eff, tolerance, CurveSource.not_class_ii, None),
             findings,
         )
+    if bias_v is not None and abs(bias_v) == 0:
+        return _cap(part, 0.0, nominal, tolerance, CurveSource.generic_screen, None, False), findings
     if bias_v is None:
         findings.append(
             PhysicsFinding(
@@ -37,12 +48,12 @@ def derate_capacitor(part: Part, bias_v: float | None, curves: list[dict]) -> tu
                 detail=f"{part.refdes} has no DC bias, so the ceramic loss is not applied",
             )
         )
-        return _cap(part, 0.0, nominal, tolerance, CurveSource.generic_screen, None), findings
+        return _cap(part, 0.0, nominal, tolerance, CurveSource.generic_screen, None, True), findings
     curve = _match_curve(part, curves)
     if curve is None:
         c_eff = nominal * 0.5
         return (
-            _cap(part, bias_v, c_eff, tolerance, CurveSource.generic_screen, None),
+            _cap(part, bias_v, c_eff, tolerance, CurveSource.generic_screen, None, True),
             findings,
         )
     ratio, clamped = _ratio_at(curve["points"], abs(bias_v))
@@ -63,13 +74,14 @@ def minimum_capacitance(
 ) -> PhysicsFinding | None:
     if required is None or not caps:
         return None
-    total = sum(cap.c_use for cap in caps)
-    if total + 1e-18 >= required:
+    trusted = [cap for cap in caps if not cap.screen_applied]
+    trusted_total = sum(cap.c_use for cap in trusted)
+    if trusted and trusted_total + 1e-18 >= required:
         return None
-    hard = any(cap.curve_source is not CurveSource.generic_screen for cap in caps)
-    detail = f"use-value {total:.6g} F is under the required {required:.6g} F"
-    if hard:
+    if trusted:
+        detail = f"use-value {trusted_total:.6g} F is under the required {required:.6g} F"
         return PhysicsFinding(code="capacitance_below_minimum", severity="fail", detail=detail)
+    detail = f"generic screen use-value {sum(cap.c_use for cap in caps):.6g} F is not a pass against {required:.6g} F"
     return PhysicsFinding(code="capacitance_below_minimum", severity="warn", detail=detail)
 
 
@@ -99,7 +111,7 @@ def _match_curve(part: Part, curves: list[dict]) -> dict | None:
 def _same(left: object, right: object) -> bool:
     if left is None or right is None:
         return False
-    return str(left).upper() == str(right).upper()
+    return str(left).strip().upper() == str(right).strip().upper()
 
 
 def _ratio_at(points: list[dict], bias: float) -> tuple[float, bool]:
@@ -124,6 +136,7 @@ def _cap(
     tolerance: float,
     source: CurveSource,
     curve_id: str | None,
+    screen_applied: bool = False,
 ) -> CapValue:
     return CapValue(
         refdes=part.refdes,
@@ -133,4 +146,5 @@ def _cap(
         curve_source=source,
         v_dc=bias,
         curve_id=curve_id,
+        screen_applied=screen_applied,
     )

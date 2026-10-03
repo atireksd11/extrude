@@ -135,6 +135,117 @@ def test_parallel_caps_share_the_sum_of_use_values_in_the_ripple():
     assert c_use != pytest.approx(44e-6)
 
 
+def test_third_pass_does_not_lie_about_capacitance():
+    zero = derive(
+        CircuitIR(
+            parts=[
+                Part(
+                    refdes="C1",
+                    kind="capacitor",
+                    capacitance=22e-6,
+                    tolerance=0,
+                    dielectric="X7R",
+                    bias_v=0,
+                )
+            ]
+        ),
+        _spec("holdup_mlcc", c_min=20e-6),
+    )
+    assert zero.caps[0].c_eff == pytest.approx(22e-6)
+    assert not any(item.code == "capacitance_below_minimum" for item in zero.findings)
+    percent = derive(
+        CircuitIR(
+            parts=[
+                Part(
+                    refdes="C1",
+                    kind="capacitor",
+                    capacitance=22e-6,
+                    tolerance=20,
+                    dielectric="C0G",
+                    bias_v=5,
+                )
+            ]
+        ),
+        _spec("holdup_mlcc"),
+    )
+    assert percent.caps[0].c_use == pytest.approx(22e-6)
+    assert percent.caps[0].c_use > 0
+    assert any(item.code == "tolerance_unreadable" for item in percent.findings)
+    spaced = derive(
+        CircuitIR(
+            parts=[
+                Part(
+                    refdes="C1",
+                    kind="capacitor",
+                    capacitance=22e-6,
+                    tolerance=0,
+                    dielectric="X7R ",
+                    bias_v=4.7,
+                    curve_id="strategy_holdup_22u_4v7",
+                )
+            ]
+        ),
+        _spec("holdup_mlcc"),
+    )
+    assert spaced.caps[0].c_eff == pytest.approx(11.4e-6, rel=1e-6)
+    rescued = derive(
+        CircuitIR(
+            parts=[
+                Part(
+                    refdes="C1",
+                    kind="capacitor",
+                    capacitance=22e-6,
+                    tolerance=0.2,
+                    dielectric="X7R",
+                    bias_v=4.7,
+                    curve_id="strategy_holdup_22u_4v7",
+                ),
+                Part(
+                    refdes="C2",
+                    kind="capacitor",
+                    capacitance=100e-6,
+                    tolerance=0,
+                    dielectric="X7R",
+                    bias_v=5,
+                    voltage_rating=6.3,
+                ),
+            ]
+        ),
+        _spec("holdup_mlcc", c_min=10e-6),
+    )
+    assert any(item.severity == "fail" for item in rescued.findings)
+    mixed = derive(
+        CircuitIR(
+            f_sw=1e6,
+            parts=[
+                Part(
+                    refdes="Cin",
+                    kind="capacitor",
+                    capacitance=100e-6,
+                    tolerance=0,
+                    dielectric="electrolytic",
+                    bias_v=5,
+                    esr=0.05,
+                ),
+                Part(
+                    refdes="Cout",
+                    kind="capacitor",
+                    capacitance=10e-6,
+                    tolerance=0,
+                    dielectric="C0G",
+                    bias_v=3.3,
+                    esr=0.01,
+                ),
+                Part(refdes="L1", kind="inductor", inductance=2.2e-6),
+            ],
+        ),
+        _spec("buck", vin=5, vout=3.3, i_load=2),
+    )
+    delta_i = 3.3 * (1 - 3.3 / 5) / (1e6 * 2.2e-6)
+    output_only = delta_i * (0.01 + 1 / (8 * 1e6 * 10e-6))
+    assert mixed.ripple_pp == pytest.approx(output_only)
+
+
 def test_second_pass_cases():
     negative = derive(
         CircuitIR(

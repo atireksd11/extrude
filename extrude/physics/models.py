@@ -21,6 +21,7 @@ class CapValue(BaseModel):
     curve_source: CurveSource
     v_dc: float
     curve_id: str | None = None
+    screen_applied: bool = False
 
 
 class PhysicsFinding(BaseModel):
