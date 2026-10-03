@@ -6,6 +6,7 @@ _SWITCH = re.compile(r"(?im)^(?!\s*\*).*\bS\d+\b")
 _SW_MODEL = re.compile(r"(?im)^(?!\s*\*)\s*\.model\s+\S+\s+SW\b")
 _TRAN = re.compile(r"(?im)^(?!\s*\*)\s*\.tran\b(.*)$")
 _PULSE = re.compile(r"(?im)PULSE\s*\(([^)]*)\)")
+_CAP_VALUE = re.compile(r"(?im)^(?!\s*\*)\s*C\w+\s+\S+\s+\S+\s+(\S+)")
 _SUFFIX = {
     "t": 1e12,
     "g": 1e9,
@@ -22,6 +23,10 @@ _SUFFIX = {
 def refusal_reason(deck: str) -> str | None:
     if _SWITCH.search(deck) or _SW_MODEL.search(deck):
         return "switch"
+    for match in _CAP_VALUE.finditer(deck):
+        value = _spice_number(match.group(1))
+        if value is None or value <= 0:
+            return "bad_capacitance"
     for match in _PULSE.finditer(deck):
         if _line_is_comment(deck, match.start()):
             continue

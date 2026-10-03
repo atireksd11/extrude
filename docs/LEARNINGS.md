@@ -64,3 +64,9 @@ Things that showed up while building and were not in the phase plan. Append only
 - Phase: 4
 - What showed up that was not planned: ngspice prints a measurement as `v_hold = 2.16e-62 at= 3.5e-03`, with text after the number. The first parser required the number to end the line, so a real run was called a tool failure. The parser now keeps the number and ignores the `at=` note. The console program is `ngspice_con.exe`, found only through `NGSPICE_PATH` or PATH.
 - Does a later phase change? no
+
+## 2026-10-03
+
+- Phase: 4
+- What showed up that was not planned: A negative capacitance was still sent to ngspice, and a part named Bank was written as a device that is not a capacitor. Zero or negative capacitance is now refused before a process starts. The device name is forced to start with C, and the original name stays in the comment.
+- Does a later phase change? no

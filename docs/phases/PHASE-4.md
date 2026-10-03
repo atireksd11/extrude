@@ -27,3 +27,4 @@ Passed 2026-10-03. 75 tests passed, including one real ngspice 47 console run.
 - A singular matrix or a timeout is `tooling`. It does not spend a design try and does not call the notebook.
 - If `NGSPICE_PATH` points at a missing file, the result is `unavailable`, not a measured pass.
 - A missing ESR is not this phase. Two capacitors each keep their own use-value.
+- A capacitance that is zero or negative is refused and does not start ngspice. A part whose name does not start with C is still written as a capacitor.

@@ -72,6 +72,20 @@ def test_an_averaged_dc_deck_is_allowed_and_a_crash_log_is_tooling():
     assert result.measurements == {}
 
 
+def test_a_non_positive_capacitance_never_starts_and_a_bad_name_is_still_a_capacitor():
+    zero = emit_cir(CircuitIR(), PhysicsValues(caps=[_cap("C1", 22e-6, 0)]))
+    negative = emit_cir(CircuitIR(), PhysicsValues(caps=[_cap("C1", 22e-6, -1e-6)]))
+    assert refusal_reason(zero) == "bad_capacitance"
+    assert refusal_reason(negative) == "bad_capacitance"
+    with patch("extrude.sim.runner.subprocess.run") as spawn:
+        assert run_allowed(negative).status == "refused"
+    spawn.assert_not_called()
+    renamed = emit_cir(CircuitIR(), PhysicsValues(caps=[_cap("Bank", 22e-6, 9.12e-6)]))
+    assert any(line.startswith("C1 rail 0 ") for line in renamed.splitlines())
+    assert "* Bank nominal=" in renamed
+    assert refusal_reason(renamed) is None
+
+
 def test_a_short_pulse_hidden_in_a_comment_does_not_refuse_the_holdup():
     deck = "* PULSE(0 5 0 1n 1n 1u 2u) is only a note\n" + emit_cir(
         CircuitIR(), PhysicsValues(caps=[_cap("C1", 22e-6, 9.12e-6)])
