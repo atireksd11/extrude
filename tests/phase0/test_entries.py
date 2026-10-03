@@ -5,7 +5,6 @@ from pathlib import Path
 
 import pytest
 
-from extrude.checks import preflight
 from extrude.coverage import cover
 from extrude.emit import emit_cir
 from extrude.eval import score
@@ -38,7 +37,6 @@ def test_every_entry_says_not_built():
         (cover, (spec,)),
         (save, (design, Path("design.json"))),
         (load, (Path("design.json"),)),
-        (preflight, (design,)),
         (derive, (design, spec)),
         (run_allowed, ("",)),
         (emit_cir, (design, PhysicsValues())),

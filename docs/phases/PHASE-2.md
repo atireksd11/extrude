@@ -18,3 +18,15 @@
 - A design with a hanging pin never reaches `sim` or `physics`
 
 Stop when those fixtures pass without editing the fixtures to suit the code.
+
+## Checkpoint
+
+Passed 2026-10-03. `tests/phase0`, `tests/phase1`, and `tests/phase2` are green.
+
+- A local capacitor and a supply down to ground has nothing blocking.
+- An AC-coupled UART with a bias resistor on both sides has nothing blocking. TX connected to RX is not a clash.
+- A hanging pin, two ideal sources on one driven net, a power pin whose only path to ground is a capacitor, two UART drivers, and a power rail with no capacitor each name that rule.
+- A do-not-connect pin is legal.
+- GND and VSS stay separate until the design says they are tied. A capacitor between them is not, by itself, a DC path.
+- A bead then a bulk capacitor does not block. It warns that the capacitor is not on the power pin's own net.
+- The report has no ripple field and does not say the board is ready. A hanging pin does not call the simulator or the physics.
