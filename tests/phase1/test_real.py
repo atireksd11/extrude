@@ -126,9 +126,16 @@ def test_a_named_buck_that_steps_up_does_not_freeze():
     assert isinstance(result, NeedsInfo)
 
 
-def test_the_front_door_still_refuses_a_finished_card():
-    with pytest.raises(NotImplementedError, match="not built"):
-        run("5 V to 3.3 V at 2 A")
+def test_the_front_door_does_not_check_a_card_without_a_proposal(monkeypatch):
+    monkeypatch.delenv("EXTRUDE_MODEL_KEY", raising=False)
+    monkeypatch.delenv("OPENAI_API_KEY", raising=False)
+    monkeypatch.delenv("EXTRUDE_ESCALATION_KEY", raising=False)
+    from extrude.harness import clear_client
+
+    clear_client()
+    result = run("5 V to 3.3 V at 2 A")
+    assert result.status == "stopped"
+    assert result.status != "checked"
 
 
 def test_ordinary_sentences_the_first_pass_missed():

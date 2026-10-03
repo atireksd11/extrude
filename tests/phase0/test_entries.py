@@ -7,7 +7,6 @@ import pytest
 
 from extrude.coverage import cover
 from extrude.eval import score
-from extrude.harness import run
 from extrude.harness.models import RunResult
 from extrude.intake.models import FrozenSpec
 from extrude.ir import load, save
@@ -31,7 +30,6 @@ def test_every_entry_says_not_built():
         (cover, (spec,)),
         (save, (design, Path("design.json"))),
         (load, (Path("design.json"),)),
-        (run, ("",)),
         (score, (RunResult(),)),
         (propose_offline, ()),
     ]

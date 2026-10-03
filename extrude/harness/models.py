@@ -11,3 +11,8 @@ class AttemptBudget(BaseModel):
 class RunResult(BaseModel):
     spec_hash: str = ""
     status: str = "not_built"
+    detail: str | None = None
+    attempts: int = 0
+    prompt_tokens: int | None = None
+    completion_tokens: int | None = None
+    cost_usd: float | None = None

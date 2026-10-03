@@ -2,7 +2,7 @@
 
 import pytest
 
-from extrude.harness import run
+from extrude.harness import clear_client, run
 from extrude.intake import confirm, describe, resolve
 from extrude.intake.errors import SpecRejected
 from extrude.intake.models import FrozenSpec, NeedsInfo, SlotOrigin
@@ -15,8 +15,10 @@ def test_power_an_esp32_does_not_invent_a_ripple_or_a_design():
     assert "1 mv" not in blob
     assert "0.001" not in blob
     assert result.question.strip().endswith("?")
-    with pytest.raises(NotImplementedError, match="not built"):
-        run("Power an ESP32")
+    clear_client()
+    door = run("Power an ESP32")
+    assert door.status == "needs_info"
+    assert "1 mv" not in (door.detail or "").lower()
 
 
 def test_a_complete_step_down_freezes_and_shows_the_default_ripple():
@@ -39,8 +41,6 @@ def test_a_complete_step_down_freezes_and_shows_the_default_ripple():
     assert "assumed default" in shown
     assert "30 mV" in shown
     assert "5 V" in shown
-    with pytest.raises(NotImplementedError, match="not built"):
-        run(text)
 
 
 def test_missing_load_current_does_not_freeze_a_card():

@@ -19,3 +19,15 @@
 - `learn` and `mcp` still raise “not built”
 
 Do not tune prompts against the Phase 7 suite. That suite does not exist yet.
+
+## Checkpoint
+
+Passed 2026-10-03 for the canned loop. 95 tests passed.
+
+- A hanging-pin proposal is rejected, then a complete rail is checked. No network call. The second prompt shows the ban and the frozen hash. The token bill on that canned pair is 0.03 because the fake usage said so.
+- A proposal that sets the load to 0, or tightens ripple, is thrown away. After two such tries the loop stops.
+- Text that is not JSON stops at once and writes the tool notebook. It does not spend a design try.
+- With no second key, two design misses stop. With a second key, the third seat may check the design.
+- “Power an ESP32” asks a question and does not call the model. An LED card is outside this seat.
+- `learn` still refuses. A bill with tokens but no dollar field leaves the cost empty.
+- No model key was present in the environment, so a live provider call was not made. The seat is ready when `EXTRUDE_MODEL_KEY` or `OPENAI_API_KEY` is set.

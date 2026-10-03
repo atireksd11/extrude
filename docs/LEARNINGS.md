@@ -81,4 +81,10 @@ Things that showed up while building and were not in the phase plan. Append only
 
 - Phase: 5
 - What showed up that was not planned: A later pass found two wide bans. An unknown tape suffix still blocked the base part when that part was attached beside the suffix. A failure stored at 0 V blocked 3.3 V and 12 V. An unknown orderable name now blocks nothing, and a voltage of 0 does not count as a stress level.
+- Does a later phase change: no
+
+## 2026-10-03
+
+- Phase: 6
+- What showed up that was not planned: A proposal that fails while it is still being read has no part identity yet. The loop now treats that name as empty instead of crashing. A fenced JSON block is accepted. Tightening ripple is thrown away. No model key was set, so the live call remains unrun.
 - Does a later phase change? no
