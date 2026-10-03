@@ -18,6 +18,10 @@ _PATTERNS = (
     ("V", re.compile(r"(?<![\w.])(\d+(?:\.\d+)?)\s*(V|volts)\b", re.IGNORECASE), 1.0),
     ("A", re.compile(r"(?<![\w.])(\d+(?:\.\d+)?)\s*(mA|milliamps|milliamperes)\b", re.IGNORECASE), 1e-3),
     ("A", re.compile(r"(?<![\w.])(\d+(?:\.\d+)?)\s*(A|amps|amperes)\b", re.IGNORECASE), 1.0),
+    ("s", re.compile(r"(?<![\w.])(\d+(?:\.\d+)?)\s*(ms|milliseconds)\b", re.IGNORECASE), 1e-3),
+    ("s", re.compile(r"(?<![\w.])(\d+(?:\.\d+)?)\s*(us|µs|microseconds)\b", re.IGNORECASE), 1e-6),
+    ("F", re.compile(r"(?<![\w.])(\d+(?:\.\d+)?)\s*(uF|µF|microfarads)\b", re.IGNORECASE), 1e-6),
+    ("F", re.compile(r"(?<![\w.])(\d+(?:\.\d+)?)\s*(nF)\b", re.IGNORECASE), 1e-9),
 )
 
 

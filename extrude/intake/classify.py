@@ -19,8 +19,9 @@ def classify(text: str) -> str:
 
 
 def _is_mcu_swap(lowered: str) -> bool:
-    if "mcu" in lowered and any(word in lowered for word in ("swap", "replace", "instead of")):
+    names_a_chip = re.search(r"\b(?:mcu|stm32|esp32|nrf52|rp2040)\b", lowered) is not None
+    if re.search(r"\b(?:swap|replace)\b", lowered) and names_a_chip:
         return True
-    return "from" in lowered and "to" in lowered and any(
-        name in lowered for name in ("mcu", "stm32", "esp32")
+    return (
+        re.search(r"\bfrom\s+[a-z][a-z0-9-]*\s+to\s+[a-z]", lowered) is not None and names_a_chip
     )

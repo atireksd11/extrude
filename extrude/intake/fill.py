@@ -19,6 +19,8 @@ _LOOKBACK = 24
 
 
 def assign_slots(text: str, hits: list[Quantity], task_class: str) -> tuple[dict[str, Quantity], bool]:
+    if task_class == "holdup_mlcc":
+        return _assign_holdup(hits)
     roles: dict[str, Quantity] = {}
     unlabeled_v: list[Quantity] = []
     unlabeled_a: list[Quantity] = []
@@ -28,8 +30,10 @@ def assign_slots(text: str, hits: list[Quantity], task_class: str) -> tuple[dict
         if role is None:
             if hit.kind == "V":
                 unlabeled_v.append(hit)
-            else:
+            elif hit.kind == "A":
                 unlabeled_a.append(hit)
+            else:
+                ambiguous = True
             continue
         if role in roles:
             ambiguous = True
@@ -56,10 +60,32 @@ def assign_slots(text: str, hits: list[Quantity], task_class: str) -> tuple[dict
 
 
 def mcu_labels(text: str) -> dict[str, str]:
-    match = re.search(r"from\s+([A-Za-z][A-Za-z0-9-]*)\s+to\s+([A-Za-z][A-Za-z0-9-]*)", text)
+    match = re.search(
+        r"from\s+([A-Za-z][A-Za-z0-9-]*)\s+to\s+([A-Za-z][A-Za-z0-9-]*)",
+        text,
+        re.IGNORECASE,
+    )
+    if match is None:
+        match = re.search(
+            r"replace\s+(?:the\s+)?([A-Za-z][A-Za-z0-9-]*)\s+with\s+(?:an?\s+)?([A-Za-z][A-Za-z0-9-]*)",
+            text,
+            re.IGNORECASE,
+        )
     if match is None:
         return {}
     return {"from_part": match.group(1), "to_part": match.group(2)}
+
+
+def _assign_holdup(hits: list[Quantity]) -> tuple[dict[str, Quantity], bool]:
+    roles: dict[str, Quantity] = {}
+    ambiguous = False
+    for hit in hits:
+        key = {"V": "v_rail", "s": "t_hold", "F": "c_min"}.get(hit.kind)
+        if key is None or key in roles:
+            ambiguous = True
+            continue
+        roles[key] = hit
+    return roles, ambiguous
 
 
 def _role(text: str, hit: Quantity) -> str | None:
@@ -69,7 +95,8 @@ def _role(text: str, hit: Quantity) -> str | None:
             ("ripple_pp", r"ripple"),
             ("vout", r"\b(?:vout|output)\b"),
             ("vin", r"\b(?:vin|input)\b"),
-            ("vout", r"\bto\b"),
+            ("vin", r"\bfrom\s*$"),
+            ("vout", r"\bto\s*$"),
         )
     else:
         patterns = (("i_load", r"\b(?:load|iout|i_load)\b"),)

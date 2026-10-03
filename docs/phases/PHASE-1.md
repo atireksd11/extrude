@@ -31,3 +31,5 @@ Passed 2026-10-03. `tests/phase0` and `tests/phase1` are green (32 tests).
 - A labeled “output” before “input” still stores 5 V in and 3.3 V out.
 - Two currents, a step-up, a spelled-out “five volts”, and `5e0 V` do not freeze a guessed card.
 - A regulator is not given the buck ripple default. Hold-up, LED, and an MCU swap do not become a buck.
+- “Power an ESP32 from 5 V to 3.3 V at 2 A”, “I want to use 5 V to 3.3 V at 2 A”, and “into 3.3 V from 5 V at 2 A” freeze the same buck as the plain sentence.
+- “hold-up 4.7 V for 20 ms, 545 uF” keeps those three typed numbers. “replace the STM32 with an ESP32” names both parts.

@@ -9,6 +9,8 @@ _SCALE = {
     "i_load": ("A", 1.0),
     "i_led": ("mA", 1e3),
     "ripple_pp": ("mV", 1e3),
+    "t_hold": ("ms", 1e3),
+    "c_min": ("uF", 1e6),
 }
 
 _HOW = {

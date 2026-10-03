@@ -131,6 +131,31 @@ def test_the_front_door_still_refuses_a_finished_card():
         run("5 V to 3.3 V at 2 A")
 
 
+def test_ordinary_sentences_the_first_pass_missed():
+    powered = resolve("Power an ESP32 from 5 V to 3.3 V at 2 A")
+    polite = resolve("I want to use 5 V to 3.3 V at 2 A")
+    ordered = resolve("into 3.3 V from 5 V at 2 A")
+    plain = resolve("5 V to 3.3 V at 2 A")
+    assert isinstance(plain, FrozenSpec)
+    for card in (powered, polite, ordered):
+        assert isinstance(card, FrozenSpec)
+        assert card.task_class == "buck"
+        assert card.values_si["vin"] == 5
+        assert card.values_si["vout"] == 3.3
+        assert card.values_si["i_load"] == 2
+        assert card.spec_hash == plain.spec_hash
+    hold = resolve("hold-up 4.7 V for 20 ms, 545 uF")
+    assert isinstance(hold, FrozenSpec)
+    assert hold.task_class == "holdup_mlcc"
+    assert hold.values_si["v_rail"] == pytest.approx(4.7)
+    assert hold.values_si["t_hold"] == pytest.approx(0.02)
+    assert hold.values_si["c_min"] == pytest.approx(545e-6)
+    assert all(origin is SlotOrigin.user_span for origin in hold.origins.values())
+    swap = resolve("replace the STM32 with an ESP32")
+    assert isinstance(swap, FrozenSpec)
+    assert swap.labels == {"from_part": "STM32", "to_part": "ESP32"}
+
+
 def test_the_card_a_person_reads_names_every_source():
     card = resolve("5 V to 3.3 V at 2 A")
     assert isinstance(card, FrozenSpec)
