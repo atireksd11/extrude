@@ -102,11 +102,7 @@ def from_simulator_log(log: str, spec_hash: str) -> AttributionEvent:
 
 def _identity_of(event: AttributionEvent) -> ElectricalIdentity | None:
     if event.orderable:
-        known = _aliases.get(event.orderable.strip())
-        if known is not None:
-            return known
-        if event.identity is None:
-            return None
+        return _aliases.get(event.orderable.strip())
     return event.identity
 
 
@@ -122,7 +118,7 @@ def _same_identity(left: ElectricalIdentity, right: ElectricalIdentity) -> bool:
 
 def _severe_enough(row: NegativeConstraint, v_new: float | None, i_new: float | None) -> bool:
     if row.check_id == "overcurrent":
-        return row.i_fail is not None and i_new is not None and i_new >= row.i_fail
-    if row.v_fail is None or v_new is None:
+        return row.i_fail is not None and i_new is not None and row.i_fail > 0 and i_new >= row.i_fail
+    if row.v_fail is None or v_new is None or row.v_fail <= 0:
         return False
     return v_new >= 0.9 * row.v_fail

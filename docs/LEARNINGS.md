@@ -76,3 +76,9 @@ Things that showed up while building and were not in the phase plan. Append only
 - Phase: 5
 - What showed up that was not planned: The follow-up pass did not find a miss filed in the wrong notebook. A 12 V block starts again at 10.8 V, which is 90 percent of the failed voltage, and not at 10.79 V. An over-current block does not fire from a voltage alone.
 - Does a later phase change? no
+
+## 2026-10-03
+
+- Phase: 5
+- What showed up that was not planned: A later pass found two wide bans. An unknown tape suffix still blocked the base part when that part was attached beside the suffix. A failure stored at 0 V blocked 3.3 V and 12 V. An unknown orderable name now blocks nothing, and a voltage of 0 does not count as a stress level.
+- Does a later phase change? no

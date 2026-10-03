@@ -129,6 +129,26 @@ def test_edges_around_the_block():
     assert matching_blocks(part, "overcurrent", _VERSION, _HASH, v_new=12) == []
 
 
+def test_an_unknown_suffix_does_not_ban_even_if_a_part_is_attached():
+    part = _cap()
+    remember_alias("C123456", part)
+    record(
+        _design(part, v_fail=12).model_copy(
+            update={"orderable": "C123456-YFP", "identity": part}
+        )
+    )
+    assert identity_for("C123456-YFP") is None
+    assert design_rows() == []
+    assert matching_blocks(part, "dc_bias", _VERSION, _HASH, v_new=12) == []
+
+
+def test_a_zero_volt_failure_does_not_block_every_rail():
+    part = _cap()
+    record(_design(part, v_fail=0))
+    assert matching_blocks(part, "dc_bias", _VERSION, _HASH, v_new=3.3) == []
+    assert matching_blocks(part, "dc_bias", _VERSION, _HASH, v_new=12) == []
+
+
 def test_five_failures_land_in_the_notebook_each_one_names():
     part = _cap()
     other = _cap(case="0603")

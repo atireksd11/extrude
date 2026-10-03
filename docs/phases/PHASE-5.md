@@ -32,3 +32,4 @@ Passed 2026-10-03.
 - “Power an ESP32” with a poor part goes in the request notebook, not the ban list.
 - Ten matching blocks show eight, each with its measured number.
 - A different case, capacitance, maker, checker version, or card hash does not share the block. An over-current block does not fire because a voltage was passed in.
+- An unknown tape suffix does not ban the base part even if that part is attached to the same miss. A failure recorded at 0 V does not block every rail.
