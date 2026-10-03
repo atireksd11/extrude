@@ -26,11 +26,9 @@ def derive(ir: CircuitIR, spec: FrozenSpec) -> PhysicsValues:
         findings.append(findings_or_none)
     inductance = _first(ir, "inductor", "inductance")
     ripple_caps = _output_caps(caps, spec)
-    esr = sum(
-        part.esr or 0.0
-        for part in ir.parts
-        if part.refdes in {cap.refdes for cap in ripple_caps}
-    )
+    ripple_ids = {cap.refdes for cap in ripple_caps}
+    missing_esr = [part.refdes for part in ir.parts if part.refdes in ripple_ids and part.esr is None]
+    esr = sum(part.esr or 0.0 for part in ir.parts if part.refdes in ripple_ids)
     c_use = sum(cap.c_use for cap in ripple_caps) if ripple_caps else None
     ripple, mode = buck_ripple(
         spec.values_si.get("vin"),
@@ -42,6 +40,18 @@ def derive(ir: CircuitIR, spec: FrozenSpec) -> PhysicsValues:
         esr,
     )
     switching = ir.f_sw is not None or inductance is not None
+    if switching and missing_esr and c_use:
+        findings.append(
+            PhysicsFinding(
+                code="esr_unknown",
+                severity="warn",
+                detail=(
+                    "ESR was not given for "
+                    + ", ".join(missing_esr)
+                    + ", so ripple ignores series resistance and can look smaller than the part"
+                ),
+            )
+        )
     if switching and mode == "dcm":
         findings.append(
             PhysicsFinding(

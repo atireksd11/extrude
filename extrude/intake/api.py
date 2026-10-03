@@ -19,7 +19,7 @@ def resolve(raw_text: str) -> FrozenSpec | NeedsInfo:
     if ambiguous:
         return NeedsInfo(
             missing=["ambiguous_numbers"],
-            question="Which number is the input, the output, and the load current?",
+            question="Some numbers could fit more than one limit. Which values should the card keep?",
         )
     kind, early = _promote(kind, roles)
     if early is not None:
@@ -104,6 +104,10 @@ def _freeze(kind: str, roles: dict) -> FrozenSpec:
 def _ask(kind: str, missing: list[str]) -> str:
     if missing == ["i_load"]:
         return f"What load current should this {kind} supply?"
+    if missing == ["vin"]:
+        return f"What input voltage should this {kind} use?"
+    if missing == ["vout"]:
+        return f"What output voltage should this {kind} supply?"
     if missing == ["i_led"]:
         return "What current should the LED draw?"
     if kind == "holdup_mlcc":
