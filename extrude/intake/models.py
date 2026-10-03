@@ -3,7 +3,7 @@
 from enum import Enum
 from typing import Literal
 
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class SlotOrigin(str, Enum):
@@ -18,6 +18,8 @@ class FrozenSpec(BaseModel):
     origins: dict[str, SlotOrigin]
     defaults_version: str
     spec_hash: str
+    labels: dict[str, str] = Field(default_factory=dict)
+    evidence: dict[str, str] = Field(default_factory=dict)
 
 
 class NeedsInfo(BaseModel):

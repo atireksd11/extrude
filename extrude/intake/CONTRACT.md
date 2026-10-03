@@ -7,3 +7,4 @@ May talk to: no other drawer in Phase 0.
 Must not talk to: sim, physics, learn, mcp.
 
 SIGNATURE: resolve(raw_text: str) -> FrozenSpec | NeedsInfo
+SIGNATURE: confirm(raw_text: str, spec: FrozenSpec) -> FrozenSpec

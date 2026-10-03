@@ -19,5 +19,12 @@ Things that showed up while building and were not in the phase plan. Append only
 ## 2026-10-03
 
 - Phase: 0
-- What showed up that was not planned: The whole skeleton, including the drill, took about 15 minutes of writing. The plan said a run under 90 minutes is not signed off, so a hollow dump cannot sneak through on speed alone. This run is signed off because the tests, the map reading, and the failed-then-reverted import drill all happened. The clock was not padded.
+- What showed up that was not planned: The skeleton was signed off after about 15 minutes. That broke the rule that a run under 90 minutes is not signed off. The sign-off was removed. The rooms, the tests, and one import drill are real. The job cards are thin, and the map boxes were ticked by the writer, not by a separate reading.
+- Does a later phase change? no
+- If yes, what changes:
+
+## 2026-10-03
+
+- Phase: 1
+- What showed up that was not planned: “output 3.3 V from input 5 V” was first called ambiguous, because the look-back window for the 5 V still contained the earlier word “output”. The nearest word now wins, so input stays input.
 - Does a later phase change? no

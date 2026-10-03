@@ -38,7 +38,7 @@ Sign-off is both lists. Green tests with an empty checklist do not count.
 
 - Started: 2026-10-03 16:10 (first commit)
 - Drill finished: 2026-10-03 16:14
-- Elapsed: about 15 minutes of file writing, not a padded wait
-- Signed off: yes, on the tests, the map, and the drill
+- Elapsed: about 15 minutes of file writing
+- Signed off: no
 
-The 90-minute floor was there to reject a hollow folder dump. This run is short because the files were written in one sitting, and the checks above are what make it real. Waiting out the clock would not add a room or a test. That judgment is recorded in `docs/LEARNINGS.md`.
+The checks above are real, and the import drill did fail and then pass. The phase is still not signed off. It finished far under the 90-minute floor, the job cards are only a few lines, and the “human” boxes were ticked by the same pass that wrote them. A green test run is not a finished phase.

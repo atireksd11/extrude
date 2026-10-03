@@ -11,7 +11,6 @@ from extrude.emit import emit_cir
 from extrude.eval import score
 from extrude.harness import run
 from extrude.harness.models import RunResult
-from extrude.intake import resolve
 from extrude.intake.models import FrozenSpec
 from extrude.ir import load, save
 from extrude.ir.models import CircuitIR
@@ -36,7 +35,6 @@ def test_every_entry_says_not_built():
     )
     design = CircuitIR()
     calls = [
-        (resolve, ("",)),
         (cover, (spec,)),
         (save, (design, Path("design.json"))),
         (load, (Path("design.json"),)),
