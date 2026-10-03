@@ -34,3 +34,9 @@ Things that showed up while building and were not in the phase plan. Append only
 - Phase: 1
 - What showed up that was not planned: A second pass found three wrong cards. “Power an ESP32 from 5 V to 3.3 V at 2 A” was treated as an MCU swap. “I want to use 5 V to 3.3 V at 2 A” was called ambiguous because the word “to” earlier in the sentence marked the first voltage as the output. A hold-up sentence that already named 4.7 V, 20 ms, and 545 µF still asked for those facts. Those three are fixed.
 - Does a later phase change? no
+
+## 2026-10-03
+
+- Phase: 2
+- What showed up that was not planned: A capacitor between VSS and GND looks connected and is not a DC path, so the power pin still fails until the design says those names are the same net. A bead followed by a bulk capacitor does not fail; it only warns that the capacitor is not on the pin's own net.
+- Does a later phase change? no
