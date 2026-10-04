@@ -46,9 +46,10 @@ def walk(raw_text: str) -> RunResult:
     prompt_tokens = 0
     completion_tokens = 0
     cost_usd = None
+    last_error = ""
     while True:
         blocks = [row for row in design_rows() if row.spec_hash == resolved.spec_hash][:8]
-        prompt = build_prompt(resolved, blocks, passed)
+        prompt = build_prompt(resolved, blocks, passed, last_error)
         try:
             text, usage = _client(prompt, seat)
         except ProposalError as exc:
@@ -69,6 +70,7 @@ def walk(raw_text: str) -> RunResult:
                 _note(resolved, "tool", exc.detail, None)
                 return _finish("stopped", resolved, design_tries, prompt_tokens, completion_tokens, cost_usd, exc.detail)
             design_tries += 1
+            last_error = exc.detail
             _note(resolved, "design", exc.detail, identity)
             nxt = _after_design_miss(design_tries, escalated)
             if nxt is None:
@@ -78,7 +80,8 @@ def walk(raw_text: str) -> RunResult:
         report = preflight(design)
         if report.blocking:
             design_tries += 1
-            _note(resolved, "design", "; ".join(report.blocking), identity)
+            last_error = "; ".join(report.blocking)
+            _note(resolved, "design", last_error, identity)
             nxt = _after_design_miss(design_tries, escalated)
             if nxt is None:
                 return _finish("stopped", resolved, design_tries, prompt_tokens, completion_tokens, cost_usd, report.blocking[0])
@@ -90,7 +93,8 @@ def walk(raw_text: str) -> RunResult:
         failures = [item for item in values.findings if item.severity == "fail"]
         if failures:
             design_tries += 1
-            _note(resolved, "design", failures[0].detail, identity)
+            last_error = failures[0].detail
+            _note(resolved, "design", last_error, identity)
             nxt = _after_design_miss(design_tries, escalated)
             if nxt is None:
                 return _finish("stopped", resolved, design_tries, prompt_tokens, completion_tokens, cost_usd, failures[0].detail)
@@ -99,7 +103,8 @@ def walk(raw_text: str) -> RunResult:
         if resolved.task_class == "holdup_mlcc":
             if not _holdup_cap_is_connected(design):
                 design_tries += 1
-                _note(resolved, "design", "the hold-up capacitor is not connected", identity)
+                last_error = "the hold-up capacitor is not connected"
+                _note(resolved, "design", last_error, identity)
                 nxt = _after_design_miss(design_tries, escalated)
                 if nxt is None:
                     return _finish(
@@ -116,7 +121,8 @@ def walk(raw_text: str) -> RunResult:
             simulated = run_allowed(emit_cir(design, values))
             if simulated.status == "refused":
                 design_tries += 1
-                _note(resolved, "design", simulated.detail or "the deck was refused", identity)
+                last_error = simulated.detail or "the deck was refused"
+                _note(resolved, "design", last_error, identity)
                 nxt = _after_design_miss(design_tries, escalated)
                 if nxt is None:
                     return _finish(

@@ -8,6 +8,7 @@ def build_prompt(
     spec: FrozenSpec,
     blocks: list[NegativeConstraint],
     passed: list[str],
+    last_error: str = "",
 ) -> str:
     shown = blocks[:8]
     lines = [
@@ -29,12 +30,22 @@ def build_prompt(
         )
     lines.append("PASSED_AND_LOCKED: " + (", ".join(passed) if passed else "none"))
     lines.append(
-        "EMIT JSON only. The object must contain spec_hash set to SPEC_HASH, "
-        "limits set to BOUNDS_SI unchanged, and, when BOUNDS_SI has i_load, "
-        "i_load set to that same number. "
+        "EMIT one JSON object. Numbers are SI. "
+        "spec_hash is SPEC_HASH. limits is BOUNDS_SI copied unchanged. "
+        "When BOUNDS_SI has i_load, set i_load to that same number. "
         "Each part is an object with refdes and kind. "
         "kind is ic, resistor, capacitor, inductor, ferrite, or ideal_voltage_source. "
-        "Each pin is an object with refdes, name, net, and state set to connected. "
+        "A capacitor has capacitance in farads. An inductor has inductance in henries. "
+        "Each pin is an object with refdes, name, net, and state connected. "
+        "Name the ground net GND. Every pin is connected. "
+        "A power pin reaches GND through a resistor, inductor, ferrite, or ideal voltage source, "
+        "and a capacitor sits on that same net. A capacitor does not conduct DC. "
+        "Do not put two ideal voltage sources on one net other than GND. "
+        "A hold-up capacitor connects the rail to GND, its capacitance is at least c_min, "
+        "and its dielectric is not X5R, X7R, X6S, Y5V, or Z5U. "
+        "A buck includes f_sw in hertz and an inductor. "
         "Do not change a limit. Do not omit the spec load."
     )
+    if last_error.strip():
+        lines.append("LAST_REJECTED: " + " ".join(last_error.split())[:400])
     return "\n".join(lines)

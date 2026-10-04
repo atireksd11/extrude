@@ -38,7 +38,7 @@ def complete(prompt: str, seat: str) -> tuple[str, dict]:
             body = json.loads(response.read().decode("utf-8"))
     except urllib.error.HTTPError as exc:
         raise ProposalError("tool", f"the model returned {exc.code}: {_http_message(exc)}") from exc
-    text = body["choices"][0]["message"]["content"]
+    text = _message_text(body["choices"][0]["message"])
     usage = body.get("usage") or {}
     bill = {
         "prompt_tokens": usage.get("prompt_tokens"),
@@ -46,6 +46,21 @@ def complete(prompt: str, seat: str) -> tuple[str, dict]:
         "cost_usd": usage.get("cost_usd", usage.get("cost")),
     }
     return text, bill
+
+
+def _message_text(message: dict) -> str:
+    content = message.get("content")
+    if isinstance(content, str):
+        return content
+    if isinstance(content, list):
+        bits = []
+        for item in content:
+            if isinstance(item, str):
+                bits.append(item)
+            elif isinstance(item, dict) and isinstance(item.get("text"), str):
+                bits.append(item["text"])
+        return "\n".join(bits)
+    return "" if content is None else str(content)
 
 
 def _http_message(exc: urllib.error.HTTPError) -> str:
