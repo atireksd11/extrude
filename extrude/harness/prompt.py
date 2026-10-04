@@ -28,5 +28,10 @@ def build_prompt(
             f"measured {block.measured}, limit {block.limit}"
         )
     lines.append("PASSED_AND_LOCKED: " + (", ".join(passed) if passed else "none"))
-    lines.append("EMIT JSON only. Do not change BOUNDS_SI. Do not omit the spec load.")
+    lines.append(
+        "EMIT JSON only. The object must contain spec_hash set to SPEC_HASH, "
+        "limits set to BOUNDS_SI unchanged, and, when BOUNDS_SI has i_load, "
+        "i_load set to that same number. Then parts and pins. "
+        "Do not change a limit. Do not omit the spec load."
+    )
     return "\n".join(lines)
