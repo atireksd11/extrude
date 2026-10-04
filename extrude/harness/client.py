@@ -2,6 +2,7 @@
 
 import json
 import os
+import urllib.error
 import urllib.request
 
 from extrude.harness.proposal import ProposalError
@@ -14,6 +15,8 @@ def complete(prompt: str, seat: str) -> tuple[str, dict]:
         raise ProposalError("tool", "no second model key")
     if not key:
         raise ProposalError("tool", "no model key")
+    if key.startswith("<") or key.endswith(">"):
+        raise ProposalError("tool", "the model key still has angle brackets around it")
     model = os.environ.get(
         "EXTRUDE_ESCALATION_MODEL" if seat == "escalation" else "EXTRUDE_MODEL",
         "",
@@ -30,8 +33,11 @@ def complete(prompt: str, seat: str) -> tuple[str, dict]:
         headers={"Authorization": f"Bearer {key}", "Content-Type": "application/json"},
         method="POST",
     )
-    with urllib.request.urlopen(request, timeout=60) as response:
-        body = json.loads(response.read().decode("utf-8"))
+    try:
+        with urllib.request.urlopen(request, timeout=60) as response:
+            body = json.loads(response.read().decode("utf-8"))
+    except urllib.error.HTTPError as exc:
+        raise ProposalError("tool", f"the model returned {exc.code}: {_http_message(exc)}") from exc
     text = body["choices"][0]["message"]["content"]
     usage = body.get("usage") or {}
     bill = {
@@ -40,3 +46,19 @@ def complete(prompt: str, seat: str) -> tuple[str, dict]:
         "cost_usd": usage.get("cost_usd", usage.get("cost")),
     }
     return text, bill
+
+
+def _http_message(exc: urllib.error.HTTPError) -> str:
+    raw = exc.read().decode("utf-8", errors="replace")
+    try:
+        payload = json.loads(raw)
+    except json.JSONDecodeError:
+        payload = None
+    if isinstance(payload, dict):
+        error = payload.get("error")
+        if isinstance(error, dict) and error.get("message"):
+            return str(error["message"])[:180]
+        if payload.get("message"):
+            return str(payload["message"])[:180]
+    text = " ".join(raw.split())
+    return text[:180] or exc.reason
