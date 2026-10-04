@@ -3,7 +3,7 @@
 from unittest.mock import patch
 
 from extrude.emit import emit_cir
-from extrude.ir.models import CircuitIR
+from extrude.ir.models import CircuitIR, Part, Pin
 from extrude.physics.models import CapValue, CurveSource, PhysicsValues
 from extrude.sim import run_allowed
 from extrude.sim.policy import refusal_reason
@@ -32,6 +32,31 @@ def test_each_capacitor_uses_its_own_use_value():
         parts = line.split()
         values[parts[0]] = float(parts[3])
     assert values == {"C1": 9.12e-6, "C2": 4e-6}
+
+
+def test_a_connected_capacitor_stays_on_its_own_nets():
+    design = CircuitIR(
+        parts=[
+            Part(refdes="C1", kind="capacitor", capacitance=22e-6),
+            Part(refdes="C2", kind="capacitor", capacitance=10e-6),
+        ],
+        pins=[
+            Pin(refdes="C1", name="1", net="HOLD", state="connected"),
+            Pin(refdes="C1", name="2", net="GND", state="connected"),
+            Pin(refdes="C2", name="1", net="VIN", state="connected"),
+            Pin(refdes="C2", name="2", net="GND", state="connected"),
+        ],
+    )
+    deck = emit_cir(
+        design,
+        PhysicsValues(caps=[_cap("C1", 22e-6, 9.12e-6), _cap("C2", 10e-6, 4e-6)]),
+    )
+    body = [line for line in deck.splitlines() if line and not line.startswith("*")]
+    assert "C1 HOLD 0 9.12e-06" in body
+    assert "C2 VIN 0 4e-06" in body
+    assert not any("rail" in line for line in deck.splitlines())
+    assert "v(HOLD)" in deck
+    assert refusal_reason(deck) is None
 
 
 def test_a_slow_holdup_pulse_is_not_a_switching_clock_and_a_fast_one_is():
