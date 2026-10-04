@@ -21,10 +21,15 @@ def parse_proposal(text: str, spec: FrozenSpec) -> tuple[CircuitIR, ElectricalId
     if raw.get("spec_hash") != spec.spec_hash:
         raise ProposalError("design", "the proposal changed the frozen card")
     limits = raw.get("limits")
-    if isinstance(limits, dict):
-        for key, value in limits.items():
-            if key not in spec.values_si or spec.values_si[key] != value:
+    if not isinstance(limits, dict):
+        raise ProposalError("design", "the proposal omitted the frozen limits")
+    for key, value in spec.values_si.items():
+        got = limits.get(key)
+        if isinstance(got, (int, float)) and isinstance(value, (int, float)):
+            if float(got) != float(value):
                 raise ProposalError("design", "the proposal changed a limit")
+        elif got != value:
+            raise ProposalError("design", "the proposal changed a limit")
     if "i_load" in spec.values_si:
         load = raw.get("i_load")
         if load is None or load == 0 or load != spec.values_si["i_load"]:

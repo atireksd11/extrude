@@ -88,3 +88,9 @@ Things that showed up while building and were not in the phase plan. Append only
 - Phase: 6
 - What showed up that was not planned: A proposal that fails while it is still being read has no part identity yet. The loop now treats that name as empty instead of crashing. A fenced JSON block is accepted. Tightening ripple is thrown away. No model key was set, so the live call remains unrun.
 - Does a later phase change? no
+
+## 2026-10-03
+
+- Phase: 6
+- What showed up that was not planned: A proposal could omit the frozen numbers and still be checked. An empty hold-up was blamed on the simulator, because the deck writer ignores the design and builds its own fade. Omitting a frozen number is now a changed card. A hold-up capacitor that is not connected is a design miss. Only a crash or a missing simulator stays a tool problem.
+- Does a later phase change? no

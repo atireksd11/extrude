@@ -97,7 +97,39 @@ def walk(raw_text: str) -> RunResult:
             seat, escalated = nxt
             continue
         if resolved.task_class == "holdup_mlcc":
+            if not _holdup_cap_is_connected(design):
+                design_tries += 1
+                _note(resolved, "design", "the hold-up capacitor is not connected", identity)
+                nxt = _after_design_miss(design_tries, escalated)
+                if nxt is None:
+                    return _finish(
+                        "stopped",
+                        resolved,
+                        design_tries,
+                        prompt_tokens,
+                        completion_tokens,
+                        cost_usd,
+                        "the hold-up capacitor is not connected",
+                    )
+                seat, escalated = nxt
+                continue
             simulated = run_allowed(emit_cir(design, values))
+            if simulated.status == "refused":
+                design_tries += 1
+                _note(resolved, "design", simulated.detail or "the deck was refused", identity)
+                nxt = _after_design_miss(design_tries, escalated)
+                if nxt is None:
+                    return _finish(
+                        "stopped",
+                        resolved,
+                        design_tries,
+                        prompt_tokens,
+                        completion_tokens,
+                        cost_usd,
+                        simulated.detail or "the deck was refused",
+                    )
+                seat, escalated = nxt
+                continue
             if simulated.status != "measured":
                 record(from_simulator_log(simulated.detail or simulated.status, resolved.spec_hash))
                 return _finish(
@@ -110,6 +142,23 @@ def walk(raw_text: str) -> RunResult:
                     simulated.detail or simulated.status,
                 )
         return _finish("checked", resolved, design_tries, prompt_tokens, completion_tokens, cost_usd, "checked")
+
+
+def _holdup_cap_is_connected(design) -> bool:
+    capacitors = {
+        part.refdes
+        for part in design.parts
+        if part.kind == "capacitor" and part.capacitance and part.capacitance > 0
+    }
+    for refdes in capacitors:
+        pins = [
+            pin
+            for pin in design.pins
+            if pin.refdes == refdes and pin.state == "connected" and pin.net and pin.net.strip()
+        ]
+        if len(pins) >= 2:
+            return True
+    return False
 
 
 def _after_design_miss(design_tries: int, escalated: bool) -> tuple[str, bool] | None:

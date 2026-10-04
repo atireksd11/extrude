@@ -31,3 +31,5 @@ Passed 2026-10-03 for the canned loop. 95 tests passed.
 - “Power an ESP32” asks a question and does not call the model. An LED card is outside this seat.
 - `learn` still refuses. A bill with tokens but no dollar field leaves the cost empty.
 - No model key was present in the environment, so a live provider call was not made. The seat is ready when `EXTRUDE_MODEL_KEY` or `OPENAI_API_KEY` is set.
+- A proposal must repeat every frozen number. Leaving them out is treated as a changed card.
+- A hold-up with no connected capacitor is a design miss. A simulator crash on a connected hold-up stays a tool problem and does not spend a design try.

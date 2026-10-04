@@ -36,6 +36,7 @@ def _good(spec_hash: str) -> str:
         {
             "spec_hash": spec_hash,
             "i_load": 2,
+            "limits": {"vin": 5.0, "vout": 3.3, "i_load": 2.0, "ripple_pp": 0.03},
             "parts": [
                 Part(refdes="U1", kind="ic").model_dump(),
                 Part(refdes="C1", kind="capacitor", capacitance=10e-6, dielectric="C0G", tolerance=0, bias_v=3.3).model_dump(),
@@ -96,7 +97,15 @@ def test_a_bad_proposal_then_a_good_one_checks_with_no_network():
 
 def test_dropping_the_load_is_rejected():
     def client(prompt: str, seat: str) -> tuple[str, dict]:
-        return json.dumps({"spec_hash": _hash(prompt), "i_load": 0, "parts": [], "pins": []}), {}
+        return json.dumps(
+            {
+                "spec_hash": _hash(prompt),
+                "i_load": 0,
+                "limits": {"vin": 5.0, "vout": 3.3, "i_load": 2.0, "ripple_pp": 0.03},
+                "parts": [],
+                "pins": [],
+            }
+        ), {}
 
     set_client(client)
     result = run("5 V to 3.3 V at 2 A")
@@ -188,12 +197,58 @@ def test_fenced_json_is_read_and_a_tighter_limit_is_thrown_away():
     assert "limit" in (result.detail or "")
 
 
-def test_a_holdup_that_cannot_be_simulated_stops_as_a_tool_problem():
+def test_a_holdup_without_a_capacitor_is_a_design_miss():
     def client(prompt: str, seat: str) -> tuple[str, dict]:
-        return json.dumps({"spec_hash": _hash(prompt), "parts": [], "pins": []}), {}
+        return json.dumps(
+            {
+                "spec_hash": _hash(prompt),
+                "limits": {"v_rail": 4.7, "t_hold": 0.02, "c_min": 545e-6},
+                "parts": [],
+                "pins": [],
+            }
+        ), {}
 
     set_client(client)
     result = run("hold-up 4.7 V for 20 ms, 545 uF")
+    assert result.status == "stopped"
+    assert result.attempts == 2
+    assert "capacitor" in (result.detail or "")
+    assert tool_rows() == []
+
+
+def test_a_simulator_crash_on_a_connected_holdup_does_not_spend_a_design_try():
+    from extrude.sim.models import SimResult
+
+    def client(prompt: str, seat: str) -> tuple[str, dict]:
+        return json.dumps(
+            {
+                "spec_hash": _hash(prompt),
+                "limits": {"v_rail": 4.7, "t_hold": 0.02, "c_min": 545e-6},
+                "parts": [
+                    Part(
+                        refdes="C1",
+                        kind="capacitor",
+                        capacitance=1000e-6,
+                        tolerance=0,
+                        dielectric="C0G",
+                        bias_v=4.7,
+                    ).model_dump(),
+                    Part(refdes="R1", kind="resistor").model_dump(),
+                ],
+                "pins": [
+                    Pin(refdes="C1", name="A", net="RAIL", state="connected").model_dump(),
+                    Pin(refdes="C1", name="B", net="GND", state="connected").model_dump(),
+                    Pin(refdes="R1", name="A", net="RAIL", state="connected").model_dump(),
+                    Pin(refdes="R1", name="B", net="GND", state="connected").model_dump(),
+                    Pin(refdes="C1", name="GND", net="GND", state="connected", role="ground").model_dump(),
+                ],
+            }
+        ), {}
+
+    set_client(client)
+    crashed = SimResult(status="tooling", cause="tooling", detail="singular matrix")
+    with patch("extrude.harness.loop.run_allowed", return_value=crashed):
+        result = run("hold-up 4.7 V for 20 ms, 545 uF")
     assert result.status == "stopped"
     assert result.attempts == 0
     assert len(tool_rows()) == 1
