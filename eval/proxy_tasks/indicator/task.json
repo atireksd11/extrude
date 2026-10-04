@@ -1,0 +1,15 @@
+{
+  "id": "indicator",
+  "family": "other",
+  "prompt": "a power-good lamp that draws 5 mA from 3.3 V",
+  "reference_bom_usd": 0.06,
+  "answer": "A small indicator at 5 mA from 3.3 V. Airflow, radios, and fast memory are not part of the answer.",
+  "technical_check": "The sentence stays an indicator lamp. It is not graded as a buck, regulator, or hold-up.",
+  "card_kind": "needs_info",
+  "card": {
+    "missing": [
+      "task_class"
+    ],
+    "question": "Which circuit is this: buck, regulator, hold-up, LED, or an MCU swap?"
+  }
+}

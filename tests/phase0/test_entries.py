@@ -6,13 +6,10 @@ from pathlib import Path
 import pytest
 
 from extrude.coverage import cover
-from extrude.eval import score
-from extrude.harness.models import RunResult
 from extrude.intake.models import FrozenSpec
 from extrude.ir import load, save
 from extrude.ir.models import CircuitIR
 from extrude.learn import propose_offline
-from extrude.physics.models import PhysicsValues
 ROOT = Path(__file__).resolve().parents[2]
 BAD_STRINGS = {"PASS", "passed", "design is good"}
 
@@ -30,7 +27,6 @@ def test_every_entry_says_not_built():
         (cover, (spec,)),
         (save, (design, Path("design.json"))),
         (load, (Path("design.json"),)),
-        (score, (RunResult(),)),
         (propose_offline, ()),
     ]
     for func, args in calls:

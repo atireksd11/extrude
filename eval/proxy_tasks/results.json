@@ -1,0 +1,216 @@
+{
+  "signed": false,
+  "reason": "Luna and Astra were not both logged",
+  "rows": [
+    {
+      "task_id": "buck",
+      "model": "none",
+      "harness_on": true,
+      "run": 1,
+      "technical": 0.0,
+      "cost_efficiency": 0.0,
+      "score": 0.0,
+      "dollars": null,
+      "seconds": 0.0,
+      "miss_kind": "tool"
+    },
+    {
+      "task_id": "buck",
+      "model": "none",
+      "harness_on": false,
+      "run": 1,
+      "technical": 0.0,
+      "cost_efficiency": 0.0,
+      "score": 0.0,
+      "dollars": null,
+      "seconds": 0.0,
+      "miss_kind": "tool"
+    },
+    {
+      "task_id": "divider",
+      "model": "none",
+      "harness_on": true,
+      "run": 1,
+      "technical": 0.0,
+      "cost_efficiency": 0.0,
+      "score": 0.0,
+      "dollars": null,
+      "seconds": 0.0,
+      "miss_kind": "request"
+    },
+    {
+      "task_id": "divider",
+      "model": "none",
+      "harness_on": false,
+      "run": 1,
+      "technical": 0.0,
+      "cost_efficiency": 0.0,
+      "score": 0.0,
+      "dollars": null,
+      "seconds": 0.0,
+      "miss_kind": "request"
+    },
+    {
+      "task_id": "holdup",
+      "model": "none",
+      "harness_on": true,
+      "run": 1,
+      "technical": 0.0,
+      "cost_efficiency": 0.0,
+      "score": 0.0,
+      "dollars": null,
+      "seconds": 0.0,
+      "miss_kind": "tool"
+    },
+    {
+      "task_id": "holdup",
+      "model": "none",
+      "harness_on": false,
+      "run": 1,
+      "technical": 0.0,
+      "cost_efficiency": 0.0,
+      "score": 0.0,
+      "dollars": null,
+      "seconds": 0.0,
+      "miss_kind": "tool"
+    },
+    {
+      "task_id": "indicator",
+      "model": "none",
+      "harness_on": true,
+      "run": 1,
+      "technical": 0.0,
+      "cost_efficiency": 0.0,
+      "score": 0.0,
+      "dollars": null,
+      "seconds": 0.0,
+      "miss_kind": "request"
+    },
+    {
+      "task_id": "indicator",
+      "model": "none",
+      "harness_on": false,
+      "run": 1,
+      "technical": 0.0,
+      "cost_efficiency": 0.0,
+      "score": 0.0,
+      "dollars": null,
+      "seconds": 0.0,
+      "miss_kind": "request"
+    },
+    {
+      "task_id": "regulator",
+      "model": "none",
+      "harness_on": true,
+      "run": 1,
+      "technical": 0.0,
+      "cost_efficiency": 0.0,
+      "score": 0.0,
+      "dollars": null,
+      "seconds": 0.0,
+      "miss_kind": "tool"
+    },
+    {
+      "task_id": "regulator",
+      "model": "none",
+      "harness_on": false,
+      "run": 1,
+      "technical": 0.0,
+      "cost_efficiency": 0.0,
+      "score": 0.0,
+      "dollars": null,
+      "seconds": 0.0,
+      "miss_kind": "tool"
+    },
+    {
+      "task_id": "led",
+      "model": "none",
+      "harness_on": true,
+      "run": 1,
+      "technical": 0.0,
+      "cost_efficiency": 0.0,
+      "score": 0.0,
+      "dollars": null,
+      "seconds": 0.0,
+      "miss_kind": "request"
+    },
+    {
+      "task_id": "led",
+      "model": "none",
+      "harness_on": false,
+      "run": 1,
+      "technical": 0.0,
+      "cost_efficiency": 0.0,
+      "score": 0.0,
+      "dollars": null,
+      "seconds": 0.0,
+      "miss_kind": "tool"
+    },
+    {
+      "task_id": "pullup",
+      "model": "none",
+      "harness_on": true,
+      "run": 1,
+      "technical": 0.0,
+      "cost_efficiency": 0.0,
+      "score": 0.0,
+      "dollars": null,
+      "seconds": 0.0,
+      "miss_kind": "request"
+    },
+    {
+      "task_id": "pullup",
+      "model": "none",
+      "harness_on": false,
+      "run": 1,
+      "technical": 0.0,
+      "cost_efficiency": 0.0,
+      "score": 0.0,
+      "dollars": null,
+      "seconds": 0.0,
+      "miss_kind": "request"
+    },
+    {
+      "task_id": "series",
+      "model": "none",
+      "harness_on": true,
+      "run": 1,
+      "technical": 0.0,
+      "cost_efficiency": 0.0,
+      "score": 0.0,
+      "dollars": null,
+      "seconds": 0.0,
+      "miss_kind": "request"
+    },
+    {
+      "task_id": "series",
+      "model": "none",
+      "harness_on": false,
+      "run": 1,
+      "technical": 0.0,
+      "cost_efficiency": 0.0,
+      "score": 0.0,
+      "dollars": null,
+      "seconds": 0.0,
+      "miss_kind": "request"
+    }
+  ],
+  "summaries": [
+    {
+      "model": "none",
+      "harness_on": false,
+      "run": 1,
+      "average": 0.0,
+      "dollars": null,
+      "seconds": 0.0
+    },
+    {
+      "model": "none",
+      "harness_on": true,
+      "run": 1,
+      "average": 0.0,
+      "dollars": null,
+      "seconds": 0.0
+    }
+  ]
+}

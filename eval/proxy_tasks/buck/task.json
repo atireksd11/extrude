@@ -1,0 +1,33 @@
+{
+  "id": "buck",
+  "family": "power",
+  "prompt": "5 V to 3.3 V at 2 A",
+  "reference_bom_usd": 1.2,
+  "answer": "A buck with input 5 V, output 3.3 V, load 2 A, and ripple at or under the 30 mV assumption. The output capacitor use-value is what the ripple math reads.",
+  "technical_check": "The frozen buck card matches, including the 30 mV ripple assumption, and the ripple check reads the output capacitor use-value.",
+  "card_kind": "frozen",
+  "card": {
+    "task_class": "buck",
+    "values_si": {
+      "vout": 3.3,
+      "vin": 5.0,
+      "i_load": 2.0,
+      "ripple_pp": 0.03
+    },
+    "origins": {
+      "vout": "user_span",
+      "vin": "user_span",
+      "i_load": "user_span",
+      "ripple_pp": "default"
+    },
+    "defaults_version": "2026-10-03",
+    "spec_hash": "4ea63ab582499a3f3c0ea7421b86cdcc72542b2347d0bf836f553c3d3b3b0fe2",
+    "labels": {},
+    "evidence": {
+      "vout": "3.3 V",
+      "vin": "5 V",
+      "i_load": "2 A",
+      "ripple_pp": "30 mV"
+    }
+  }
+}

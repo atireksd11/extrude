@@ -1,0 +1,15 @@
+{
+  "id": "series",
+  "family": "other",
+  "prompt": "a 330 ohm series resistor into a lower-voltage pin",
+  "reference_bom_usd": 0.02,
+  "answer": "One 330 ohm series resistor between a signal and a lower-voltage pin.",
+  "technical_check": "The sentence stays a series resistor. It is not graded as a buck, regulator, or hold-up.",
+  "card_kind": "needs_info",
+  "card": {
+    "missing": [
+      "task_class"
+    ],
+    "question": "Which circuit is this: buck, regulator, hold-up, LED, or an MCU swap?"
+  }
+}

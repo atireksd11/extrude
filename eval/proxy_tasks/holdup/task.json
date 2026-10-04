@@ -1,0 +1,30 @@
+{
+  "id": "holdup",
+  "family": "power",
+  "prompt": "hold-up 4.7 V for 20 ms, 545 uF",
+  "reference_bom_usd": 0.42,
+  "answer": "A connected capacitor whose use-value at 4.7 V, after tolerance, is at least 545 uF. A generic half-loss screen is not proof.",
+  "technical_check": "The frozen hold-up card matches, the capacitor is connected, and the use-value meets the minimum. A generic half-loss screen is not proof.",
+  "card_kind": "frozen",
+  "card": {
+    "task_class": "holdup_mlcc",
+    "values_si": {
+      "v_rail": 4.7,
+      "t_hold": 0.02,
+      "c_min": 0.000545
+    },
+    "origins": {
+      "v_rail": "user_span",
+      "t_hold": "user_span",
+      "c_min": "user_span"
+    },
+    "defaults_version": "2026-10-03",
+    "spec_hash": "a81d0227cb9dd5503dc1696ac9a36853d09b89e49a366bf8d2035fc788510e0d",
+    "labels": {},
+    "evidence": {
+      "v_rail": "4.7 V",
+      "t_hold": "20 ms",
+      "c_min": "545 uF"
+    }
+  }
+}

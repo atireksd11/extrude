@@ -1,1 +1,1 @@
-Phase 7 task slot. Not a task yet.
+Buck practice task. The question, the answer, and the reference cost are in task.json.

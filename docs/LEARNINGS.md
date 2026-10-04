@@ -94,3 +94,9 @@ Things that showed up while building and were not in the phase plan. Append only
 - Phase: 6
 - What showed up that was not planned: A proposal could omit the frozen numbers and still be checked. An empty hold-up was blamed on the simulator, because the deck writer ignores the design and builds its own fade. Omitting a frozen number is now a changed card. A hold-up capacitor that is not connected is a design miss. Only a crash or a missing simulator stays a tool problem.
 - Does a later phase change? no
+
+## 2026-10-03
+
+- Phase: 7
+- What showed up that was not planned: Two of the other-circuit sentences, a divider and a series resistor, were read as unfinished bucks because they named two voltages. Those prompts were rewritten so they stay outside the power seat. The gate also ignored a handwritten score and now uses the same 0.65 / 0.35 formula as the scorer. No model key was set, so Luna and Astra were not run. The three power tasks miss as tools. The other five miss as requests. The show-people checklist stays unsigned.
+- Does a later phase change? no

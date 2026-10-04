@@ -1,0 +1,30 @@
+{
+  "id": "regulator",
+  "family": "power",
+  "prompt": "regulator from 12 V to 5 V at 0.2 A",
+  "reference_bom_usd": 0.35,
+  "answer": "A linear regulator from 12 V to 5 V at 0.2 A. Heat, if estimated, is a still-air datasheet estimate and is not airflow.",
+  "technical_check": "The frozen regulator card matches 12 V to 5 V at 0.2 A. A heat note is a still-air estimate, not airflow.",
+  "card_kind": "frozen",
+  "card": {
+    "task_class": "ldo",
+    "values_si": {
+      "vin": 12.0,
+      "vout": 5.0,
+      "i_load": 0.2
+    },
+    "origins": {
+      "vin": "user_span",
+      "vout": "user_span",
+      "i_load": "user_span"
+    },
+    "defaults_version": "2026-10-03",
+    "spec_hash": "f53359bc3148d99fae01cd58c9322e82d5cd72b0d38b7f894e2a39808cbd9c28",
+    "labels": {},
+    "evidence": {
+      "vin": "12 V",
+      "vout": "5 V",
+      "i_load": "0.2 A"
+    }
+  }
+}

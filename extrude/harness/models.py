@@ -16,3 +16,5 @@ class RunResult(BaseModel):
     prompt_tokens: int | None = None
     completion_tokens: int | None = None
     cost_usd: float | None = None
+    bom_usd: float | None = None
+    reference_bom_usd: float | None = None
