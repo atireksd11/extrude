@@ -5,7 +5,8 @@ import math
 from extrude.eval.models import ScoreCard
 from extrude.harness.models import RunResult
 
-_UNCHECKED = "Not checked: heat-in-airflow, radios, and fast memory."
+UNCHECKED = "Not checked: heat-in-airflow, radios, and fast memory."
+NOT_OFFICIAL = "This is not an official EEBench score."
 
 
 def blend(technical: float, cost_efficiency: float) -> float:
@@ -41,8 +42,8 @@ def export_note(result: RunResult) -> str:
             f"Cost efficiency: {card.cost_efficiency}",
             f"Score: {card.score}",
             checked,
-            _UNCHECKED,
-            "This is not an official EEBench score.",
+            UNCHECKED,
+            NOT_OFFICIAL,
         ]
     )
 

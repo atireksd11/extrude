@@ -20,5 +20,17 @@
     "evidence": {
       "i_led": "20 mA"
     }
-  }
+  },
+  "reference_parts": [
+    {
+      "item": "LED",
+      "qty": 1,
+      "usd": 0.05
+    },
+    {
+      "item": "series resistor",
+      "qty": 1,
+      "usd": 0.03
+    }
+  ]
 }

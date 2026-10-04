@@ -29,5 +29,27 @@
       "i_load": "2 A",
       "ripple_pp": "30 mV"
     }
-  }
+  },
+  "reference_parts": [
+    {
+      "item": "buck regulator",
+      "qty": 1,
+      "usd": 0.7
+    },
+    {
+      "item": "inductor",
+      "qty": 1,
+      "usd": 0.25
+    },
+    {
+      "item": "input capacitor",
+      "qty": 1,
+      "usd": 0.1
+    },
+    {
+      "item": "output capacitor",
+      "qty": 1,
+      "usd": 0.15
+    }
+  ]
 }

@@ -26,5 +26,17 @@
       "t_hold": "20 ms",
       "c_min": "545 uF"
     }
-  }
+  },
+  "reference_parts": [
+    {
+      "item": "hold-up capacitor bank, use-value at least 545 uF at 4.7 V",
+      "qty": 1,
+      "usd": 0.32
+    },
+    {
+      "item": "2 ohm source resistor",
+      "qty": 1,
+      "usd": 0.1
+    }
+  ]
 }

@@ -26,5 +26,22 @@
       "vout": "5 V",
       "i_load": "0.2 A"
     }
-  }
+  },
+  "reference_parts": [
+    {
+      "item": "linear regulator",
+      "qty": 1,
+      "usd": 0.25
+    },
+    {
+      "item": "input capacitor",
+      "qty": 1,
+      "usd": 0.05
+    },
+    {
+      "item": "output capacitor",
+      "qty": 1,
+      "usd": 0.05
+    }
+  ]
 }

@@ -100,3 +100,9 @@ Things that showed up while building and were not in the phase plan. Append only
 - Phase: 7
 - What showed up that was not planned: Two of the other-circuit sentences, a divider and a series resistor, were read as unfinished bucks because they named two voltages. Those prompts were rewritten so they stay outside the power seat. The gate also ignored a handwritten score and now uses the same 0.65 / 0.35 formula as the scorer. No model key was set, so Luna and Astra were not run. The three power tasks miss as tools. The other five miss as requests. The show-people checklist stays unsigned.
 - Does a later phase change? no
+
+## 2026-10-03
+
+- Phase: 7
+- What showed up that was not planned: A second pass found two scoring holes. A simulator timeout and a missing measurement were labeled design misses, and so was an unreadable proposal. Those are tool misses. A checked flag on a sentence that never froze a card was also able to take technical credit. The saved log did not name heat-in-airflow, radios, and fast memory. The tasks that missed with no model key are hold-up, buck, and regulator as tools, and LED, divider, pull-up, series resistor, and indicator as requests.
+- Does a later phase change? no

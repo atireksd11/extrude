@@ -4,7 +4,7 @@ from pathlib import Path
 
 from pydantic import BaseModel, Field
 
-from extrude.eval.api import blend, score
+from extrude.eval.api import NOT_OFFICIAL, UNCHECKED, blend, score
 from extrude.eval.tasks import PracticeTask, load_tasks
 from extrude.harness.models import RunResult
 
@@ -39,6 +39,7 @@ class RunSummary(BaseModel):
 class GateReport(BaseModel):
     signed: bool
     reason: str
+    notice: str = f"{UNCHECKED} {NOT_OFFICIAL}"
     rows: list[ScoreRow] = Field(default_factory=list)
     summaries: list[RunSummary] = Field(default_factory=list)
 
@@ -53,8 +54,12 @@ def row_from_run(
     seconds: float,
 ) -> ScoreRow:
     stamped = result.model_copy(update={"reference_bom_usd": task.reference_bom_usd})
-    if (
-        task.family == "power"
+    if task.card_kind != "frozen" and stamped.status == "checked":
+        stamped = stamped.model_copy(
+            update={"status": "stopped", "detail": "this sentence does not freeze a card"}
+        )
+    elif (
+        task.card_kind == "frozen"
         and stamped.status == "checked"
         and stamped.spec_hash != task.card.get("spec_hash")
     ):
@@ -174,12 +179,28 @@ def _name(model: str) -> str:
     return model.strip().lower()
 
 
+_TOOL_EXACT = {
+    "timeout",
+    "no_measurement",
+    "simulator_crash",
+    "no model key",
+}
+_TOOL_PREFIXES = (
+    "the model call failed",
+    "the proposal was not json",
+    "the proposal was not a json object",
+    "the proposal did not fit the design file",
+    "the part identity was unreadable",
+    "ngspice was not found",
+)
+
+
 def _miss_kind(result: RunResult) -> str | None:
     if result.status == "checked":
         return None
     if result.status == "needs_info" or "only designs" in (result.detail or ""):
         return "request"
     detail = (result.detail or "").lower()
-    if any(bit in detail for bit in ("no model key", "model call failed", "not json", "simulator", "ngspice")):
+    if detail in _TOOL_EXACT or any(detail.startswith(bit) for bit in _TOOL_PREFIXES):
         return "tool"
     return "design"

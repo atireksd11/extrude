@@ -1,6 +1,7 @@
 """The frozen eight. Written as the questions, not as a harness tuned to them."""
 
 import json
+import math
 from pathlib import Path
 from typing import Literal
 
@@ -14,11 +15,18 @@ _POWER = {
 }
 
 
+class ReferencePart(BaseModel):
+    item: str
+    qty: int
+    usd: float
+
+
 class PracticeTask(BaseModel):
     id: str
     family: Literal["power", "other"]
     prompt: str
     reference_bom_usd: float
+    reference_parts: list[ReferencePart]
     answer: str
     technical_check: str
     card_kind: Literal["frozen", "needs_info"]
@@ -37,6 +45,11 @@ def load_tasks() -> list[PracticeTask]:
     for task in found:
         if task.reference_bom_usd <= 0 or not task.technical_check.strip() or not task.answer.strip():
             raise ValueError(f"{task.id} is missing its answer, check, or reference cost")
+        if not task.reference_parts or any(part.qty < 1 or part.usd <= 0 or not part.item.strip() for part in task.reference_parts):
+            raise ValueError(f"{task.id} is missing a reference parts list")
+        total = sum(part.qty * part.usd for part in task.reference_parts)
+        if not math.isclose(total, task.reference_bom_usd, rel_tol=0, abs_tol=1e-9):
+            raise ValueError(f"{task.id} reference parts do not add up to the reference cost")
         expected = _POWER.get(task.id)
         if expected is None:
             if task.family != "other":

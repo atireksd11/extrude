@@ -1,6 +1,7 @@
 {
   "signed": false,
   "reason": "Luna and Astra were not both logged",
+  "notice": "Not checked: heat-in-airflow, radios, and fast memory. This is not an official EEBench score.",
   "rows": [
     {
       "task_id": "buck",

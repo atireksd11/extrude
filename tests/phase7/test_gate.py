@@ -28,6 +28,8 @@ def test_eight_cards_match_the_sentences():
     assert {task.id for task in tasks if task.family == "power"} == {"holdup", "buck", "regulator"}
     for task in tasks:
         assert resolve(task.prompt).model_dump(mode="json") == task.card
+        total = sum(part.qty * part.usd for part in task.reference_parts)
+        assert total == pytest.approx(task.reference_bom_usd)
 
 
 def test_a_failed_circuit_gets_no_cost_credit():
@@ -57,6 +59,10 @@ def test_export_names_what_was_not_checked():
     assert "fast memory" in note
     assert "not an official EEBench score" in note
     assert "Parts cost was not credited" in note
+    report = judge_gate([])
+    assert "heat-in-airflow" in report.notice
+    assert "radios" in report.notice
+    assert "fast memory" in report.notice
 
 
 def test_power_tasks_alone_do_not_sign():
@@ -133,6 +139,51 @@ def test_missing_harness_off_log_cannot_sign():
     assert report.reason == "harness-off was not logged"
 
 
+def test_a_tool_crash_is_not_filed_as_a_design_miss():
+    task = next(item for item in load_tasks() if item.id == "holdup")
+    hashed = task.card["spec_hash"]
+    for detail in (
+        "timeout",
+        "no_measurement",
+        "simulator_crash",
+        "the proposal did not fit the design file: pins",
+        "the part identity was unreadable: name",
+    ):
+        row = row_from_run(
+            task,
+            RunResult(status="stopped", spec_hash=hashed, detail=detail),
+            model="none",
+            harness_on=True,
+            run=1,
+            seconds=0.1,
+        )
+        assert row.miss_kind == "tool", detail
+    for detail in ("the proposal dropped the load", "switch", "the hold-up capacitor is not connected"):
+        row = row_from_run(
+            task,
+            RunResult(status="stopped", spec_hash=hashed, detail=detail),
+            model="none",
+            harness_on=True,
+            run=1,
+            seconds=0.1,
+        )
+        assert row.miss_kind == "design", detail
+
+
+def test_an_unfrozen_sentence_cannot_be_marked_checked():
+    task = next(item for item in load_tasks() if item.id == "divider")
+    row = row_from_run(
+        task,
+        RunResult(status="checked", bom_usd=0.01, cost_usd=0.0),
+        model="none",
+        harness_on=True,
+        run=1,
+        seconds=0.1,
+    )
+    assert row.score == 0.0
+    assert row.miss_kind == "design"
+
+
 def test_a_changed_card_is_not_a_technical_pass():
     task = next(item for item in load_tasks() if item.id == "buck")
     result = RunResult(
@@ -175,6 +226,26 @@ def test_log_records_both_harness_modes(tmp_path):
     assert '"average"' in text
     assert '"dollars"' in text
     assert '"seconds"' in text
+
+
+def test_saved_log_is_unsigned_and_names_the_unchecked_work():
+    import json
+    from pathlib import Path
+
+    saved = json.loads((Path(__file__).resolve().parents[2] / "eval" / "proxy_tasks" / "results.json").read_text(encoding="utf-8"))
+    assert saved["signed"] is False
+    assert "heat-in-airflow" in saved["notice"]
+    assert "radios" in saved["notice"]
+    assert "fast memory" in saved["notice"]
+    misses = {row["task_id"]: row["miss_kind"] for row in saved["rows"] if row["harness_on"]}
+    assert misses["holdup"] == "tool"
+    assert misses["buck"] == "tool"
+    assert misses["regulator"] == "tool"
+    assert misses["led"] == "request"
+    assert misses["divider"] == "request"
+    assert misses["pullup"] == "request"
+    assert misses["series"] == "request"
+    assert misses["indicator"] == "request"
 
 
 def test_no_model_key_cannot_sign_the_gate():

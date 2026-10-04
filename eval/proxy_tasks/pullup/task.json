@@ -11,5 +11,12 @@
       "task_class"
     ],
     "question": "Which circuit is this: buck, regulator, hold-up, LED, or an MCU swap?"
-  }
+  },
+  "reference_parts": [
+    {
+      "item": "4.7k resistor",
+      "qty": 2,
+      "usd": 0.015
+    }
+  ]
 }

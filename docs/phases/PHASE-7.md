@@ -20,7 +20,7 @@ People outside the build see it only after that checklist is signed. A higher sc
 
 ## Checkpoint
 
-Not signed. 2026-10-03. 110 tests passed, 1 skipped. The skip is the live ngspice check when `NGSPICE_PATH` is unset.
+Not signed. 2026-10-03. 113 tests passed, 1 skipped. The skip is the live ngspice check when `NGSPICE_PATH` is unset.
 
 - The eight tasks are in `eval/proxy_tasks/`, each with the sentence, a written answer, a technical check, and a reference cost. The stored card matches what intake freezes from that sentence.
 - A failed circuit scores 0 even when its parts list is cheaper than the reference. A working circuit scores `0.65 + 0.35 × cost efficiency`. The gate recomputes that formula, so a log cannot invent a higher average.
@@ -29,4 +29,7 @@ Not signed. 2026-10-03. 110 tests passed, 1 skipped. The skip is the live ngspic
 - `learn` is not called.
 - With no model key, the three power tasks miss as tools and the other five miss as requests. Every score is 0. The checklist stays unsigned.
 - A log of only the three power tasks cannot sign. Three perfect power scores and five failures average 37.5%, which is under Luna’s 40% bar.
-- No prompt was changed to fit these tasks.
+- The harness prompt was not rewritten for these tasks. The divider and series sentences were written so intake would not turn them into bucks.
+- Each task has a reference parts list, and the line prices add up to the reference cost.
+- A simulator timeout or a missing measurement is a tool miss. A dropped load stays a design miss.
+- The saved log names heat-in-airflow, radios, and fast memory as not checked.
