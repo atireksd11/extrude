@@ -91,6 +91,8 @@ def test_a_bad_proposal_then_a_good_one_checks_with_no_network():
     assert "BOUNDS_SI" in seen[0][0]
     assert "spec_hash set to SPEC_HASH" in seen[0][0]
     assert "limits set to BOUNDS_SI" in seen[0][0]
+    assert "refdes and kind" in seen[0][0]
+    assert "state set to connected" in seen[0][0]
     assert "DO_NOT_REPEAT:" in seen[1][0]
     assert "measured" in seen[1][0]
     assert "PASSED_AND_LOCKED: none" in seen[1][0]

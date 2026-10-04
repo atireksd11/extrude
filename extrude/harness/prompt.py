@@ -31,7 +31,10 @@ def build_prompt(
     lines.append(
         "EMIT JSON only. The object must contain spec_hash set to SPEC_HASH, "
         "limits set to BOUNDS_SI unchanged, and, when BOUNDS_SI has i_load, "
-        "i_load set to that same number. Then parts and pins. "
+        "i_load set to that same number. "
+        "Each part is an object with refdes and kind. "
+        "kind is ic, resistor, capacitor, inductor, ferrite, or ideal_voltage_source. "
+        "Each pin is an object with refdes, name, net, and state set to connected. "
         "Do not change a limit. Do not omit the spec load."
     )
     return "\n".join(lines)
