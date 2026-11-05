@@ -1,4 +1,6 @@
 .venv/
+.env
+eval/proxy_tasks/last-reply.txt
 __pycache__/
 *.py[cod]
 .pytest_cache/
@@ -6,3 +8,20 @@ __pycache__/
 *.egg-info/
 dist/
 build/
+
+# Local imports, audit reports, model responses, databases, and tool caches.
+/data/
+.env.*
+!.env.example
+*.log
+*.sqlite
+*.sqlite3
+*.db
+.DS_Store
+Thumbs.db
+
+# Legacy benchmark run output; preserve task specs and source inputs.
+/eval/mechanical/tasks/*/*/
+/eval/mechanical_2d/tasks/*/*/
+/eval/arm_benchmark/*/
+/eval/**/results*.json

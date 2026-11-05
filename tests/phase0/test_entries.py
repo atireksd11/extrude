@@ -5,8 +5,6 @@ from pathlib import Path
 
 import pytest
 
-from extrude.coverage import cover
-from extrude.intake.models import FrozenSpec
 from extrude.ir import load, save
 from extrude.ir.models import CircuitIR
 from extrude.learn import propose_offline
@@ -15,16 +13,8 @@ BAD_STRINGS = {"PASS", "passed", "design is good"}
 
 
 def test_every_entry_says_not_built():
-    spec = FrozenSpec(
-        task_class="buck",
-        values_si={},
-        origins={},
-        defaults_version="phase0",
-        spec_hash="phase0",
-    )
     design = CircuitIR()
     calls = [
-        (cover, (spec,)),
         (save, (design, Path("design.json"))),
         (load, (Path("design.json"),)),
         (propose_offline, ()),

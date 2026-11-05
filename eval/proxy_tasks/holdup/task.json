@@ -2,7 +2,7 @@
   "id": "holdup",
   "family": "power",
   "prompt": "hold-up 4.7 V for 20 ms, 545 uF",
-  "reference_bom_usd": 0.42,
+  "reference_bom_usd": 0.6392,
   "answer": "A connected capacitor whose use-value at 4.7 V, after tolerance, is at least 545 uF. A generic half-loss screen is not proof.",
   "technical_check": "The frozen hold-up card matches, the capacitor is connected, and the use-value meets the minimum. A generic half-loss screen is not proof.",
   "card_kind": "frozen",
@@ -29,14 +29,14 @@
   },
   "reference_parts": [
     {
-      "item": "hold-up capacitor bank, use-value at least 545 uF at 4.7 V",
+      "item": "EKZE100ELL681MJC5S hold-up capacitor, 680 uF 10 V, qty-100",
       "qty": 1,
-      "usd": 0.32
+      "usd": 0.618
     },
     {
-      "item": "2 ohm source resistor",
+      "item": "CRCW08052R00FKEA 2 ohm source resistor, qty-100",
       "qty": 1,
-      "usd": 0.1
+      "usd": 0.0212
     }
   ]
 }

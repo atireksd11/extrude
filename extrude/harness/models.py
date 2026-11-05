@@ -18,3 +18,9 @@ class RunResult(BaseModel):
     cost_usd: float | None = None
     bom_usd: float | None = None
     reference_bom_usd: float | None = None
+    notice: str | None = None
+    netlist: str | None = None
+    code: str | None = None
+    preview_png: str | None = None
+    stl_path: str | None = None
+    svg_path: str | None = None

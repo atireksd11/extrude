@@ -1,0 +1,18 @@
+{
+  "sentence": "Design an electronics enclosure in OpenSCAD measuring about 100 by 80 by 40 millimeters with a hollow body and four M3 foot holes.",
+  "material": "PETG",
+  "insert": "M3",
+  "insert_count": 4,
+  "insert_min_mm": 4.05,
+  "insert_max_mm": 4.35,
+  "min_wall_mm": 2.0,
+  "bbox_min_mm": 90.0,
+  "bbox_max_mm": 105.0,
+  "checks": [
+    "compiles",
+    "bbox_in_range",
+    "base_mounting_holes",
+    "insert_diameter",
+    "joint_wall"
+  ]
+}

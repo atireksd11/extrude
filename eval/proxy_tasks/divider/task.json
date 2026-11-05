@@ -2,26 +2,38 @@
   "id": "divider",
   "family": "other",
   "prompt": "two resistors for an ADC divider, 10k and 4.99k",
-  "reference_bom_usd": 0.04,
-  "answer": "Two resistors, 10k and 4.99k, form the divider. No power checker applies.",
-  "technical_check": "The sentence stays a divider. It is not graded as a buck, regulator, or hold-up.",
-  "card_kind": "needs_info",
+  "reference_bom_usd": 0.0424,
+  "answer": "Two resistors, 10k from the sense node to the midpoint and 4.99k from the midpoint to ground. A DC run checks that ratio.",
+  "technical_check": "The frozen divider card matches 10k and 4.99k. A DC measurement of the midpoint matches that ratio.",
+  "card_kind": "frozen",
   "card": {
-    "missing": [
-      "task_class"
-    ],
-    "question": "Which circuit is this: buck, regulator, hold-up, LED, or an MCU swap?"
+    "task_class": "divider",
+    "values_si": {
+      "r_top": 10000.0,
+      "r_bot": 4990.0
+    },
+    "origins": {
+      "r_top": "user_span",
+      "r_bot": "user_span"
+    },
+    "defaults_version": "2026-10-03",
+    "spec_hash": "5b75357455486858ee9a9b1d18052dc9839b2fbe705ae3815282b0ea8ec4adf9",
+    "labels": {},
+    "evidence": {
+      "r_top": "10k",
+      "r_bot": "4.99k"
+    }
   },
   "reference_parts": [
     {
-      "item": "10k resistor",
+      "item": "CRCW0805 10k resistor, qty-100",
       "qty": 1,
-      "usd": 0.02
+      "usd": 0.0212
     },
     {
-      "item": "4.99k resistor",
+      "item": "CRCW0805 4.99k resistor, qty-100",
       "qty": 1,
-      "usd": 0.02
+      "usd": 0.0212
     }
   ]
 }

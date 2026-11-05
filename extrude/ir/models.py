@@ -23,7 +23,9 @@ class Part(BaseModel):
         "inductor",
         "ferrite",
         "ideal_voltage_source",
+        "led",
     ]
+    resistance: float | None = None
     capacitance: float | None = None
     tolerance: float | None = None
     dielectric: str | None = None
@@ -36,6 +38,7 @@ class Part(BaseModel):
     theta_ja: float | None = None
     bias_v: float | None = None
     curve_id: str | None = None
+    mpn: str | None = None
 
 
 class CircuitIR(BaseModel):
@@ -46,3 +49,4 @@ class CircuitIR(BaseModel):
     parts: list[Part] = Field(default_factory=list)
     tied_nets: list[list[str]] = Field(default_factory=list)
     f_sw: float | None = None
+    c_min: float | None = None

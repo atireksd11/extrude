@@ -80,8 +80,9 @@ def test_duplicate_readings_do_not_freeze():
     twice = resolve("hold-up 4.7 V for 20 ms and 10 ms, 22 uF")
     assert twice.missing == ["ambiguous_numbers"]
     lone = resolve("status LED")
-    assert lone.missing == ["i_led"]
+    assert lone.missing == ["i_led", "v_supply"]
     assert "current" in lone.question
+    assert "supply voltage" in lone.question
 
 
 def test_missing_esr_warns_instead_of_pretending_it_is_zero():

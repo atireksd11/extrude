@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f4f0">
+  <title>Design Studio — Extrude</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/app.css?v=3">
+</head>
+<body>
+  <div class="layout">
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+        <div>
+          <h1>extrude<span>.</span></h1>
+          <p>DESIGN STUDIO</p>
+        </div>
+      </div>
+
+      <nav class="studio-nav" aria-label="Primary navigation"><a href="/projects" aria-label="Project map">▧ <span>Project map</span><b>↗</b></a><a class="active" href="/" aria-label="Design studio">⌘ <span>Design studio</span><b>↗</b></a></nav>
+
+      <div class="sidebar-section prompts-section">
+        <p class="section-title">Quick prompts</p>
+        <div id="examples" class="examples"></div>
+      </div>
+
+      <div class="sidebar-section toolchain-section">
+        <p class="section-title">Toolchain</p>
+        <div id="tools" class="tool-list"></div>
+      </div>
+
+      <div class="sidebar-footer">
+        LOCAL WORKSPACE<br>
+        3D · 2D plates · Circuits
+      </div>
+    </aside>
+
+    <div class="main">
+      <header class="topbar">
+        <div class="studio-intro"><span>02 / DESIGN WORKBENCH</span><h2>Turn an idea into a checked first draft.</h2><p>Describe a part or circuit, inspect the first attempt, and compare it with Extrude’s verified output.</p></div>
+        <form id="form">
+          <div class="prompt-shell">
+            <textarea id="prompt" placeholder="Describe what to design — a cube, a laser-cut plate, a robotic arm, a buck converter…"></textarea>
+            <details class="artifact-input">
+              <summary>Audit existing code instead (OpenSCAD or a KiCad netlist)</summary>
+              <textarea id="artifact" placeholder="Paste cube() / difference() code or a KiCad netlist. A normal sentence here is ignored."></textarea>
+            </details>
+            <div id="loading" class="loading" hidden>
+              <div class="loading-card">
+                <div class="spinner"></div>
+                <h3>Making the design</h3>
+                <p id="loading-detail">Running checks and rendering a preview. This may take a moment.</p>
+              </div>
+            </div>
+            <div class="prompt-actions">
+              <label>Filament
+                <select id="filament">
+                  <option>PLA</option>
+                  <option selected>PETG</option>
+                </select>
+              </label>
+              <label><input id="offline" type="checkbox" checked> Local demo mode (no model call)</label>
+              <button id="run" class="btn-primary" type="submit">Generate & Compare</button>
+            </div>
+          </div>
+        </form>
+      </header>
+
+      <main class="content">
+        <div id="notice" style="display:none;margin-bottom:1rem;color:var(--warn);font-size:0.85rem;"></div>
+        <div id="meta" class="meta-row"></div>
+
+        <div id="empty" class="empty-state">
+          <span class="empty-kicker">READY WHEN YOU ARE</span>
+          <h3>Start with something small.</h3>
+          <p>Choose a quick prompt or describe a part or circuit above. You’ll see the first attempt beside the checked result, with the reasons behind each score.</p>
+          <a href="/projects">Already building? Open the project map ↗</a>
+        </div>
+
+        <div id="results" class="compare-grid" style="display:none;">
+          <article id="panel-raw" class="panel raw">
+            <div class="panel-head">
+              <div>
+                <h2>First try</h2>
+                <span class="lane-status" style="font-size:0.75rem;color:var(--muted);"></span>
+              </div>
+              <div class="score-ring">—</div>
+            </div>
+            <div class="preview-box">
+              <div class="preview-media"></div>
+              <div class="preview-placeholder">No preview</div>
+            </div>
+            <div class="misses-block" style="display:none;">
+              <h4>What failed</h4>
+              <ul class="misses-list"></ul>
+            </div>
+            <div class="panel-body pane-checks">
+              <h3 class="block-title">Checks</h3>
+              <ul class="check-list"></ul>
+            </div>
+            <div class="panel-body pane-code">
+              <h3 class="block-title">Output</h3>
+              <pre class="code-block"></pre>
+            </div>
+          </article>
+
+          <article id="panel-harness" class="panel harness">
+            <div class="panel-head">
+              <div>
+                <h2>Harness repaired</h2>
+                <span class="lane-status" style="font-size:0.75rem;color:var(--muted);"></span>
+              </div>
+              <div class="score-ring">—</div>
+            </div>
+            <div class="preview-box">
+              <div class="preview-media"></div>
+              <div class="preview-placeholder">No preview</div>
+            </div>
+            <div class="misses-block" style="display:none;">
+              <h4>What failed</h4>
+              <ul class="misses-list"></ul>
+            </div>
+            <div class="panel-body pane-checks">
+              <h3 class="block-title">Checks</h3>
+              <ul class="check-list"></ul>
+            </div>
+            <div class="panel-body pane-code">
+              <h3 class="block-title">Output</h3>
+              <pre class="code-block"></pre>
+            </div>
+          </article>
+        </div>
+      </main>
+    </div>
+  </div>
+  <script src="/static/app.js?v=12"></script>
+</body>
+</html>

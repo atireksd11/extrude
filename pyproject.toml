@@ -1,17 +1,32 @@
 [project]
 name = "extrude"
 version = "0.0.0"
-description = "Local harness skeleton for simple power-circuit checks."
+description = "Extrude local project map and hardware design checks."
 requires-python = ">=3.11"
-dependencies = ["pydantic>=2"]
+dependencies = ["pydantic==2.12.5", "fastapi==0.141.1", "httpx==0.28.1", "uvicorn==0.52.4", "kicad-tools==0.27.0", "trimesh==5.2.0", "cadquery==2.8.0", "cadquery-ocp==7.9.3.1.1"]
 
 [project.optional-dependencies]
-dev = ["pytest>=8"]
+dev = ["pytest==9.0.2"]
 
 [build-system]
-requires = ["setuptools>=69"]
+requires = ["setuptools==82.0.0"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["extrude*"]
+include = ["extrude*", "eval*"]
+
+[tool.setuptools.package-data]
+extrude = ["checks/data/*.json"]
+"extrude.demo_robot" = ["README.md", "firmware/*", "electronics/*", "cad/*"]
+"extrude.api" = ["static/*.html", "static/*.css", "static/*.js"]
+"extrude.tools" = ["manifest.json"]
+"extrude.physics" = ["curves/*.json"]
+"eval.arm_benchmark" = ["*.scad"]
+
+[tool.pytest.ini_options]
+markers = [
+    "atlas: Project Atlas product and release gate tests",
+    "legacy: Design Studio and hardware harness tests",
+    "live: explicitly opt-in tests that may call external services",
+]

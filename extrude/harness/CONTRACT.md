@@ -6,4 +6,4 @@ May talk to: intake, coverage, ir, checks, physics, sim, emit, memory, and eval,
 
 Must not talk to: learn, mcp.
 
-SIGNATURE: run(raw_text: str) -> RunResult
+SIGNATURE: run(raw_text: str, *, filament: str='PETG') -> RunResult

@@ -1,0 +1,14 @@
+{
+  "sentence": "OpenSCAD flat plate 80 mm by 60 mm with four M3 mounting holes. Output only the OpenSCAD code.",
+  "material": "PETG",
+  "insert": "M3",
+  "insert_count": 4,
+  "insert_min_mm": 4.05,
+  "insert_max_mm": 4.35,
+  "checks": [
+    "compiles",
+    "base_mounting_holes",
+    "insert_diameter"
+  ],
+  "negative_control": true
+}

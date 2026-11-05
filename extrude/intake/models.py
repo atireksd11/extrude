@@ -13,7 +13,20 @@ class SlotOrigin(str, Enum):
 
 
 class FrozenSpec(BaseModel):
-    task_class: Literal["buck", "ldo", "holdup_mlcc", "led", "mcu_swap"]
+    task_class: Literal[
+        "buck",
+        "ldo",
+        "holdup_mlcc",
+        "led",
+        "mcu_swap",
+        "divider",
+        "pullup",
+        "series",
+        "indicator",
+        "mechanical_3d",
+        "mechanical_2d",
+        "ambiguous",
+    ]
     values_si: dict[str, float]
     origins: dict[str, SlotOrigin]
     defaults_version: str

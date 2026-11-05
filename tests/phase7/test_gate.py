@@ -265,13 +265,16 @@ def test_no_model_key_cannot_sign_the_gate():
     report = judge_gate(rows)
     assert report.signed is False
     assert report.reason == "Luna and Astra were not both logged"
-    assert {row.score for row in rows} == {0.0}
     kinds = {row.task_id: row.miss_kind for row in rows if row.harness_on}
+    scores = {row.task_id: row.score for row in rows if row.harness_on}
     assert kinds["holdup"] == "tool"
     assert kinds["buck"] == "tool"
     assert kinds["regulator"] == "tool"
     assert kinds["led"] == "request"
-    assert kinds["divider"] == "request"
+    assert scores["buck"] == 0.0
+    assert scores["led"] == 0.0
+    assert scores["divider"] == 1.0
+    assert kinds["divider"] is None
 
 
 def _row(task_id: str, model: str, harness_on: bool, run: int, earned: float) -> ScoreRow:

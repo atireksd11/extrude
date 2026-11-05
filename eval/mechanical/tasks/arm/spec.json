@@ -1,0 +1,19 @@
+{
+  "sentence": "Build a full 3D model of a desktop robotic arm in OpenSCAD. Include a base plate, three arm links, three rotary joints, and a two-finger gripper.",
+  "material": "PETG",
+  "insert": "M3",
+  "insert_count": 4,
+  "insert_min_mm": 4.05,
+  "insert_max_mm": 4.35,
+  "min_wall_mm": 2.0,
+  "checks": [
+    "compiles",
+    "desktop_scale",
+    "three_links",
+    "two_fingers",
+    "more_than_one_bend",
+    "base_mounting_holes",
+    "insert_diameter",
+    "joint_wall"
+  ]
+}

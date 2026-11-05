@@ -1,0 +1,17 @@
+{
+  "sentence": "Model an L-bracket in OpenSCAD about 60 by 40 millimeters with two M4 mount holes and a bent leg.",
+  "material": "PETG",
+  "insert": "M4",
+  "insert_count": 2,
+  "insert_min_mm": 5.05,
+  "insert_max_mm": 5.35,
+  "min_wall_mm": 2.0,
+  "min_bends": 1,
+  "checks": [
+    "compiles",
+    "base_mounting_holes",
+    "insert_diameter",
+    "joint_wall",
+    "min_bends"
+  ]
+}

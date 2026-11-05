@@ -96,10 +96,25 @@ def test_holdup_and_led_and_mcu_do_not_become_a_buck():
     stray = resolve("Power an ESP32, ripple 1 mV")
     assert isinstance(stray, NeedsInfo)
     assert not isinstance(stray, FrozenSpec)
-    assert isinstance(led, FrozenSpec)
-    assert led.task_class == "led"
-    assert led.values_si["i_led"] == pytest.approx(0.02)
-    assert "ripple_pp" not in led.values_si
+    assert isinstance(led, NeedsInfo)
+    assert led.missing == ["v_supply"]
+    assert "supply voltage" in led.question
+    assert "5" not in led.question
+    supplied = resolve("20 mA LED from 5 V")
+    assert isinstance(supplied, FrozenSpec)
+    assert supplied.task_class == "led"
+    assert supplied.values_si["i_led"] == pytest.approx(0.02)
+    assert supplied.values_si["v_supply"] == pytest.approx(5)
+    assert supplied.origins["v_supply"] is SlotOrigin.user_span
+    assert "ripple_pp" not in supplied.values_si
+    beside = resolve("20 mA LED, 3.3 V")
+    assert isinstance(beside, FrozenSpec)
+    assert beside.values_si["v_supply"] == pytest.approx(3.3)
+    assert beside.origins["v_supply"] is SlotOrigin.user_span
+    two = resolve("20 mA LED from 5 V to 3.3 V")
+    assert isinstance(two, NeedsInfo)
+    assert two.missing == ["ambiguous_numbers"]
+    assert "5 V" not in two.question
     assert isinstance(bare_led, NeedsInfo)
     assert isinstance(swap, FrozenSpec)
     assert swap.labels["from_part"] == "STM32"

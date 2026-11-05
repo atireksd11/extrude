@@ -1,0 +1,12 @@
+{
+  "sentence": "Laser-cut a 30x30 mm square plate with no holes.",
+  "plate_width_mm": 30,
+  "plate_height_mm": 30,
+  "hole_count": 0,
+  "checks": [
+    "compiles",
+    "closed_outline",
+    "outline_size"
+  ],
+  "negative_control": true
+}

@@ -14,12 +14,17 @@ if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
 from extrude.checks import preflight
+from extrude.coverage.api import render
 from extrude.emit import emit_cir
+from extrude.emit.netlist import emit_netlist
+from extrude.eval.bom import design_bom_usd
 from extrude.eval.gate import ScoreRow, judge_gate, row_from_run, write_log
 from extrude.eval.tasks import load_tasks
 from extrude.harness import run
 from extrude.harness.client import complete
+from extrude.harness.envfile import load_env
 from extrude.harness.models import RunResult
+from extrude.harness.loop import _holdup_cap_is_connected
 from extrude.harness.prompt import build_prompt
 from extrude.harness.proposal import ProposalError, parse_proposal
 from extrude.intake import resolve
@@ -33,6 +38,7 @@ _LOG = ROOT / "eval" / "proxy_tasks" / "results-live.json"
 
 
 def main() -> int:
+    load_env(ROOT / ".env")
     name = os.environ.get("EXTRUDE_GATE_NAME", "").strip().lower()
     if name not in {"luna", "astra"}:
         _instructions()
@@ -93,86 +99,94 @@ def main() -> int:
 def _off(prompt: str) -> RunResult:
     resolved = resolve(prompt)
     if isinstance(resolved, NeedsInfo):
-        return RunResult(status="needs_info", detail=resolved.question)
+        return RunResult(status="needs_info", detail=resolved.question, notice=render(None, []))
     if resolved.task_class not in _JOBS:
         return RunResult(
             status="stopped",
             spec_hash=resolved.spec_hash,
             detail="this seat only designs a buck, regulator, or hold-up",
+            notice=render(resolved, []),
         )
     try:
         text, usage = complete(build_prompt(resolved, [], []), "primary")
+        _keep_reply(text)
     except ProposalError as exc:
-        return RunResult(status="stopped", spec_hash=resolved.spec_hash, detail=exc.detail)
+        return _spoken(resolved, exc.detail, None, ran=[])
     except Exception:
-        return RunResult(status="stopped", spec_hash=resolved.spec_hash, detail="the model call failed")
+        return _spoken(resolved, "the model call failed", None, ran=[])
     try:
         design, _identity = parse_proposal(text, resolved)
     except ProposalError as exc:
-        return RunResult(
-            status="stopped",
-            spec_hash=resolved.spec_hash,
-            detail=exc.detail,
-            cost_usd=_cost(usage),
-        )
+        return _spoken(resolved, exc.detail, usage, ran=[])
     report = preflight(design)
     if report.blocking:
-        return RunResult(
-            status="stopped",
-            spec_hash=resolved.spec_hash,
-            detail=report.blocking[0],
-            cost_usd=_cost(usage),
-        )
+        return _spoken(resolved, report.blocking[0], usage, ran=["wiring"], stopped="wiring")
     values = derive(design, resolved)
     failures = [item for item in values.findings if item.severity == "fail"]
+    physics = _off_physics(resolved, values)
     if failures:
-        return RunResult(
-            status="stopped",
-            spec_hash=resolved.spec_hash,
-            detail=failures[0].detail,
-            cost_usd=_cost(usage),
-        )
+        code = failures[0].code
+        stopped = "ripple" if "ripple" in code else ("still-air heat" if resolved.task_class == "ldo" else "capacitance")
+        return _spoken(resolved, failures[0].detail, usage, ran=physics, stopped=stopped)
     if resolved.task_class == "holdup_mlcc":
-        if not _cap_is_connected(design):
-            return RunResult(
-                status="stopped",
-                spec_hash=resolved.spec_hash,
-                detail="the hold-up capacitor is not connected",
-                cost_usd=_cost(usage),
+        if not _holdup_cap_is_connected(design):
+            return _spoken(
+                resolved,
+                "the hold-up capacitor is not connected",
+                usage,
+                ran=physics,
+                stopped="hold-up connection",
             )
         simulated = run_allowed(emit_cir(design, values))
-        if simulated.status == "refused":
-            return RunResult(
-                status="stopped",
-                spec_hash=resolved.spec_hash,
-                detail=simulated.detail or "the deck was refused",
-                cost_usd=_cost(usage),
+        faded = [*physics, "hold-up fade"]
+        if simulated.status == "refused" or simulated.status != "measured":
+            return _spoken(
+                resolved,
+                simulated.detail or simulated.status or "the deck was refused",
+                usage,
+                ran=faded,
+                stopped="hold-up fade",
             )
-        if simulated.status != "measured":
-            return RunResult(
-                status="stopped",
-                spec_hash=resolved.spec_hash,
-                detail=simulated.detail or simulated.status,
-                cost_usd=_cost(usage),
-            )
-    return RunResult(status="checked", spec_hash=resolved.spec_hash, detail="checked", cost_usd=_cost(usage))
+    passed = [*physics, *(["hold-up connection", "hold-up fade"] if resolved.task_class == "holdup_mlcc" else []), "parts-cost"]
+    return RunResult(
+        status="checked",
+        spec_hash=resolved.spec_hash,
+        detail="checked",
+        cost_usd=_cost(usage),
+        bom_usd=design_bom_usd(design, resolved.task_class),
+        notice=render(resolved, passed),
+        netlist=emit_netlist(design),
+    )
 
 
-def _cap_is_connected(design) -> bool:
-    capacitors = {
-        part.refdes
-        for part in design.parts
-        if part.kind == "capacitor" and part.capacitance and part.capacitance > 0
-    }
-    for refdes in capacitors:
-        pins = [
-            pin
-            for pin in design.pins
-            if pin.refdes == refdes and pin.state == "connected" and pin.net and pin.net.strip()
-        ]
-        if len(pins) >= 2:
-            return True
-    return False
+def _off_physics(spec, values) -> list[str]:
+    ran = ["wiring"]
+    if spec.task_class in {"buck", "holdup_mlcc"} and values.caps:
+        ran.append("capacitance")
+    if spec.task_class == "buck" and values.ripple_pp is not None:
+        ran.append("ripple")
+    if values.heat_note:
+        ran.append("still-air heat")
+    return ran
+
+
+def _spoken(spec, detail: str, usage: dict | None, ran: list[str], stopped: str | None = None) -> RunResult:
+    return RunResult(
+        status="stopped",
+        spec_hash=spec.spec_hash,
+        detail=detail,
+        cost_usd=None if usage is None else _cost(usage),
+        notice=render(spec, ran, stopped),
+    )
+
+
+def _keep_reply(text: str) -> None:
+    path = os.environ.get("EXTRUDE_SAVE_REPLY", "").strip()
+    if not path:
+        return
+    target = Path(path)
+    previous = target.read_text(encoding="utf-8") if target.is_file() else ""
+    target.write_text(text if not previous else previous + "\n\n---\n\n" + text, encoding="utf-8")
 
 
 def _cost(usage: dict) -> float | None:
@@ -196,14 +210,8 @@ def _warn_if_ngspice_missing() -> None:
 
 
 def _instructions() -> None:
-    print("Set these in this shell, then run the script again. Do not put the key in a file.")
-    print('$env:EXTRUDE_MODEL_URL = "https://openrouter.ai/api/v1/chat/completions"')
-    print('$env:EXTRUDE_MODEL_KEY = "<OpenRouter key>"')
-    print('$env:EXTRUDE_MODEL = "openai/gpt-6-luna"')
-    print('$env:EXTRUDE_GATE_NAME = "luna"')
-    print('$env:EXTRUDE_GATE_RUN = "1"')
-    print(r'$env:NGSPICE_PATH = "C:\Users\atire\AppData\Local\Temp\extrude-ngspice\Spice64\bin\ngspice_con.exe"')
-    print(r".\.venv\Scripts\python eval\live_gate.py")
+    print("Put the OpenRouter key in .env as EXTRUDE_MODEL_KEY. See .env.example.")
+    print("That file is gitignored. Do not commit it and do not paste the key into chat.")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,23 @@
+{
+  "version": "2026-10-04",
+  "tools": {
+    "openscad": {
+      "env": "OPENSCAD_PATH",
+      "fallback": "openscad",
+      "domains": ["mechanical_3d", "mechanical_2d"],
+      "required_for_generate": true
+    },
+    "ngspice": {
+      "env": "NGSPICE_PATH",
+      "fallback": "ngspice",
+      "domains": ["circuit"],
+      "required_for_generate": false
+    },
+    "kicad_cli": {
+      "env": "KICAD_CLI_PATH",
+      "fallback": "kicad-cli",
+      "domains": ["circuit"],
+      "required_for_generate": false
+    }
+  }
+}

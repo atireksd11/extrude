@@ -2,21 +2,36 @@
   "id": "pullup",
   "family": "other",
   "prompt": "4.7k pull-ups on a 3.3 V I2C bus",
-  "reference_bom_usd": 0.03,
-  "answer": "Pull-up resistors on both I2C lines to 3.3 V.",
-  "technical_check": "The sentence stays an I2C pull-up. It is not graded as a buck, regulator, or hold-up.",
-  "card_kind": "needs_info",
+  "reference_bom_usd": 0.0424,
+  "answer": "A 4.7k pull-up on SDA and a 4.7k pull-up on SCL, both to 3.3 V.",
+  "technical_check": "The frozen pull-up card matches 4.7k and 3.3 V. A DC measurement shows both released I2C lines at that bus.",
+  "card_kind": "frozen",
   "card": {
-    "missing": [
-      "task_class"
-    ],
-    "question": "Which circuit is this: buck, regulator, hold-up, LED, or an MCU swap?"
+    "task_class": "pullup",
+    "values_si": {
+      "r_pull": 4700.0,
+      "v_bus": 3.3,
+      "n_lines": 2.0
+    },
+    "origins": {
+      "r_pull": "user_span",
+      "v_bus": "user_span",
+      "n_lines": "user_span"
+    },
+    "defaults_version": "2026-10-03",
+    "spec_hash": "6b6836658b6c75785b08957d432b5260a153622d48699fee825f2371fa6670b5",
+    "labels": {},
+    "evidence": {
+      "r_pull": "4.7k",
+      "v_bus": "3.3 V",
+      "n_lines": "I2C"
+    }
   },
   "reference_parts": [
     {
-      "item": "4.7k resistor",
+      "item": "CRCW0805 4.7k resistor, qty-100",
       "qty": 2,
-      "usd": 0.015
+      "usd": 0.0212
     }
   ]
 }

@@ -1,0 +1,26 @@
+{
+  "sentence": "Laser-cut a circular 50 mm gear blank with 6 M2 clearance holes on a 40 mm pitch circle.",
+  "plate_diameter_mm": 50,
+  "hole": "M2",
+  "hole_count": 6,
+  "hole_min_mm": 2.15,
+  "hole_max_mm": 2.65,
+  "hole_positions": [
+    [45.0, 25.0],
+    [35.0, 42.32],
+    [15.0, 42.32],
+    [5.0, 25.0],
+    [15.0, 7.68],
+    [35.0, 7.68]
+  ],
+  "min_edge_distance_mm": 2.0,
+  "checks": [
+    "compiles",
+    "closed_outline",
+    "outline_size",
+    "hole_count",
+    "hole_diameter",
+    "hole_positions",
+    "min_edge_distance"
+  ]
+}

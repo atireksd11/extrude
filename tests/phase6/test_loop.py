@@ -120,7 +120,7 @@ def test_dropping_the_load_is_rejected():
     assert result.attempts == 2
 
 
-def test_unparseable_text_stops_without_a_second_design_try():
+def test_unparseable_text_gets_format_retries_without_design_tries():
     calls = {"n": 0}
 
     def client(prompt: str, seat: str) -> tuple[str, dict]:
@@ -129,11 +129,11 @@ def test_unparseable_text_stops_without_a_second_design_try():
 
     set_client(client)
     result = run("5 V to 3.3 V at 2 A")
-    assert calls["n"] == 1
+    assert calls["n"] == 3
     assert result.status == "stopped"
     assert result.attempts == 0
     assert result.cost_usd is None
-    assert len(tool_rows()) == 1
+    assert len(tool_rows()) == 0
 
 
 def test_no_second_key_stops_after_two_design_misses(monkeypatch):
@@ -177,9 +177,13 @@ def test_vague_text_and_other_jobs_do_not_call_the_model():
     set_client(client)
     vague = run("Power an ESP32")
     led = run("20 mA LED")
+    supplied = run("20 mA LED from 5 V")
     assert calls["n"] == 0
     assert vague.status == "needs_info"
-    assert led.status == "stopped"
+    assert led.status == "needs_info"
+    assert led.detail == "What supply voltage should the LED use?"
+    assert supplied.status == "checked"
+    assert supplied.netlist and '(part "LED")' in supplied.netlist
 
 
 def test_fenced_json_is_read_and_a_tighter_limit_is_thrown_away():
@@ -204,7 +208,10 @@ def test_fenced_json_is_read_and_a_tighter_limit_is_thrown_away():
 
 
 def test_a_holdup_without_a_capacitor_is_a_design_miss():
+    seen = []
+
     def client(prompt: str, seat: str) -> tuple[str, dict]:
+        seen.append(prompt)
         return json.dumps(
             {
                 "spec_hash": _hash(prompt),
@@ -218,8 +225,57 @@ def test_a_holdup_without_a_capacitor_is_a_design_miss():
     result = run("hold-up 4.7 V for 20 ms, 545 uF")
     assert result.status == "stopped"
     assert result.attempts == 2
-    assert "capacitor" in (result.detail or "")
+    assert result.detail == seen[1].split("LAST_REJECTED: ", 1)[1]
+    assert "LAST_REJECTED:" not in seen[0]
+    repair = seen[1].split("LAST_REJECTED: ", 1)[1]
+    assert repair.startswith("the hold-up capacitor is not connected.")
+    assert "top-level pins" in repair
+    assert "other pin net is GND" in repair
+    assert "still not connected" in repair
     assert tool_rows() == []
+
+
+def test_nested_holdup_pins_do_not_spend_a_design_try():
+    from extrude.sim.models import SimResult
+
+    def client(prompt: str, seat: str) -> tuple[str, dict]:
+        return json.dumps(
+            {
+                "spec_hash": _hash(prompt),
+                "limits": {"v_rail": 4.7, "t_hold": 0.02, "c_min": 545e-6},
+                "parts": [
+                    {
+                        "refdes": "C1",
+                        "kind": "capacitor",
+                        "capacitance": 1000e-6,
+                        "tolerance": 0,
+                        "dielectric": "C0G",
+                        "bias_v": 4.7,
+                        "pins": [
+                            {"name": "A", "net": "RAIL"},
+                            {"name": "B", "net": "GND"},
+                        ],
+                    },
+                    {
+                        "refdes": "R1",
+                        "kind": "resistor",
+                        "pins": [
+                            {"name": "A", "net": "RAIL"},
+                            {"name": "B", "net": "GND"},
+                        ],
+                    },
+                ],
+            }
+        ), {}
+
+    set_client(client)
+    crashed = SimResult(status="tooling", cause="tooling", detail="singular matrix")
+    with patch("extrude.harness.loop.run_allowed", return_value=crashed):
+        result = run("hold-up 4.7 V for 20 ms, 545 uF")
+    assert result.attempts == 0
+    assert result.status == "stopped"
+    assert design_rows() == []
+    assert len(tool_rows()) == 1
 
 
 def test_a_simulator_crash_on_a_connected_holdup_does_not_spend_a_design_try():

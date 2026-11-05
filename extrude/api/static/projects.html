@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#f5f4f0">
+  <title>Project Atlas — Extrude</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/static/projects.css?v=9">
+</head>
+<body>
+  <div class="shell">
+    <aside class="sidebar">
+      <a class="identity" href="/projects" aria-label="Extrude Project Atlas home">
+        <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+        <span class="brand-name">extrude<span class="brand-period">.</span><small>PROJECT ATLAS</small></span>
+      </a>
+      <div class="side-group">
+        <p class="nav-title">WORKSPACE <span>01</span></p>
+        <nav aria-label="Primary navigation">
+          <a class="active" href="/projects"><span class="nav-symbol">▧</span><span>Project map</span><span class="nav-arrow">↗</span></a>
+          <a href="/projects/github"><span class="nav-symbol">↳</span><span>GitHub workspace</span><span class="nav-arrow">↗</span></a>
+          <a href="/"><span class="nav-symbol">⌘</span><span>Design studio</span><span class="nav-arrow">↗</span></a>
+        </nav>
+      </div>
+      <div class="sidebar-bottom">
+        <div class="engine"><span class="engine-light"></span><div><strong>Local workspace</strong><small>Engine is running</small></div></div>
+        <p>EXTRUDE <span>—</span> PRIVATE PILOT</p>
+      </div>
+    </aside>
+    <div class="main-column">
+      <header class="topbar">
+        <div class="breadcrumb"><span>Workspace</span><span class="slash">/</span><strong>Project Atlas</strong></div>
+        <div class="top-right"><span class="pilot"><i></i> LOCAL PILOT</span><span class="top-avatar">E</span></div>
+      </header>
+      <main>
+        <section id="welcome">
+          <div class="intro-line"><span>01 / PROJECT INTELLIGENCE</span><span>BUILT FOR HARDWARE TEAMS</span></div>
+          <div class="hero">
+            <div class="hero-copy">
+              <div class="hero-kicker"><span class="kicker-line"></span> The project map for things you can touch.</div>
+              <h1>Every change<br><em>in context<span>.</span></em></h1>
+              <p>One place to see your firmware, electronics, and mechanical design. When a file changes, understand what else deserves a look.</p>
+              <div class="hero-actions"><a class="hero-link" href="#new-project">Connect your first project <span>↗</span></a><button id="explore-demo" class="demo-link" type="button">Explore a working demo <span>↗</span></button></div>
+              <div class="hero-foot"><span><i></i> PRIVATE BY DESIGN</span><span>FILES STAY ON YOUR MACHINE</span></div>
+            </div>
+            <div class="hero-visual" aria-label="Illustration of connected hardware project areas">
+              <div class="visual-top"><span>PROJECT / 001</span><span>LIVE SYSTEM MAP <i></i></span></div>
+              <div class="visual-canvas">
+                <svg class="visual-lines" viewBox="0 0 520 390" preserveAspectRatio="none" aria-hidden="true"><path d="M112 92H256V196H408"/><path d="M104 282H256V196"/><circle cx="256" cy="196" r="4"/></svg>
+                <div class="visual-node firmware"><span class="node-index">01 / CODE</span><strong>Firmware</strong><small>motor_controller.cpp</small></div>
+                <div class="visual-node pcb"><span class="node-index">02 / BOARD</span><strong>PCB</strong><small>main_board.kicad_pcb</small></div>
+                <div class="visual-node cad"><span class="node-index">03 / FORM</span><strong>CAD</strong><small>housing.step</small></div>
+                <div class="visual-center"><span class="center-icon">✳</span><strong>ONE PROJECT</strong><small>CONNECTED CONTEXT</small></div>
+                <div class="visual-note"><span class="note-pulse"></span><strong>Change detected</strong><small>Check related design areas</small></div>
+              </div>
+              <div class="visual-bottom"><span>FIRMWARE</span><span>SCHEMATIC</span><span>PCB</span><span>CAD</span></div>
+            </div>
+          </div>
+          <div class="welcome-grid">
+            <form id="new-project" class="connect panel">
+              <div class="panel-intro"><div><span class="section-number">01 — CONNECT</span><h2>Start with your project.</h2><p>Choose a local folder. Extrude will create a baseline and start watching for changes.</p></div><span class="panel-glyph">↗</span></div>
+              <div class="fields">
+                <label><span>Project name</span><input name="name" placeholder="Robot arm" autocomplete="off" required></label>
+                <label><span>Project folder</span><input name="path" placeholder="C:\Projects\robot-arm" autocomplete="off" required></label>
+                <label class="wide"><span>Onshape document <small>OPTIONAL</small></span><input name="onshape_url" type="url" placeholder="https://cad.onshape.com/documents/..."></label>
+              </div>
+              <div class="form-footer"><span><i>✓</i> Read-only scan. Your files stay untouched.</span><button type="submit">Create project map <b>↗</b></button></div>
+              <p id="form-error" role="alert"></p>
+            </form>
+            <div class="how panel"><span class="section-number">02 — HOW IT WORKS</span><h3>A clearer picture<br>as you build.</h3><div class="how-step"><span>01</span><div><strong>Connect the project</strong><p>Firmware, PCB, CAD, and docs in one view.</p></div><b>↗</b></div><div class="how-step"><span>02</span><div><strong>Keep building</strong><p>Saved file changes land in the timeline.</p></div><b>↗</b></div><div class="how-step"><span>03</span><div><strong>See what it affects</strong><p>Review likely ripple effects and real checks.</p></div><b>↗</b></div></div>
+          </div>
+        </section>
+        <section id="workspace" hidden>
+          <div class="workspace-heading"><div><span class="section-number">PROJECT / OVERVIEW</span><h1 id="project-name"></h1><p id="project-meta"></p></div><div class="actions"><select id="project-select" aria-label="Select project"></select><button id="demo-change" class="demo-change" type="button" hidden>Make a demo change ↗</button><button id="refresh" class="secondary" type="button">↻ <span>Scan now</span></button><a id="export-handoff" class="handoff-link" href="#" download="extrude-handoff.md">Export handoff ↗</a><button id="add-project" type="button">+ New project</button></div></div>
+          <div class="activity-strip"><div><span class="activity-dot"></span><strong id="monitor-state">Monitoring project</strong><span id="monitor-detail">Changes are checked every five seconds.</span></div><span id="coverage-detail">0 files tracked</span></div>
+          <section class="next-action" aria-label="Next action"><div class="next-icon">↗</div><div class="next-copy"><span>YOUR NEXT ACTION</span><strong id="next-title">Looking for project changes</strong><p id="next-detail">Keep building; Atlas will show what deserves a closer look.</p></div><button id="review-next" type="button" hidden>Review impact <span>↗</span></button></section>
+          <div class="metrics"><div class="metric"><span>TRACKED FILES</span><strong id="metric-files">0</strong><small>Across your project</small></div><div class="metric"><span>RECENT CHANGES</span><strong id="metric-changes">0</strong><small>In the local timeline</small></div><div class="metric"><span>VERIFIED CHECKS</span><strong id="metric-checks">0</strong><small>Passed from real files</small></div><div class="metric metric-status"><span>SCAN STATUS</span><strong id="metric-sync">Ready</strong><small id="metric-scan-time">Awaiting scan</small></div></div>
+          <div class="dashboard-grid">
+            <section class="panel graph-panel"><div class="panel-head"><div><span class="section-number">01 / PROJECT SYSTEM</span><h2>Live project map</h2></div><span class="live-chip"><i></i> LOCAL VIEW</span></div><div class="graph-frame"><svg id="graph" viewBox="0 0 760 500" role="img" aria-label="Project files and relationship map"></svg></div><div class="legend"><span><i class="changed"></i>Recently changed</span><span><i></i>Project file</span><span>Mint link verified · dashed link possible</span></div><div id="area-details" class="area-details"></div></section>
+            <section class="panel impact-panel"><div class="panel-head"><div><span class="section-number">02 / REQUIRES ATTENTION</span><h2>Possible effects</h2></div><span class="panel-symbol">↗</span></div><div id="impacts" class="feed"></div></section>
+            <section class="panel check-panel"><div class="panel-head"><div><span class="section-number">03 / VERIFIED AGAINST FILES</span><h2>Engineering checks</h2></div><span class="panel-symbol">✓</span></div><div id="checks" class="feed"></div></section>
+            <section class="panel activity-panel"><div class="panel-head"><div><span class="section-number">04 / PROJECT HISTORY</span><h2>Change timeline</h2></div><span class="panel-symbol">◷</span></div><div id="changes" class="feed"></div></section>
+          </div>
+          <div class="tools-grid">
+            <section class="panel file-panel"><div class="panel-head"><div><span class="section-number">05 / SOURCE INVENTORY</span><h2>Explore your files</h2></div><span id="file-count-note"></span></div><div class="file-toolbar"><input id="file-search" type="search" placeholder="Search tracked files…" aria-label="Search tracked files"><span id="file-filter-note">ALL AREAS</span></div><div class="file-browser"><div id="files" class="file-list"></div><div id="file-inspector" class="file-inspector"><div class="inspector-empty"><span>↗</span><strong>Select a file to inspect</strong><p>Read source previews and rotate STL or OBJ models right here.</p></div></div></div><p id="skipped-note" class="skipped-note" hidden></p></section>
+            <section class="panel rules-panel"><div class="panel-head"><div><span class="section-number">06 / VERIFIED RELATIONSHIP</span><h2>Pin checks</h2></div><span class="panel-symbol">⌁</span></div><p class="rules-intro">Connect a firmware pin to an exported KiCad netlist. Atlas will check the two files on every scan.</p><div id="pin-rules" class="rules-list"></div><form id="pin-rule-form" class="rule-form"><label>Firmware file<select name="firmware_file" required></select></label><label>Symbol<input name="firmware_symbol" placeholder="MOTOR_PIN" required></label><label>Netlist file<select name="netlist_file" required></select></label><div class="rule-pair"><label>Net name<input name="schematic_net" placeholder="MOTOR" required></label><label>MCU ref<input name="mcu_ref" placeholder="U1" required></label></div><button type="submit">Add pin check <span>↗</span></button><p id="rule-error" role="alert"></p></form></section>
+          </div>
+          <section class="panel review-log-panel"><div class="panel-head"><div><span class="section-number">07 / TEAM MEMORY</span><h2>Review decisions</h2></div><span class="panel-symbol">◷</span></div><p class="review-log-intro">A record of what you checked, so the next builder can understand why an alert was closed.</p><div id="review-history" class="review-history"></div></section>
+        </section>
+      </main>
+    </div>
+  </div>
+  <dialog id="review-dialog" class="review-dialog" aria-labelledby="review-heading"><div class="review-shell"><header class="review-head"><div><span class="section-number">CHANGE / REVIEW</span><h2 id="review-heading">Investigate impact</h2></div><button id="review-close" type="button" aria-label="Close review">×</button></header><div id="review-context" class="review-context"></div><div class="review-columns"><section><span class="section-number">01 / WHAT CHANGED</span><h3 id="review-source-title"></h3><pre id="review-diff" class="review-code"></pre></section><section><span class="section-number">02 / WHAT TO CHECK</span><label class="review-target-label" for="review-target">Affected file</label><select id="review-target"></select><div id="review-target-preview" class="review-target-preview"></div></section></div><div id="review-checks" class="review-checks"></div><label class="review-note-label" for="review-note">What did you find? <span>Optional · saved in this project</span></label><textarea id="review-note" maxlength="500" placeholder="Example: The PCB connector stays on pin 12, so the firmware change needs to be reverted."></textarea><p id="review-error" role="alert"></p><footer><span id="review-guidance">Choose an outcome after checking the affected design.</span><div><button id="review-irrelevant" type="button">Not relevant</button><button id="review-done" type="button">Reviewed, no action needed <span>↗</span></button></div></footer></div></dialog>
+  <script src="/static/projects.js?v=8"></script>
+</body>
+</html>

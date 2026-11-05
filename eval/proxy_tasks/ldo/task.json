@@ -2,7 +2,7 @@
   "id": "regulator",
   "family": "power",
   "prompt": "regulator from 12 V to 5 V at 0.2 A",
-  "reference_bom_usd": 0.35,
+  "reference_bom_usd": 1.27727,
   "answer": "A linear regulator from 12 V to 5 V at 0.2 A. Heat, if estimated, is a still-air datasheet estimate and is not airflow.",
   "technical_check": "The frozen regulator card matches 12 V to 5 V at 0.2 A. A heat note is a still-air estimate, not airflow.",
   "card_kind": "frozen",
@@ -29,19 +29,19 @@
   },
   "reference_parts": [
     {
-      "item": "linear regulator",
+      "item": "LM78M05CT/NOPB linear regulator, qty-100",
       "qty": 1,
-      "usd": 0.25
+      "usd": 0.92267
     },
     {
-      "item": "input capacitor",
+      "item": "GRM21BR61E106KA73L input capacitor, qty-100",
       "qty": 1,
-      "usd": 0.05
+      "usd": 0.1773
     },
     {
-      "item": "output capacitor",
+      "item": "GRM21BR61E106KA73L output capacitor, qty-100",
       "qty": 1,
-      "usd": 0.05
+      "usd": 0.1773
     }
   ]
 }

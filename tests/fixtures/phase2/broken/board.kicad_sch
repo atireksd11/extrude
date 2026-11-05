@@ -1,0 +1,18 @@
+(kicad_sch (version 20250114) (generator "eeschema")
+      (uuid 10000000-0000-4000-8000-000000000000) (paper "A4")
+      (lib_symbols
+        (symbol "Test:Output" (pin_names (offset 0)) (in_bom yes) (on_board yes)
+          (property "Reference" "U" (at 0 2 0) (effects (font (size 1 1))))
+          (property "Value" "Output" (at 0 -2 0) (effects (font (size 1 1))))
+          (symbol "Output_1_1"
+            (pin output line (at 0 0 0) (length 2.54)
+              (name "OUT" (effects (font (size 1 1))))
+              (number "1" (effects (font (size 1 1))))))))
+      
+      (symbol (lib_id "Test:Output") (at 50 50 0) (unit 1)
+        (in_bom yes) (on_board yes) (dnp no) (uuid 20000000-0000-4000-8000-000000000000)
+        (property "Reference" "U1" (at 50 45 0) (effects (font (size 1 1))))
+        (property "Value" "Output" (at 50 47 0) (effects (font (size 1 1))))
+        (property "Footprint" "Test:Output" (at 50 50 0) (effects (font (size 1 1)) hide))
+        (pin "1" (uuid 40000000-0000-4000-8000-000000000000))
+        (instances (project "board" (path "/10000000-0000-4000-8000-000000000000" (reference "U1") (unit 1))))))

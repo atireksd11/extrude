@@ -1,4 +1,4 @@
-"""Which checks can run for a card. The map is empty until a later phase fills it."""
+"""Which checks can run for a card, and which this seat does not run."""
 
 from pydantic import BaseModel
 

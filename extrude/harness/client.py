@@ -8,7 +8,9 @@ import urllib.request
 from extrude.harness.proposal import ProposalError
 
 
-def complete(prompt: str, seat: str) -> tuple[str, dict]:
+def complete(prompt: str, seat: str, *, temperature: float = 0, system: str | None = None,
+             timeout: float = 60, max_tokens: int | None = None,
+             max_response_bytes: int | None = None) -> tuple[str, dict]:
     key_name = "EXTRUDE_ESCALATION_KEY" if seat == "escalation" else "EXTRUDE_MODEL_KEY"
     key = os.environ.get(key_name, "").strip() or os.environ.get("OPENAI_API_KEY", "").strip()
     if seat == "escalation" and not os.environ.get("EXTRUDE_ESCALATION_KEY", "").strip():
@@ -24,9 +26,11 @@ def complete(prompt: str, seat: str) -> tuple[str, dict]:
     url = os.environ.get("EXTRUDE_MODEL_URL", "https://api.openai.com/v1/chat/completions")
     payload = {
         "model": model,
-        "messages": [{"role": "user", "content": prompt}],
-        "temperature": 0,
+        "messages": ([{"role": "system", "content": system}] if system else []) + [{"role": "user", "content": prompt}],
+        "temperature": temperature,
     }
+    if max_tokens is not None:
+        payload["max_tokens"] = max_tokens
     request = urllib.request.Request(
         url,
         data=json.dumps(payload).encode("utf-8"),
@@ -34,8 +38,11 @@ def complete(prompt: str, seat: str) -> tuple[str, dict]:
         method="POST",
     )
     try:
-        with urllib.request.urlopen(request, timeout=60) as response:
-            body = json.loads(response.read().decode("utf-8"))
+        with urllib.request.urlopen(request, timeout=timeout) as response:
+            raw = response.read(max_response_bytes + 1) if max_response_bytes is not None else response.read()
+            if max_response_bytes is not None and len(raw) > max_response_bytes:
+                raise ProposalError("tool", "model response exceeded the configured limit")
+            body = json.loads(raw.decode("utf-8"))
     except urllib.error.HTTPError as exc:
         raise ProposalError("tool", f"the model returned {exc.code}: {_http_message(exc)}") from exc
     text = _message_text(body["choices"][0]["message"])

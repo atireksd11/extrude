@@ -2,7 +2,7 @@
   "id": "buck",
   "family": "power",
   "prompt": "5 V to 3.3 V at 2 A",
-  "reference_bom_usd": 1.2,
+  "reference_bom_usd": 2.3277,
   "answer": "A buck with input 5 V, output 3.3 V, load 2 A, and ripple at or under the 30 mV assumption. The output capacitor use-value is what the ripple math reads.",
   "technical_check": "The frozen buck card matches, including the 30 mV ripple assumption, and the ripple check reads the output capacitor use-value.",
   "card_kind": "frozen",
@@ -32,24 +32,24 @@
   },
   "reference_parts": [
     {
-      "item": "buck regulator",
+      "item": "TPS54302DDCT buck regulator, qty-100",
       "qty": 1,
-      "usd": 0.7
+      "usd": 1.1401
     },
     {
-      "item": "inductor",
+      "item": "SRR1260-4R7Y inductor, qty-100",
       "qty": 1,
-      "usd": 0.25
+      "usd": 0.833
     },
     {
-      "item": "input capacitor",
+      "item": "GRM21BR61E106KA73L input capacitor, qty-100",
       "qty": 1,
-      "usd": 0.1
+      "usd": 0.1773
     },
     {
-      "item": "output capacitor",
+      "item": "GRM21BR61E106KA73L output capacitor, qty-100",
       "qty": 1,
-      "usd": 0.15
+      "usd": 0.1773
     }
   ]
 }

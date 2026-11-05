@@ -1,0 +1,52 @@
+[
+  {
+    "id": "divider-order",
+    "prompt": "4.99k and 10k for an ADC divider",
+    "expect": "checked"
+  },
+  {
+    "id": "divider-node",
+    "prompt": "10k and 4.99k divider, output at the midpoint",
+    "expect": "checked"
+  },
+  {
+    "id": "pullup-one",
+    "prompt": "10k pull-up on reset to 3.3 V",
+    "expect": "checked"
+  },
+  {
+    "id": "pullup-not-i2c",
+    "prompt": "4.7k pull-up to 3.3 V on a chip-select pin",
+    "expect": "checked"
+  },
+  {
+    "id": "series-other",
+    "prompt": "a 1k series resistor into a lower-voltage pin",
+    "expect": "checked"
+  },
+  {
+    "id": "indicator-other",
+    "prompt": "a lamp that draws 10 mA from 5 V",
+    "expect": "checked"
+  },
+  {
+    "id": "divider-labeled",
+    "prompt": "bottom 4.99k and top 10k divider",
+    "expect": "checked"
+  },
+  {
+    "id": "series-in-series",
+    "prompt": "a 1k resistor in series with the pin",
+    "expect": "checked"
+  },
+  {
+    "id": "pullup-resistors",
+    "prompt": "10k pull-up resistors to 3.3 V",
+    "expect": "checked"
+  },
+  {
+    "id": "none",
+    "prompt": "tidy the analog front end",
+    "expect": "needs_info"
+  }
+]

@@ -61,7 +61,7 @@ class ProposalError(Exception):
 def parse_proposal(text: str, spec: FrozenSpec) -> tuple[CircuitIR, ElectricalIdentity | None]:
     raw = _json_object(text)
     if not isinstance(raw, dict):
-        raise ProposalError("tool", "the proposal was not a JSON object")
+        raise ProposalError("format", "the proposal was not a JSON object")
     raw = _normalize(raw)
     if raw.get("spec_hash") != spec.spec_hash:
         raise ProposalError("design", "the proposal changed the frozen card")
@@ -103,10 +103,29 @@ def _normalize(raw: dict) -> dict:
         found["spec_hash"] = found["spec_hash"].strip()
     if isinstance(found.get("limits"), dict):
         found["limits"] = {key: _number(value) for key, value in found["limits"].items()}
+    nested: list = []
     if isinstance(found.get("parts"), list):
-        found["parts"] = [_part(item) for item in found["parts"]]
-    if isinstance(found.get("pins"), list):
-        found["pins"] = _pins(found["pins"])
+        parts = []
+        for item in found["parts"]:
+            part = _part(item)
+            if isinstance(part, dict):
+                refdes = part.get("refdes")
+                for key in ("pins", "pads", "connections"):
+                    extra = part.pop(key, None)
+                    if refdes:
+                        nested.extend(_nested_pins(refdes, extra))
+            parts.append(part)
+        found["parts"] = parts
+    top = found.get("pins") if isinstance(found.get("pins"), list) else []
+    seen = {_pin_identity(pin) for pin in top if isinstance(pin, dict)}
+    lifted = []
+    for pin in nested:
+        identity = _pin_identity(pin)
+        if identity in seen:
+            continue
+        seen.add(identity)
+        lifted.append(pin)
+    found["pins"] = _pins([*top, *lifted])
     if found.get("i_load") is not None:
         found["i_load"] = _number(found["i_load"])
     return found
@@ -147,6 +166,37 @@ def _part(item: object) -> object:
         if field in part:
             part[field] = _number(part[field])
     return part
+
+
+def _nested_pins(refdes: str, extra: object) -> list[dict]:
+    found = []
+    if isinstance(extra, list):
+        for index, pin in enumerate(extra, start=1):
+            if isinstance(pin, str):
+                found.append({"refdes": refdes, "name": str(index), "net": pin})
+            elif isinstance(pin, dict):
+                lifted = dict(pin)
+                lifted.setdefault("refdes", refdes)
+                found.append(lifted)
+    elif isinstance(extra, dict):
+        for key, pin in extra.items():
+            if isinstance(pin, str):
+                found.append({"refdes": refdes, "name": str(key), "net": pin})
+            elif isinstance(pin, dict):
+                lifted = dict(pin)
+                lifted.setdefault("name", str(key))
+                lifted.setdefault("refdes", refdes)
+                found.append(lifted)
+    return found
+
+
+def _pin_identity(pin: dict) -> tuple[str, str, str]:
+    refdes = str(pin.get("refdes") or pin.get("ref") or pin.get("reference") or "")
+    name = str(pin.get("name") or pin.get("pin") or pin.get("pin_name") or "")
+    net = str(pin.get("net") or "").strip().upper()
+    if name:
+        return (refdes, "name", name)
+    return (refdes, "net", net)
 
 
 def _pins(items: list) -> list:
@@ -252,8 +302,8 @@ def _json_object(text: str) -> object:
     start = body.find("{")
     end = body.rfind("}")
     if start < 0 or end < start:
-        raise ProposalError("tool", "the proposal was not JSON")
+        raise ProposalError("format", "the proposal was not JSON")
     try:
         return json.loads(body[start : end + 1])
     except json.JSONDecodeError as exc:
-        raise ProposalError("tool", "the proposal was not JSON") from exc
+        raise ProposalError("format", "the proposal was not JSON") from exc

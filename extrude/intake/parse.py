@@ -22,6 +22,8 @@ _PATTERNS = (
     ("s", re.compile(r"(?<![\w.])(\d+(?:\.\d+)?)\s*(us|µs|microseconds)\b", re.IGNORECASE), 1e-6),
     ("F", re.compile(r"(?<![\w.])(\d+(?:\.\d+)?)\s*(uF|µF|microfarads)\b", re.IGNORECASE), 1e-6),
     ("F", re.compile(r"(?<![\w.])(\d+(?:\.\d+)?)\s*(nF)\b", re.IGNORECASE), 1e-9),
+    ("ohm", re.compile(r"(?<![\w.])(\d+(?:\.\d+)?)\s*(ohm|ohms)\b", re.IGNORECASE), 1.0),
+    ("ohm", re.compile(r"(?<![\w.])(\d+(?:\.\d+)?)\s*(k)\b", re.IGNORECASE), 1e3),
 )
 
 

@@ -76,6 +76,104 @@ def test_a_reply_that_uses_aliases_can_be_checked_without_a_second_call():
     assert result.attempts == 0
 
 
+def test_pins_nested_on_a_part_are_lifted_and_a_same_net_pair_is_not():
+    spec = resolve("hold-up 4.7 V for 20 ms, 545 uF")
+    text = json.dumps(
+        {
+            "spec_hash": spec.spec_hash,
+            "limits": {"v_rail": 4.7, "t_hold": 0.02, "c_min": 545e-6},
+            "parts": [
+                {
+                    "refdes": "C1",
+                    "kind": "capacitor",
+                    "capacitance": 680e-6,
+                    "pins": [
+                        {"name": "1", "net": "RAIL"},
+                        {"name": "2", "net": "GND"},
+                    ],
+                }
+            ],
+        }
+    )
+    design, _identity = parse_proposal(text, spec)
+    nets = {pin.net for pin in design.pins if pin.refdes == "C1"}
+    assert nets == {"RAIL", "GND"}
+    same = json.dumps(
+        {
+            "spec_hash": spec.spec_hash,
+            "limits": {"v_rail": 4.7, "t_hold": 0.02, "c_min": 545e-6},
+            "parts": [
+                {
+                    "refdes": "C1",
+                    "kind": "capacitor",
+                    "capacitance": 680e-6,
+                    "pins": [
+                        {"name": "1", "net": "RAIL"},
+                        {"name": "2", "net": "RAIL"},
+                    ],
+                }
+            ],
+        }
+    )
+    tied, _identity = parse_proposal(same, spec)
+    from extrude.harness.loop import _holdup_cap_is_connected
+
+    assert _holdup_cap_is_connected(design) is True
+    assert _holdup_cap_is_connected(tied) is False
+    one = json.loads(text)
+    one["parts"][0]["pins"] = [{"name": "1", "net": "RAIL"}]
+    single, _identity = parse_proposal(json.dumps(one), spec)
+    assert _holdup_cap_is_connected(single) is False
+    grounds = json.loads(text)
+    grounds["parts"][0]["pins"] = [
+        {"name": "1", "net": "GND"},
+        {"name": "2", "net": "gnd"},
+    ]
+    aliased, _identity = parse_proposal(json.dumps(grounds), spec)
+    assert _holdup_cap_is_connected(aliased) is False
+    mixed = json.loads(text)
+    mixed["pins"] = [{"refdes": "C1", "name": "1", "net": "RAIL"}]
+    mixed["parts"][0]["pins"] = [
+        {"name": "1", "net": "RAIL"},
+        {"name": "2", "net": "GND"},
+    ]
+    both, _identity = parse_proposal(json.dumps(mixed), spec)
+    assert {pin.net for pin in both.pins if pin.refdes == "C1"} == {"RAIL", "GND"}
+
+
+def test_pin_names_written_as_plain_nets_are_lifted():
+    spec = resolve("hold-up 4.7 V for 20 ms, 545 uF")
+    text = json.dumps(
+        {
+            "spec_hash": spec.spec_hash,
+            "limits": {"v_rail": 4.7, "t_hold": 0.02, "c_min": 545e-6},
+            "parts": [{"refdes": "C1", "kind": "capacitor", "capacitance": 680e-6, "pins": ["RAIL", "GND"]}],
+        }
+    )
+    design, _identity = parse_proposal(text, spec)
+    assert {pin.net for pin in design.pins} == {"RAIL", "GND"}
+
+
+def test_a_pin_map_is_lifted_without_a_second_try():
+    spec = resolve("hold-up 4.7 V for 20 ms, 545 uF")
+    text = json.dumps(
+        {
+            "spec_hash": spec.spec_hash,
+            "limits": {"v_rail": 4.7, "t_hold": 0.02, "c_min": 545e-6},
+            "parts": [
+                {
+                    "ref": "C1",
+                    "kind": "capacitor",
+                    "capacitance": 680e-6,
+                    "connections": {"1": "RAIL", "2": {"net": "GND"}},
+                }
+            ],
+        }
+    )
+    design, _identity = parse_proposal(text, spec)
+    assert {(pin.name, pin.net) for pin in design.pins} == {("1", "RAIL"), ("2", "GND")}
+
+
 def test_a_changed_limit_is_still_rejected():
     spec = resolve("5 V to 3.3 V at 2 A")
     text = json.dumps(

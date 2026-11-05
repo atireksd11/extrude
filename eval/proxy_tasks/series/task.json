@@ -2,21 +2,30 @@
   "id": "series",
   "family": "other",
   "prompt": "a 330 ohm series resistor into a lower-voltage pin",
-  "reference_bom_usd": 0.02,
-  "answer": "One 330 ohm series resistor between a signal and a lower-voltage pin.",
-  "technical_check": "The sentence stays a series resistor. It is not graded as a buck, regulator, or hold-up.",
-  "card_kind": "needs_info",
+  "reference_bom_usd": 0.0212,
+  "answer": "One 330 ohm series resistor between the signal and the lower-voltage pin.",
+  "technical_check": "The frozen series card matches 330 ohm, and that resistor is the part between the two nets.",
+  "card_kind": "frozen",
   "card": {
-    "missing": [
-      "task_class"
-    ],
-    "question": "Which circuit is this: buck, regulator, hold-up, LED, or an MCU swap?"
+    "task_class": "series",
+    "values_si": {
+      "r_series": 330.0
+    },
+    "origins": {
+      "r_series": "user_span"
+    },
+    "defaults_version": "2026-10-03",
+    "spec_hash": "b2376cfd2391a28bf59537ffc478fd1500d219256251c85cf60c1e4bdc360ab1",
+    "labels": {},
+    "evidence": {
+      "r_series": "330 ohm"
+    }
   },
   "reference_parts": [
     {
-      "item": "330 ohm series resistor",
+      "item": "CRCW0805 330 ohm resistor, qty-100",
       "qty": 1,
-      "usd": 0.02
+      "usd": 0.0212
     }
   ]
 }

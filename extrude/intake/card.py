@@ -8,6 +8,7 @@ _SCALE = {
     "v_rail": ("V", 1.0),
     "i_load": ("A", 1.0),
     "i_led": ("mA", 1e3),
+    "v_supply": ("V", 1.0),
     "ripple_pp": ("mV", 1e3),
     "t_hold": ("ms", 1e3),
     "c_min": ("uF", 1e6),
@@ -25,7 +26,7 @@ def describe(spec: FrozenSpec) -> str:
         f"Task: {spec.task_class}",
         f"Defaults version: {spec.defaults_version}",
     ]
-    order = ("vin", "vout", "i_load", "i_led", "v_rail", "t_hold", "c_min", "ripple_pp")
+    order = ("vin", "vout", "i_load", "i_led", "v_supply", "v_rail", "t_hold", "c_min", "ripple_pp")
     keys = [key for key in order if key in spec.values_si]
     keys.extend(key for key in spec.values_si if key not in keys)
     for key in keys:

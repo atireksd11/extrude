@@ -1,0 +1,20 @@
+{
+  "sentence": "Laser-cut a 40x20 mm plywood bracket with a centered 20x8 mm slot and 2 M3 clearance holes at (8,10) and (32,10).",
+  "plate_width_mm": 40,
+  "plate_height_mm": 20,
+  "hole": "M3",
+  "hole_count": 2,
+  "hole_min_mm": 2.95,
+  "hole_max_mm": 3.45,
+  "hole_positions": [[8, 10], [32, 10]],
+  "min_edge_distance_mm": 2.0,
+  "checks": [
+    "compiles",
+    "closed_outline",
+    "outline_size",
+    "hole_count",
+    "hole_diameter",
+    "hole_positions",
+    "min_edge_distance"
+  ]
+}

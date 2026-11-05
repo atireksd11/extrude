@@ -3,23 +3,14 @@
   "family": "other",
   "prompt": "20 mA LED",
   "reference_bom_usd": 0.08,
-  "answer": "An LED whose current is 20 mA. This seat does not design LEDs.",
-  "technical_check": "The LED current on the frozen card is 20 mA. This seat stops instead of turning the LED into a buck.",
-  "card_kind": "frozen",
+  "answer": "An LED at 20 mA. The supply voltage was not in the sentence, so the card asks for it and does not assume 5 V.",
+  "technical_check": "The sentence names 20 mA and no supply. The seat asks for the supply voltage and does not check a design.",
+  "card_kind": "needs_info",
   "card": {
-    "task_class": "led",
-    "values_si": {
-      "i_led": 0.02
-    },
-    "origins": {
-      "i_led": "user_span"
-    },
-    "defaults_version": "2026-10-03",
-    "spec_hash": "dd084b4124f109e9f18dbd80a77d124557ce5fa777f0c5b33cbbf50cd4e92fbe",
-    "labels": {},
-    "evidence": {
-      "i_led": "20 mA"
-    }
+    "missing": [
+      "v_supply"
+    ],
+    "question": "What supply voltage should the LED use?"
   },
   "reference_parts": [
     {

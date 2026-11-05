@@ -2,15 +2,30 @@
   "id": "indicator",
   "family": "other",
   "prompt": "a power-good lamp that draws 5 mA from 3.3 V",
-  "reference_bom_usd": 0.06,
-  "answer": "A small indicator at 5 mA from 3.3 V. Airflow, radios, and fast memory are not part of the answer.",
-  "technical_check": "The sentence stays an indicator lamp. It is not graded as a buck, regulator, or hold-up.",
-  "card_kind": "needs_info",
+  "reference_bom_usd": 0.0612,
+  "answer": "An indicator LED from 3.3 V at 5 mA, with a series resistor sized for a 2 V forward drop.",
+  "technical_check": "The frozen indicator card matches 3.3 V and 5 mA. The resistor is (3.3 V - 2 V) / 5 mA. The 2 V drop is a marked default.",
+  "card_kind": "frozen",
   "card": {
-    "missing": [
-      "task_class"
-    ],
-    "question": "Which circuit is this: buck, regulator, hold-up, LED, or an MCU swap?"
+    "task_class": "indicator",
+    "values_si": {
+      "i_lamp": 0.005,
+      "v_rail": 3.3,
+      "v_f": 2.0
+    },
+    "origins": {
+      "i_lamp": "user_span",
+      "v_rail": "user_span",
+      "v_f": "default"
+    },
+    "defaults_version": "2026-10-03",
+    "spec_hash": "335f8062134d09b3ded31dafe672285e12d29037a90e2f224e3c66d685054119",
+    "labels": {},
+    "evidence": {
+      "i_lamp": "5 mA",
+      "v_rail": "3.3 V",
+      "v_f": "2 V"
+    }
   },
   "reference_parts": [
     {
@@ -19,9 +34,9 @@
       "usd": 0.04
     },
     {
-      "item": "series resistor",
+      "item": "CRCW0805 series resistor, qty-100",
       "qty": 1,
-      "usd": 0.02
+      "usd": 0.0212
     }
   ]
 }

@@ -15,6 +15,13 @@ def test_power_words_stay_on_the_list():
     assert classify("swap the MCU from STM32 to ESP32") == "mcu_swap"
 
 
+def test_named_small_circuits_stay_on_the_list():
+    assert classify("two resistors for an ADC divider, 10k and 4.99k") == "divider"
+    assert classify("4.7k pull-ups on a 3.3 V I2C bus") == "pullup"
+    assert classify("a 330 ohm series resistor into a lower-voltage pin") == "series"
+    assert classify("a power-good lamp that draws 5 mA from 3.3 V") == "indicator"
+
+
 def test_a_vague_sentence_is_unknown():
     assert classify("Power an ESP32") == "unknown"
     assert classify("make it nice") == "unknown"

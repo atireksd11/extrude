@@ -1,0 +1,14 @@
+{
+  "band_mm": 0.15,
+  "filaments": {
+    "PLA": {"min_wall_mm": 1.2},
+    "PETG": {"min_wall_mm": 1.5}
+  },
+  "inserts": {
+    "M2": {"PLA": 3.2, "PETG": 3.4, "min_wall_mm": 1.2},
+    "M3": {"PLA": 4.0, "PETG": 4.2, "min_wall_mm": 1.5},
+    "M4": {"PLA": 5.0, "PETG": 5.2, "min_wall_mm": 2.0}
+  },
+  "overhang_warn_z": 0.5,
+  "overhang_block_z": 0.3
+}

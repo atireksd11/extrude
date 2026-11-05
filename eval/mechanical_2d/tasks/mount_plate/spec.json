@@ -1,0 +1,20 @@
+{
+  "sentence": "Laser-cut an 80x60 mm acrylic mounting plate with 4 M3 clearance holes inset 10 mm from each corner.",
+  "plate_width_mm": 80,
+  "plate_height_mm": 60,
+  "hole": "M3",
+  "hole_count": 4,
+  "hole_min_mm": 2.95,
+  "hole_max_mm": 3.45,
+  "hole_positions": [[10, 10], [70, 10], [10, 50], [70, 50]],
+  "min_edge_distance_mm": 2.0,
+  "checks": [
+    "compiles",
+    "closed_outline",
+    "outline_size",
+    "hole_count",
+    "hole_diameter",
+    "hole_positions",
+    "min_edge_distance"
+  ]
+}
