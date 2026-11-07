@@ -3,6 +3,7 @@
 import json
 import shutil
 import subprocess
+import sys
 import threading
 import time
 from concurrent.futures import ThreadPoolExecutor
@@ -226,7 +227,7 @@ def test_core_workspace_workers_and_restart(pilot, monkeypatch):
     assert audit.findings[0].related[0].path == "electronics/main.kicad_sch"
     assert any(row.outcome == "unavailable" and row.domain == "firmware" for row in audit.coverage)
     output = subprocess.check_output([
-        str(Path(".venv/Scripts/python.exe").resolve()), "-c",
+        sys.executable, "-c",
         "from extrude.workspace_audit import get; import sys; print(get(sys.argv[1], sys.argv[2]).model_dump_json())",
         repo_id, audit.id,
     ], text=True)
