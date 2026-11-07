@@ -23,13 +23,13 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y openscad xvfb xauth libgl1-mesa-dri ngspice
       - name: Project Atlas gate
-        run: python -m pytest -q -m atlas --basetemp data/.pytest-atlas
+        run: python -m pytest -q -m atlas --basetemp "$RUNNER_TEMP/pytest-atlas"
       - name: Workspace UI state gate
         run: node tests/ui/github_workspace.test.cjs
       - name: Legacy hardware harness
         env:
           LIBGL_ALWAYS_SOFTWARE: '1'
-        run: xvfb-run -a python -m pytest -q -m legacy --basetemp data/.pytest-legacy
+        run: xvfb-run -a python -m pytest -q -m legacy --basetemp "$RUNNER_TEMP/pytest-legacy"
       - name: Installed UI smoke test
         run: |
           cd "$(mktemp -d)"
