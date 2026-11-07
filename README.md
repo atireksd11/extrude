@@ -30,6 +30,8 @@ The long architecture write-up is [docs/architecture/hardware-ai-master-blueprin
 
 Start with the one-page room map: [docs/MAP.md](docs/MAP.md).
 
+For the verified Muse, Linear, Codex Cloud, and GitHub workflow, see the [Extrude operating guide](docs/EXTRUDE-OPERATING-SYSTEM.md).
+
 The first local project change-map pilot is at `/projects` when the API is running. Setup and its two-week pilot plan are in [docs/PROJECT-MAP-MVP.md](docs/PROJECT-MAP-MVP.md).
 
 For the install, offline tests, and Docker commands, see [the Slice 0 stabilization gate](docs/SLICE-0-STABILIZATION.md).
