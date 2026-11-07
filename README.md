@@ -4,6 +4,10 @@ Extrude is a local workspace for reviewing changes across a hardware project's G
 
 Paste a repository URL, select a commit, and run an audit. Supported checks show evidence from the saved revisions, links between related files, and what still needs manual review. An optional AI review summarizes the existing audit after you explicitly approve sending selected evidence to the configured model provider.
 
+## Contributing
+
+Contributors should run `git diff --check` before opening a PR.
+
 ## Start locally
 
 Requires Python 3.11 or newer and Git. Python 3.11 or 3.12 is a practical starting point for native CAD dependencies.
