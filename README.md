@@ -20,6 +20,14 @@ Open http://127.0.0.1:8000/projects. Saved repositories, settings and audits sta
 
 Install KiCad separately for DRC, ERC, schematic netlists, and board/schematic parity. The native integration was exercised with KiCad 10.0.6. Set `KICAD_CLI_PATH` if it is not discovered automatically. Missing tools or unsupported files appear as coverage gaps.
 
+## Muse and Codex handoff
+
+1. Muse plans the work, creates a task in the [Extrude Linear project](https://linear.app/plmp/project/extrude-8799dc9dae00), and creates a matching GitHub issue using the [Codex task template](.github/ISSUE_TEMPLATE/codex-task.md). Link both issues and record the goal, exact files, and acceptance test.
+2. Codex works from the published `extrude` Cloud environment on a separate branch. It runs the acceptance test and opens a draft PR against `main`. Link the PR and its check results in Linear.
+3. Muse reviews the diff and results and records its review on the task. Atirek decides whether to merge. All changes to `main` go through a PR.
+
+The [GitHub Actions intake](.github/workflows/extrude-codex-handoff.yml) recognizes a new `/codex <task>` comment from the repository owner on an open GitHub issue. The comment must include the approved file scope and acceptance test. The workflow runs from the default branch and can verify its intake rules without calling a model. Hosted model execution is off by default. It needs the repository opt-in `EXTRUDE_CODEX_ACTIONS_ENABLED=true`, a separately configured `OPENAI_API_KEY`, and permission for Actions to open draft PRs. Use Codex Cloud directly with the existing ChatGPT plan for the no-extra-spend path.
+
 ## Current scope and next work
 
 This is an assisted local pilot, not a hosted team service. See [current product status](docs/CURRENT-STATUS.md) for implemented features and limitations, and [the pilot build plan](docs/PILOT-BUILD-PLAN.md) for the technical phases and acceptance gates. The next step is Phase 5: test the import-to-finding workflow with real builders and fix the problems they encounter.
