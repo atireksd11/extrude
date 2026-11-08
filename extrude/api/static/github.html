@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/static/projects.css?v=9">
-  <link rel="stylesheet" href="/static/github.css?v=8">
+  <link rel="stylesheet" href="/static/github.css?v=12">
 </head>
 <body class="workspace-app">
   <a href="#github-main" class="skip-link">Skip to workspace</a>
@@ -129,23 +129,31 @@
               <div class="pane-heading"><div><span class="pane-number">02</span><h2>Change review</h2></div><svg class="ui-icon pane-mark" aria-hidden="true"><use href="#icon-branch"/></svg></div>
               <div class="audit-callout"><div><strong>Check this change</strong><p>Review hardware, CAD, firmware and BOM changes with their project context.</p></div><button id="github-audit-run" class="button primary" type="button" disabled>Run audit ↗</button></div>
               <p id="github-audit-status" class="audit-status" role="status" aria-live="polite"></p>
-              <details id="github-ai-panel" class="ai-review" hidden><summary>AI review</summary><p id="github-ai-disclosure"></p><button id="github-explain" class="button secondary" type="button" disabled>Explain this audit</button><p id="github-ai-status" role="status"></p><div id="github-ai-results"></div></details>
               <div class="review-tabs" role="tablist" aria-label="Review content"><button id="github-tab-changes" type="button" role="tab" aria-selected="true" aria-controls="github-changes-panel">Changes <span id="github-tab-change-count">0</span></button><button id="github-tab-findings" type="button" role="tab" aria-selected="false" aria-controls="github-findings-panel" tabindex="-1">Findings <span id="github-tab-finding-count">0</span></button><button id="github-tab-connections" type="button" role="tab" aria-selected="false" aria-controls="github-connections-panel" tabindex="-1">Connections <span id="github-tab-connection-count">0</span></button></div>
               <div id="github-changes-panel" role="tabpanel" aria-labelledby="github-tab-changes"><p id="github-file-count" class="pane-caption"></p><ul id="github-files" class="review-list"></ul><button id="github-more-files" class="button load-more" type="button" hidden>Load more changes</button></div>
-              <div id="github-findings-panel" role="tabpanel" aria-labelledby="github-tab-findings" hidden><p class="pane-caption">Observations and items to review in the checked files.</p><ul id="github-audit-findings" class="review-list" aria-label="Audit findings"></ul><details id="github-audit-coverage" class="audit-coverage" hidden><summary>What was checked <span aria-hidden="true">⌄</span></summary><ul></ul></details></div>
+              <div id="github-findings-panel" role="tabpanel" aria-labelledby="github-tab-findings" hidden>
+                <p id="github-findings-empty" class="pane-caption">Run the audit to see findings for this commit pair.</p>
+                <p id="github-review-summary" class="review-summary" hidden></p>
+                <details id="github-ai-panel" class="ai-review" hidden><summary>AI review & next steps</summary><p id="github-ai-disclosure"></p><button id="github-explain" class="button secondary" type="button" disabled>Generate AI review</button><p id="github-ai-status" role="status"></p><div id="github-ai-results"></div></details>
+                <ul id="github-audit-findings" class="review-list" aria-label="Audit findings"></ul>
+                <details id="github-audit-coverage" class="audit-coverage" hidden><summary>What was checked <span aria-hidden="true">⌄</span></summary><ul></ul></details>
+              </div>
               <div id="github-connections-panel" role="tabpanel" aria-labelledby="github-tab-connections" hidden><p class="pane-caption">File connections at the selected commit. Confirmed reference matches establish identity; physical fit and pad/net agreement remain separate checks.</p><div id="github-connections"></div></div>
             </section>
             <section class="workspace-pane inspector-pane" aria-label="File inspector">
               <div class="pane-heading"><div><span class="pane-number">03</span><h2>Inspector</h2></div><svg class="ui-icon pane-mark" aria-hidden="true"><use href="#icon-search"/></svg></div>
               <div id="github-inspector-empty" class="inspector-empty"><div class="empty-file" aria-hidden="true"><span></span><i></i><i></i><i></i></div><h3>Follow the evidence.</h3><p>Select a file or finding to see its contents, what changed, and the related files.</p><span class="empty-hint">← Start with a change</span></div>
               <div id="github-preview" hidden>
-                <div class="inspector-file-heading"><span class="section-caption">SELECTED FILE</span><h3 id="github-file-name"></h3></div>
+                <div id="github-finding-report" class="finding-report" hidden></div>
+                <div id="github-finding-source">
+                <div class="inspector-file-heading"><span class="section-caption">SELECTED FILE</span><h3 id="github-file-name" tabindex="-1"></h3></div>
                 <p id="github-source-hint" class="inspector-hint"></p>
                 <ul id="github-evidence" class="evidence-list" aria-label="Finding evidence" hidden></ul>
                 <ul id="github-related" class="evidence-list related-list" aria-label="Related files" hidden></ul>
                 <div id="github-artifact" class="artifact-panel" hidden><h3>Inside the file</h3><p id="github-artifact-summary" role="status"></p><div id="github-artifact-mesh"></div><div id="github-artifact-facts"></div></div>
                 <div id="github-pcb" class="github-pcb" hidden><div class="pcb-heading"><span id="github-hardware-label" class="small-label">PCB REVIEW</span><h3 id="github-hardware-title">Inside the board</h3></div><p id="github-pcb-summary" role="status"></p><ul id="github-pcb-changes"></ul><button id="github-pcb-more" class="button load-more" type="button" hidden>Load more changes</button></div>
                 <div class="github-previews"><div id="github-before" class="source-pane"><h3><span class="source-dot before-dot"></span>Before</h3><pre></pre></div><div class="source-pane"><h3><span class="source-dot after-dot"></span><span id="github-after-label">Selected commit</span></h3><pre id="github-after"></pre></div></div>
+                </div>
               </div>
             </section>
           </div>
@@ -155,6 +163,6 @@
     </div>
   </div>
   <script src="/static/mesh-viewer.js?v=1" defer></script>
-  <script src="/static/github.js?v=8" defer></script>
+  <script src="/static/github.js?v=12" defer></script>
 </body>
 </html>

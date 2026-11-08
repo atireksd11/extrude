@@ -84,6 +84,11 @@ async function main() {
   assert(nodes.get("github-before").hidden);
   assert.equal(nodes.get("github-after").textContent, `${head}:docs/setup.md`);
 
+  await execute(`showFinding({evidence:[{path:"docs/setup.md", sha:"${head}"}], related:[]},
+    {base_sha:"${base}", head_sha:"${head}"})`);
+  assert.match(nodes.get("github-source-hint").textContent, /Finding evidence/);
+  assert.equal(nodes.get("github-before").querySelector("pre").textContent, "No evidence was cited for this revision.");
+
   let releasePreview;
   const slowPreview = new Promise(resolve => { releasePreview = resolve; });
   respond = url => new URL(url, "http://local").searchParams.get("path") === "slow.txt"
@@ -112,9 +117,13 @@ async function main() {
     evidence: [{ sha: base, path: "board.kicad_pcb", locator: "Track UUID 123" },
       { sha: head, path: "board.kicad_pcb", locator: "Track UUID 123" }], related: [] };
   respond = async () => ({ state: "partial", base_sha: base, head_sha: head,
-    findings: [nativeFinding], coverage: [] });
+    findings: [nativeFinding], coverage: [], review: { finding_count: 1, new_problems: 0,
+      groups: [{ title: "Existing problems", items: [{ source_id: "F0", indexes: [0],
+        what: "KiCad reported intersecting tracks.", why: "The tracks may short.", next_step: "Check the cited nets." }] }] } });
   await execute('showAudit("native", context)');
-  const nativeRow = nodes.get("github-audit-findings").children[0].children[0];
+  const nativeList = nodes.get("github-audit-findings");
+  assert.equal(nativeList.children[0].textContent, "Existing problems");
+  const nativeRow = nativeList.children[1].children[0];
   assert.equal(nativeRow.children[0].textContent, "Tracks cross on F.Cu");
   assert(nativeRow.children[1].textContent.includes("Already present"));
   assert(!nativeRow.children[1].textContent.includes("undefined"));
@@ -211,7 +220,9 @@ async function main() {
       }
       return { provider: {available:true, disclosure:"Selected evidence goes to the configured provider."},
         explanation: explainRequested ? {state:"complete",detail:"Saved explanation",sections:{what_changed:[
-          {source_id:"F0", summary:"U1 moved",detail:"Observed placement change",certainty:"observed",evidence:[source,target]}
+          {source_id:"F0", summary:"U1 moved",detail:"Observed placement change",certainty:"observed",evidence:[source,target],
+            explanation:"U1 moved to a new position.", impact:"Parts around U1 may need clearance.",
+            next_step:"Compare U1 against the enclosure."}
         ],what_to_review:[],what_could_not_be_checked:[]}} : null };
     }
     return {text:"source"};
@@ -221,7 +232,10 @@ async function main() {
   assert(!explainRequested);
   await execute('requestExplanation()');
   assert.equal(calls.filter(call => call.options?.method === "POST" && call.url.includes("/explain")).length, explainPosts + 1);
-  assert.equal(nodes.get("github-ai-results").children.length, 3);
+  const results = nodes.get("github-ai-results");
+  assert.equal(results.children.length, 1);
+  const aiArticle = results.children[0].children[1];
+  assert.equal(aiArticle.children[1].children[5].textContent, "Compare U1 against the enclosure.");
   assert(nodes.get("github-explain").disabled);
   let releaseOldExplanation;
   const oldExplanation = new Promise(resolve => { releaseOldExplanation = resolve; });

@@ -120,7 +120,10 @@ def _answer(prompt):
     result, used = {}, set()
     for section, entries in context.items():
         available = [e for e in entries if e["source_id"] not in used]
-        result[section] = [{"source_id": e["source_id"], "evidence_ids": e["evidence_ids"][:2]} for e in available[:1]]
+        result[section] = [dict(source_id=e["source_id"], evidence_ids=e["evidence_ids"][:2],
+            explanation="The cited check recorded a difference between these two versions.",
+            impact="Review linked files if they rely on the changed part of the design.",
+            next_step="Open the cited items and compare them in the design tool.") for e in available[:1]]
         used.update(e["source_id"] for e in available[:1])
     return json.dumps(result)
 
@@ -128,7 +131,12 @@ def _answer(prompt):
 def test_explanation_rejects_unknown_citations_and_invented_verdicts(project):
     prompt, catalog, allowed, _ = explain.context(project)
     good = json.loads(_answer(prompt))
-    assert explain.validate_selection(json.dumps(good), catalog, allowed)
+    saved = explain.validate_selection(json.dumps(good), catalog, allowed)
+    assert saved["what_changed"][0].next_step == good["what_changed"][0]["next_step"]
+    assert saved["what_changed"][0].summary == catalog[good["what_changed"][0]["source_id"]]["summary"]
+    bad = json.loads(json.dumps(good)); del bad["what_changed"][0]["impact"]
+    with pytest.raises(ValueError):
+        explain.validate_selection(json.dumps(bad), catalog, allowed)
     bad = json.loads(json.dumps(good)); bad["what_changed"][0]["evidence_ids"] = ["invented-id"]
     with pytest.raises(ValueError):
         explain.validate_selection(json.dumps(bad), catalog, allowed)
@@ -161,6 +169,32 @@ def test_known_but_unrelated_citation_and_new_label_are_rejected(project):
     bad["what_changed"] = [{"source_id": inherited, "evidence_ids":list(catalog[inherited]["evidence"])[:1]}]
     with pytest.raises(ValueError):
         explain.validate_selection(json.dumps(bad), catalog, allowed)
+
+
+def test_missing_kicad_libraries_are_one_coverage_item_with_citations(project):
+    from extrude import workspace_report
+    evidence = next(f.evidence for f in project.findings if f.evidence)
+    missing = "The current configuration does not include the footprint library 'Connectors'"
+    findings = [audit.Finding(rule_id=rule, summary=missing, domain="pcb", status="unverified",
+                severity="warning", lifecycle="existing", evidence=evidence,
+                after={"items": [{"description": "Footprint J3"}]})
+                for rule in ("kicad.drc.lib_footprint_issues", "kicad.erc.footprint_link_issues")]
+    coverage = [audit.Coverage(check="Library consistency", outcome="unavailable", domain="pcb",
+                path=evidence[0].path, tool="kicad-cli",
+                detail=f"Library-version or resolution warning needs review: {missing}")]
+    report = project.model_copy(update={"findings": findings, "coverage": coverage})
+    review = workspace_report.review(report)
+    assert review["finding_count"] == 0 and review["new_problems"] == 0
+    assert review["groups"][0]["title"] == "Check limitations"
+    item = review["groups"][0]["items"][0]
+    assert item["libraries"] == [dict(kind="footprint", name="Connectors", references=["J3"], indexes=[0, 1])]
+    assert len(report.findings) == 2
+    prompt, catalog, allowed, _ = explain.context(report)
+    payload = json.loads(prompt)
+    assert payload["changed_paths"]["total"] > 0
+    assert allowed["what_could_not_be_checked"] == {"L0"}
+    assert not allowed["what_changed"] and not allowed["what_to_review"]
+    assert explain.validate_selection(_answer(prompt), catalog, allowed)["what_could_not_be_checked"][0].evidence
 
 
 def test_native_hierarchy_relationship_cites_child(tmp_path, monkeypatch):
@@ -263,4 +297,5 @@ def test_phase4_api_consent_and_no_automatic_model_call(project, monkeypatch):
         time.sleep(.02)
     assert result["state"] == "complete" and len(calls) == 1
     assert result["sections"]["what_changed"][0]["evidence"]
+    assert result["sections"]["what_changed"][0]["impact"]
     assert client.get(root.replace(project.repo_id, "0" * 32)).status_code == 404

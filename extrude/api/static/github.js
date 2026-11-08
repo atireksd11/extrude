@@ -18,6 +18,8 @@ let disposeMesh = null;
 let savingSettings = false;
 let explanationTimer;
 let explanationEpoch = 0;
+const reviewNotes = new Map();
+let selectedReview;
 const reviewTabs = ["changes", "findings", "connections"];
 const folders = new Map();
 const commitTitles = new Map();
@@ -154,7 +156,12 @@ async function selectRevision(sha, compareFrom = null) {
   clearTimeout(auditTimer);
   clearTimeout(explanationTimer);
   explanationEpoch++;
+  reviewNotes.clear();
+  selectedReview = null;
   $("github-ai-panel").hidden = true;
+  $("github-ai-panel").open = false;
+  $("github-review-summary").hidden = true;
+  $("github-findings-empty").hidden = false;
   $("github-ai-results").replaceChildren();
   $("github-connections").replaceChildren();
   $("github-tab-connection-count").textContent = "0";
@@ -283,7 +290,7 @@ async function loadMore(which) {
   (which === "inventory" ? renderTree : renderFiles)(data[which]);
 }
 
-async function showPreview(item, parent, finding = null, inspectSha = revision) {
+async function showPreview(item, parent, finding = null, inspectSha = revision, reviewItem = null) {
   const current = context;
   const request = ++previewRequest;
     disposeMesh?.(); disposeMesh = null;
@@ -296,14 +303,23 @@ async function showPreview(item, parent, finding = null, inspectSha = revision) 
       run(() => loadArtifact(item, parent, inspectSha, current, request));
     }
   $("github-preview").hidden = false;
+  $("github-finding-source").hidden = false;
   $("github-inspector-empty").hidden = true;
   $("github-file-name").textContent = item.path;
   selectedPath(item.path);
-  $("github-source-hint").textContent = item.status
+  $("github-source-hint").textContent = finding
+    ? item.status && !item.singleRevisionEvidence ? "Finding evidence from both revisions." : "Finding evidence from one revision."
+    : item.status
     ? `${statuses[item.status] || "Changed"} file · Compare the saved versions below.`
     : "Saved contents at the selected commit.";
   $("github-after-label").textContent = `At ${inspectSha.slice(0, 8)}`;
-  renderEvidence(finding);
+  selectedReview = reviewItem;
+  renderFindingReport(reviewItem);
+  renderEvidence(finding, reviewItem);
+  if (reviewItem && window.matchMedia?.("(max-width: 640px)").matches) {
+    $("github-finding-report").querySelector("h3").focus({ preventScroll: true });
+    $("github-preview").scrollIntoView({ block: "start" });
+  }
     const schematic = item.path.toLowerCase().endsWith(".kicad_sch");
     const board = item.path.toLowerCase().endsWith(".kicad_pcb");
     $("github-pcb").hidden = (!board && !schematic) || !item.status;
@@ -322,7 +338,7 @@ async function showPreview(item, parent, finding = null, inspectSha = revision) 
   const after = $("github-after");
   before.textContent = after.textContent = "Loading…";
   async function read(sha, path) {
-    if (!sha) return "File was not present.";
+    if (!sha) return item.singleRevisionEvidence ? "No evidence was cited for this revision." : "File was not present.";
     const data = await api(route("preview", { revision: sha, path }));
     return data.text ?? data.reason;
   }
@@ -392,7 +408,7 @@ async function loadBoardReview() {
   $("github-pcb-more").hidden = active.offset == null;
 }
 
-function renderEvidence(finding) {
+function renderEvidence(finding, reviewItem) {
   const source = $("github-evidence");
   const related = $("github-related");
   source.replaceChildren();
@@ -400,7 +416,7 @@ function renderEvidence(finding) {
   source.hidden = !finding?.evidence.length;
   related.hidden = !finding?.related.length;
   if (!finding) return;
-  const inspect = item => showPreview({ path: item.path }, null, finding, item.sha);
+  const inspect = item => showPreview({ path: item.path }, null, finding, item.sha, reviewItem);
   for (const item of finding.evidence) {
     row(source, item.path, `${item.sha.slice(0, 8)} · ${item.locator}`, () => inspect(item));
   }
@@ -411,13 +427,164 @@ function renderEvidence(finding) {
   }
 }
 
-function showFinding(finding, audit) {
+function showFinding(finding, audit, reviewItem) {
   const before = finding.evidence.find(item => item.sha === audit.base_sha);
   const after = finding.evidence.find(item => item.sha === audit.head_sha);
   const item = after || before;
-  if (!item) return;
+  if (!item) {
+    if (reviewItem) {
+      previewRequest++;
+      disposeMesh?.(); disposeMesh = null;
+      $("github-preview").hidden = false;
+      $("github-finding-source").hidden = true;
+      $("github-inspector-empty").hidden = true;
+      selectedReview = reviewItem;
+      renderFindingReport(reviewItem);
+      if (window.matchMedia?.("(max-width: 640px)").matches) {
+        $("github-finding-report").querySelector("h3").focus({ preventScroll: true });
+        $("github-preview").scrollIntoView({ block: "start" });
+      }
+    }
+    return;
+  }
   const status = before && after ? "M" : before ? "D" : "A";
-  return showPreview({ path: item.path, previous_path: before?.path, status }, audit.base_sha, finding, audit.head_sha);
+  return showPreview({ path: item.path, previous_path: before?.path, status,
+    singleRevisionEvidence: !before || !after }, audit.base_sha, finding, audit.head_sha, reviewItem);
+}
+
+function findingTitle(finding) {
+  const kind = finding.rule_id.split(".").at(-1);
+  const label = finding.rule_id.startsWith("pcb.") && pcbLabels[kind];
+  return label ? `${finding.summary.split(":")[0]} · ${label}` : finding.summary;
+}
+
+function findingState(finding) {
+  const lifecycle = { new: "New at selected commit", existing: "Already present",
+    resolved: "Resolved", present_at_head: "Present at selected commit · Baseline unverified" };
+  const certainty = { suggestion: "Review suggested", verified: "Check found a problem",
+    unverified: "Unverified", observed: "Observed change" };
+  const severity = finding.status === "verified" && finding.lifecycle !== "resolved"
+    ? { error: "Error", warning: "Warning", info: "Info" }[finding.severity] : null;
+  const status = finding.lifecycle !== "resolved" ? certainty[finding.status] : null;
+  return [status, lifecycle[finding.lifecycle], severity].filter(Boolean).join(" · ");
+}
+
+function appendExplanation(parent, fields) {
+  const list = document.createElement("dl");
+  for (const [label, value] of fields) {
+    const term = document.createElement("dt");
+    term.textContent = label;
+    const text = document.createElement("dd");
+    text.textContent = value;
+    list.append(term, text);
+  }
+  parent.append(list);
+}
+
+function appendReviewNote(parent, note) {
+  appendExplanation(parent, [["What it means", note.explanation], ["Why it matters", note.impact], ["What to do next", note.next_step]]);
+}
+
+function renderFindingReport(item) {
+  const panel = $("github-finding-report");
+  panel.replaceChildren();
+  panel.hidden = !item;
+  if (!item) return;
+  const heading = document.createElement("h3");
+  heading.tabIndex = -1;
+  heading.textContent = item.title;
+  const state = document.createElement("p");
+  state.className = "finding-state";
+  state.textContent = item.libraries ? item.caption : findingState(item.findings[0]);
+  panel.append(heading, state);
+  const fields = [["What happened", item.what], ["Why it matters", item.why], ["What to do next", item.next_step]];
+  const finding = item.findings[0];
+  if (!item.libraries && !finding.lifecycle && (finding.before != null || finding.after != null)) {
+    const kind = finding.rule_id.split(".").at(-1);
+    fields.splice(1, 0, ["Before → after", `${boardValue(finding.before, kind)} → ${boardValue(finding.after, kind)}`]);
+  }
+  appendExplanation(panel, fields);
+  if (item.libraries) {
+    const list = document.createElement("ul");
+    for (const library of item.libraries) {
+      const li = document.createElement("li");
+      li.textContent = `${library.kind === "symbol" ? "Symbol" : "Footprint"} library: ${library.name}${library.references.length ? ` · ${library.references.join(", ")}` : ""}`;
+      list.append(li);
+    }
+    panel.append(list);
+  }
+  const note = reviewNotes.get(item.source_id);
+  if (note) {
+    const section = document.createElement("section");
+    section.className = "finding-ai";
+    const title = document.createElement("h4");
+    title.textContent = "AI interpretation";
+    section.append(title);
+    appendReviewNote(section, note);
+    panel.append(section);
+  }
+  const details = document.createElement("details");
+  const label = document.createElement("summary");
+  label.textContent = "Original checker output";
+  details.append(label);
+  for (const finding of item.findings) {
+    const raw = document.createElement("p");
+    raw.textContent = `${finding.rule_id} · ${finding.summary}`;
+    details.append(raw);
+  }
+  panel.append(details);
+}
+
+function inspectReviewItem(item, audit) {
+  const findings = item.findings;
+  if (findings.length === 1) return showFinding(findings[0], audit, item);
+  const evidence = new Map(findings.flatMap(f => f.evidence)
+    .map(e => [JSON.stringify([e.sha, e.path, e.locator]), e]));
+  return showFinding({ evidence: [...evidence.values()], related: [] }, audit, item);
+}
+
+function renderAuditReview(audit) {
+  const report = audit.review;
+  const list = $("github-audit-findings");
+  list.replaceChildren();
+  const overview = $("github-review-summary");
+  overview.hidden = !["complete", "partial"].includes(audit.state);
+  $("github-tab-finding-count").textContent = String(report?.finding_count ?? audit.findings.length);
+  if (overview.hidden) {
+    const empty = document.createElement("li");
+    empty.className = "list-empty";
+    empty.textContent = "Retry the audit to read these files.";
+    list.append(empty);
+    return;
+  }
+  const changes = workspaceView.changes;
+  const changedPath = changes?.total === 1 ? changes.files?.[0]?.path : null;
+  const facts = changedPath ? `Only ${changedPath} changed.`
+    : changes ? `${changes.total} changed files.` : "";
+  const verified = report?.new_problems || 0;
+  const baselineNote = report?.baseline_unverified ? "Some problems could only be checked at the selected commit." : "";
+  const verdict = verified ? `${verified} new problem${verified === 1 ? "" : "s"} found by the checks.`
+    : audit.base_sha ? "The checks that ran found no new verified problems."
+    : "This audit covers a single commit.";
+  overview.textContent = [facts, verdict, baselineNote, audit.state === "partial" ? "Some checks are still incomplete." : ""].filter(Boolean).join(" ");
+  for (const group of report?.groups || []) {
+    const label = document.createElement("li");
+    label.className = "finding-group";
+    label.textContent = group.title;
+    list.append(label);
+    for (const entry of group.items) {
+      const findings = entry.indexes.map(index => audit.findings[index]);
+      const finding = findings[0];
+      const title = entry.title || findingTitle(finding);
+      const caption = entry.libraries
+        ? `${entry.libraries.length} missing library reference${entry.libraries.length === 1 ? "" : "s"} · ${findings.every(f => f.lifecycle === "existing") ? "Already present in both commits" : "Library check incomplete"}`
+        : findingState(finding);
+      const item = { ...entry, findings, title, caption };
+      const button = row(list, title, caption, () => inspectReviewItem(item, audit));
+      button.dataset.status = entry.libraries || finding.status === "unverified" ? "?"
+        : finding.lifecycle === "resolved" ? "✓" : finding.status === "observed" ? "Δ" : "!";
+    }
+  }
 }
 
 async function showAudit(id, current) {
@@ -445,34 +612,12 @@ async function showAudit(id, current) {
   workspaceView.audit = audit;
     renderConnections(audit);
     if (["complete", "partial"].includes(audit.state)) run(() => loadExplanation(audit.id, current));
-  $("github-total-findings").textContent = $("github-tab-finding-count").textContent = String(audit.findings.length);
+  $("github-findings-empty").hidden = true;
   button.textContent = audit.state === "complete" ? "Audit saved"
     : audit.state === "partial" ? "Retry audit" : "Run audit again";
   button.disabled = audit.state === "complete";
-  const list = $("github-audit-findings");
-  list.replaceChildren();
-  if (!audit.findings.length) {
-    const empty = document.createElement("li");
-    empty.className = "list-empty";
-    empty.textContent = audit.state === "failed" ? "Retry the audit to read these files."
-      : "No findings in the fields checked. Review coverage for the rest of the project.";
-    list.append(empty);
-  }
-  for (const finding of audit.findings) {
-      const location = finding.evidence.at(-1)?.locator || finding.domain;
-    const kind = finding.rule_id.split(".").at(-1);
-      const native = Boolean(finding.lifecycle);
-      const title = native ? finding.summary : `${location} · ${pcbLabels[kind] || finding.summary}`;
-      const states = { new: "New finding", existing: "Already present", resolved: "Resolved",
-        present_at_head: "Present at selected commit · Baseline unverified" };
-      const certainty = finding.status === "suggestion" ? "Review suggested"
-        : finding.status === "verified" ? "Checked finding" : "Observed change";
-      const detail = native ? `${finding.status === "unverified" ? "Unverified check · " : finding.status === "suggestion" ? "Review suggested · " : ""}${states[finding.lifecycle] || certainty} · ${finding.severity} · ${finding.evidence.at(-1)?.path || finding.domain}`
-        : `${certainty} · ${boardValue(finding.before, kind)} → ${boardValue(finding.after, kind)}`;
-      const button = row(list, title, detail,
-      () => showFinding(finding, audit));
-      button.dataset.status = finding.lifecycle === "resolved" ? "✓" : finding.status === "observed" ? "Δ" : "!";
-  }
+  renderAuditReview(audit);
+  $("github-total-findings").textContent = $("github-tab-finding-count").textContent;
   const coverage = $("github-audit-coverage");
   const entries = coverage.querySelector("ul");
   entries.replaceChildren();
@@ -488,6 +633,10 @@ async function startAudit() {
   if (!workspaceView) return;
   const current = context;
   clearTimeout(explanationTimer); explanationEpoch++;
+  reviewNotes.clear();
+  renderFindingReport(selectedReview);
+  $("github-review-summary").hidden = true;
+  $("github-findings-empty").hidden = true;
   $("github-ai-panel").hidden = true; $("github-ai-results").replaceChildren();
   $("github-audit-run").disabled = true;
   $("github-audit-status").textContent = "Starting audit…";
@@ -792,32 +941,39 @@ async function loadExplanation(id, current) {
     const explanation = response.explanation;
     const button = $("github-explain");
     button.disabled = !response.provider.available || ["queued", "running", "complete"].includes(explanation?.state);
-    button.textContent = explanation?.state === "complete" ? "Explanation saved" : "Explain this audit";
+    button.hidden = explanation?.state === "complete";
+    button.textContent = explanation?.state === "failed" ? "Retry AI review" : "Generate AI review";
     $("github-ai-status").textContent = explanation?.detail || (response.provider.available
-      ? "Clicking Explain sends the selected context to the provider above."
-      : "Model provider unavailable. All audit findings and connections remain usable.");
-    if (explanation?.state === "complete" && explanation.scope?.total_findings != null) {
-      $("github-ai-status").textContent += ` Context included ${explanation.scope.included_findings} of ${explanation.scope.total_findings} findings. The full audit remains below.`;
-    }
+      ? "Get a short list of the most useful checks and what to verify next."
+      : "Model provider unavailable. Use the findings below for the saved check results.");
     if (explanation?.state === "queued" || explanation?.state === "running") {
       explanationTimer = setTimeout(() => loadExplanation(id, current), 700); return;
     }
     const output = $("github-ai-results"); output.replaceChildren();
-    for (const [key, title] of [["what_changed", "What changed"], ["what_to_review", "What else to review"], ["what_could_not_be_checked", "What couldn't be checked"]]) {
-      const items = explanation?.sections?.[key];
-      if (!explanation || explanation.state !== "complete") continue;
-      const section = document.createElement("section"); const heading = document.createElement("h3"); heading.textContent = title;
+    if (explanation?.state !== "complete") return;
+    for (const note of Object.values(explanation.sections).flat()) reviewNotes.set(note.source_id, note);
+    if (selectedReview) renderFindingReport(selectedReview);
+    for (const [key, title] of [["what_changed", "Changes worth checking"], ["what_to_review", "Follow-up checks"], ["what_could_not_be_checked", "What limited this review"]]) {
+      const items = explanation.sections[key];
+      if (!items?.length) continue;
+      const section = document.createElement("section");
+      const heading = document.createElement("h3");
+      heading.textContent = title;
       section.append(heading);
-      if (!items?.length) {
-        const empty = document.createElement("p"); empty.textContent = "No items selected in this section. Check the complete audit for the full scope."; section.append(empty);
-      }
-      for (const item of items || []) {
-        const p = document.createElement("p"); const strong = document.createElement("strong"); strong.textContent = item.summary;
-        const detail = document.createElement("span"); detail.textContent = `${item.certainty} · ${item.detail}`;
-        p.append(strong, detail); section.append(p);
-        const list = document.createElement("ul"); list.className = "evidence-list";
-        for (const e of item.evidence) row(list, e.path, `${e.sha.slice(0,8)} · ${e.locator}`, () => showPreview({path:e.path}, null, null, e.sha));
-        section.append(list);
+      for (const item of items) {
+        const article = document.createElement("article");
+        const name = document.createElement("h4");
+        name.textContent = item.summary;
+        article.append(name);
+        appendReviewNote(article, item);
+        if (item.evidence.length) {
+          const list = document.createElement("ul");
+          list.className = "evidence-list";
+          for (const e of item.evidence) row(list, e.path, `${e.sha.slice(0, 8)} · ${e.locator}`,
+            () => showPreview({ path: e.path }, null, { evidence: item.evidence, related: [] }, e.sha));
+          article.append(list);
+        }
+        section.append(article);
       }
       output.append(section);
     }
@@ -832,7 +988,7 @@ async function requestExplanation() {
   const current = context;
   const epoch = explanationEpoch;
   $("github-explain").disabled = true;
-  $("github-ai-status").textContent = "Requesting an explanation of the saved audit…";
+  $("github-ai-status").textContent = "Preparing the AI review…";
   try {
     await api(route(`audits/${id}/explain`), {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({consent:true})});
     if (current === context && epoch === explanationEpoch) await loadExplanation(id, current);

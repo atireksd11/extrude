@@ -9,7 +9,7 @@ from pydantic import BaseModel, Field, ConfigDict
 from extrude import github_history as store
 from extrude import pcb_review, schematic_review, workspace, workspace_audit
 from extrude import workspace_settings, workspace_checks, workspace_cad
-from extrude import workspace_explain
+from extrude import workspace_explain, workspace_report
 
 router = APIRouter(prefix="/v1/github/repositories")
 
@@ -156,9 +156,10 @@ def start_audit(repo_id: str, body: AuditRequest) -> dict:
 
 
 @router.get("/{repo_id}/audits/{audit_id}")
-def get_audit(repo_id: str, audit_id: str) -> workspace_audit.Audit:
+def get_audit(repo_id: str, audit_id: str) -> dict:
     with _errors():
-        return workspace_audit.get(repo_id, audit_id)
+        audit = workspace_audit.get(repo_id, audit_id)
+        return {**audit.model_dump(), "review": workspace_report.review(audit)}
 
 
 class ExplainRequest(BaseModel):
