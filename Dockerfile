@@ -3,7 +3,10 @@ WORKDIR /src
 COPY pyproject.toml ./
 COPY extrude ./extrude
 COPY eval ./eval
-RUN pip install --no-cache-dir --prefix=/install .
+# Optional build-only CA for managed cloud proxies; absent on ordinary builds.
+RUN --mount=type=secret,id=proxy_ca \
+    if [ -f /run/secrets/proxy_ca ]; then export PIP_CERT=/run/secrets/proxy_ca; fi; \
+    pip install --no-cache-dir --prefix=/install .
 
 FROM python:3.13-slim-trixie
 ENV PYTHONDONTWRITEBYTECODE=1 \

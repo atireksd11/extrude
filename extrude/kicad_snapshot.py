@@ -2,6 +2,7 @@
 
 import contextlib
 import json
+import os
 import re
 import tempfile
 from dataclasses import dataclass, field
@@ -32,7 +33,7 @@ def temporary_directory(prefix: str):
 
 
 def safe_path(root: Path, value: str) -> Path:
-    """Also reject Windows ADS, devices, UNC, and case-colliding Git names."""
+    """Reject escaping paths, Windows ADS, devices and UNC names."""
     path = PurePosixPath(value)
     if (not value or path.is_absolute() or "\\" in value or ":" in value or "\x00" in value
             or any(part in {"", ".", ".."} for part in value.split("/"))
@@ -133,7 +134,7 @@ def materialize(repo_id: str, sha: str):
             try:
                 target = safe_path(snapshot.root, path)
                 if path.casefold() in seen:
-                    if __import__("os").name == "nt":
+                    if os.name == "nt":
                         if target.suffix.lower() == ".dcm":
                             snapshot.warnings.append((path, "case_collision: duplicate documentation skipped; native design inputs still attempted."))
                             continue

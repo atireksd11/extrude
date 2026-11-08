@@ -67,3 +67,18 @@ def test_case_collision_preserves_files_and_does_not_suppress_checks(tmp_path, m
         results, _ = native._revision("repo", "sha", time.monotonic() + 30)
         assert all(results["board.kicad_pcb", name].outcome == "ran" for name in ("drc", "parity"))
         assert results["board.kicad_sch", "erc"].outcome == "ran"
+
+
+def test_budget_keeps_parity_row(tmp_path, monkeypatch):
+    import time
+    snap = Snapshot(tmp_path, {"board.kicad_pcb"})
+    monkeypatch.setattr(native, "materialize", lambda *a: nullcontext(snap))
+    results, _ = native._revision("repo", "sha", time.monotonic() - 1)
+    assert results["board.kicad_pcb", "drc"].outcome == "not checked"
+    assert results["board.kicad_pcb", "parity"].outcome == "not checked"
+    assert "audit_budget_reached" in results["board.kicad_pcb", "parity"].detail
+
+
+def test_legacy_authored_version_and_mismatch():
+    assert native._authored_version(b'(kicad_pcb (host pcbnew "(5.1.6)-1"))') == "5.1.6"
+    assert native._authored_version(b'(generator_version "6.0")') == "6.0"

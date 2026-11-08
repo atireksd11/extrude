@@ -48,4 +48,6 @@ def test_buck_gate(case):
         clear_client()
     assert (result.status == "checked") == (case == "connected")
     if case != "connected":
+        from extrude.eval.api import score
+        assert score(result).technical == 0
         assert "Verified: Pin Connectivity, Parts cost" not in (result.notice or "")

@@ -84,3 +84,15 @@ def test_wired_and_broken_netlists_keep_verdicts(tmp_path):
         path.write_text(content)
         assert handle(CopilotRequest(artifact=content, filename="wired.net", offline=True)).status == expected[0]
         assert _check_file(path, "netlist")[0]["status"] == expected[1]
+
+
+def test_empty_netlist_http_and_cli(tmp_path, capsys):
+    from extrude.copilot.__main__ import main
+    path = tmp_path / "empty.net"
+    path.write_text("(export (version E))")
+    response = TestClient(app).post("/v1/copilot", json={"filename": path.name, "artifact": path.read_text(), "offline": True})
+    assert response.status_code == 200
+    assert response.json()["status"] == "unverified"
+    assert main(["audit", str(path)]) == 1
+    import json
+    assert json.loads(capsys.readouterr().out)["status"] == "unverified"

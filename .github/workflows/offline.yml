@@ -22,6 +22,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y openscad xvfb xauth libgl1-mesa-dri ngspice
+      - name: Phase 0 and native failure-mode regressions
+        run: python -m pytest -q tests/test_stabilization.py tests/phase6/test_buck_trust.py tests/test_native_failures.py
       - name: Project Atlas gate
         run: python -m pytest -q -m atlas --basetemp "$RUNNER_TEMP/pytest-atlas"
       - name: Workspace UI state gate
@@ -37,6 +39,7 @@ jobs:
       - name: Container smoke test
         run: |
           docker build --tag extrude-ci .
+          docker run --rm --volume "$PWD/tests/fixtures/phase2:/fixtures:ro" extrude-ci python -c 'from pathlib import Path; from extrude.kicad_audit import tool_version, _execute, PINNED_VERSION; from extrude.kicad_snapshot import Snapshot; p=Path("/fixtures/clean"); s=Snapshot(p, {f.name for f in p.iterdir()}); assert tool_version() == PINNED_VERSION; assert all(r.outcome == "ran" for r in _execute(s, "board.kicad_pcb", "drc", {}, parity=True).values()); assert _execute(s, "board.kicad_sch", "erc", s.sheets("board.kicad_sch"))["erc"].outcome == "ran"'
           container=$(docker run --detach --publish 127.0.0.1:8000:8000 extrude-ci)
           trap 'docker rm -f "$container"' EXIT
           curl --fail --silent --show-error --retry 10 --retry-connrefused http://127.0.0.1:8000/projects > /dev/null

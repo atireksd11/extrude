@@ -202,7 +202,8 @@ def _execute(snapshot: Snapshot, path: str, check: str, sheets: dict[str, str], 
                                      stdout=stdout, stderr=stderr)
             evidence = _save_evidence(snapshot, path, check, folder, run.returncode)
             diagnostics = f" KiCad {tool_version()}; input {path}; evidence {evidence}."
-            log = (Path(folder) / "stderr.log").read_bytes()[:2000].decode("utf-8", "replace")
+            with (Path(folder) / "stderr.log").open("rb") as stream:
+                log = stream.read(2000).decode("utf-8", "replace")
             if run.returncode not in {0, 5}:
                 authored = _authored_version(safe_path(snapshot.root, path).read_bytes())
                 cause = {1: "invalid_arguments", 2: "output_write_error", 3: "input_load_error",
@@ -234,7 +235,7 @@ def _execute(snapshot: Snapshot, path: str, check: str, sheets: dict[str, str], 
 
 
 def _authored_version(data: bytes) -> str | None:
-    match = re.search(rb'(?:generator_version|host pcbnew)\s+"?([0-9]+\.[0-9]+(?:\.[0-9]+)?)', data[:4096])
+    match = re.search(rb'(?:generator_version|host pcbnew)\s+"?\(?([0-9]+\.[0-9]+(?:\.[0-9]+)?)', data[:4096])
     return match[1].decode() if match else None
 
 
@@ -319,7 +320,9 @@ def _revision(repo_id: str, sha: str, deadline: float) -> tuple[dict[tuple[str, 
         targets = [(p, "drc") for p in boards] + [(p, "erc") for p in roots]
         for index, (path, check) in enumerate(targets):
             if index >= MAX_PROJECTS or time.monotonic() >= deadline:
-                results[path, check] = Result("not checked", "Native audit project/time budget reached; retry a smaller project.")
+                results[path, check] = Result("not checked", "audit_budget_reached: retry a smaller project.")
+                if check == "drc":
+                    results[path, "parity"] = Result("not checked", "audit_budget_reached: parity requires a completed paired run.")
                 continue
             if snapshot.issues:
                 results[path, check] = Result("failed", "snapshot_incomplete: " + "; ".join(f"{p}: {reason}" for p, reason in snapshot.issues)[:2000])
@@ -353,6 +356,9 @@ def _revision(repo_id: str, sha: str, deadline: float) -> tuple[dict[tuple[str, 
                 results[path, name] = result
             if check == "drc" and not paired:
                 results[path, "parity"] = Result("not checked", "No unambiguous root schematic with the same directory and basename; parity was not checked.")
+        if not boards:
+            results["", "drc"] = Result("not checked", "no_board: no native PCB in saved revision; DRC not checked.")
+            results["", "parity"] = Result("not checked", "no_board: schematic/PCB parity not checked.")
         if not schematics and not legacy:
             results["", "erc"] = Result("not checked", "no_schematic: no schematic in saved revision; ERC not checked.")
         for path, reason in snapshot.warnings:
