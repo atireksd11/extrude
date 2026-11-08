@@ -11,7 +11,7 @@ _ROOT = Path(__file__).resolve().parents[1]
 
 
 def test_solid_repair_report_is_valid():
-    report = json.loads((_ROOT / "eval/arm_benchmark/results-repair.json").read_text(encoding="utf-8"))
+    report = json.loads((_ROOT / "tests/fixtures/reports/solid-repair.json").read_text(encoding="utf-8"))
     report["verifier_kind"] = "solid"
     assert validate_lift_report(report) == []
 
@@ -35,5 +35,5 @@ def test_unlabeled_positive_lift_is_rejected():
 
 
 def test_legacy_results_json_without_quote_flag_passes():
-    report = json.loads((_ROOT / "eval/arm_benchmark/results.json").read_text(encoding="utf-8"))
+    report = json.loads((_ROOT / "tests/fixtures/reports/legacy.json").read_text(encoding="utf-8"))
     assert validate_lift_report(report) == []

@@ -1,6 +1,5 @@
 """Raw vs harness compare session for the design studio UI."""
 
-import os
 import shutil
 import time
 import uuid
@@ -34,6 +33,7 @@ from extrude.tools import load_manifest, missing_required, tool_available
 from extrude.verify.solid import score_openscad_text, spec_from_frozen
 from extrude.verify.svg import score_openscad_2d_text, spec_from_frozen_2d
 from extrude.runtime import data_dir
+from extrude.render.openscad import STUDIO_RENDER
 
 _EVAL = Path(__file__).resolve().parents[2] / "eval"
 _SAMPLES_ONLINE = 1
@@ -89,12 +89,19 @@ class CompareRequest(BaseModel):
 
 
 def run_compare(body: CompareRequest) -> CompareResponse:
+    token = STUDIO_RENDER.set(True)
+    try:
+        return _run_compare(body)
+    finally:
+        STUDIO_RENDER.reset(token)
+
+
+def _run_compare(body: CompareRequest) -> CompareResponse:
     started = time.perf_counter()
     session_id = uuid.uuid4().hex[:12]
     session_dir = data_dir() / "generated" / session_id
     session_dir.mkdir(parents=True, exist_ok=True)
     tooling = {name: tool_available(name) for name in load_manifest()["tools"]}
-    os.environ["EXTRUDE_STUDIO_RENDER"] = "1"
     body = _normalize_request(body)
     decision = route(text=body.text, filename=body.filename, content=body.artifact)
 

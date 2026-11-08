@@ -2,14 +2,13 @@
 
 import hashlib
 import json
-import os
 import re
 import struct
 import tempfile
 from pathlib import Path
 
 from eval.arm_benchmark.csg_read import read_csg
-from extrude.render.openscad import render_source
+from extrude.render.openscad import render_source, studio_render_enabled
 from extrude.verify.models import SolidVerifySpec
 
 
@@ -92,7 +91,7 @@ def score_openscad(source: Path, verify: SolidVerifySpec, out_dir: Path | None =
     if cache_file.is_file():
         return json.loads(cache_file.read_text(encoding="utf-8"))
     rendered = render_source(source, folder, source.stem + "-solid")
-    studio = os.environ.get("EXTRUDE_STUDIO_RENDER") == "1"
+    studio = studio_render_enabled()
     if rendered.status != "checked" or not rendered.csg or (not rendered.stl and not studio):
         return {
             "percent": 0.0,

@@ -3,9 +3,18 @@
 import os
 import shutil
 import subprocess
+from contextvars import ContextVar
 from pathlib import Path
 
 from pydantic import BaseModel
+
+
+# Compare previews must not change rendering in other requests or harness runs.
+STUDIO_RENDER = ContextVar("studio_render", default=False)
+
+
+def studio_render_enabled() -> bool:
+    return STUDIO_RENDER.get() or os.environ.get("EXTRUDE_STUDIO_RENDER") == "1"
 
 
 class RenderResult(BaseModel):
@@ -23,7 +32,7 @@ def render_source(source: Path, out_dir: Path, stem: str) -> RenderResult:
     if exe is None:
         return RenderResult(status="stopped", detail="openscad was not found")
     out_dir.mkdir(parents=True, exist_ok=True)
-    studio = os.environ.get("EXTRUDE_STUDIO_RENDER") == "1"
+    studio = studio_render_enabled()
     stl = out_dir / f"{stem}.stl"
     png = out_dir / f"{stem}.png"
     csg = out_dir / f"{stem}.csg"
@@ -81,7 +90,7 @@ def _executable() -> str | None:
 def _run(exe: str, source: Path, dest: Path, extra: list[str] | None = None) -> RenderResult | None:
     command = [exe, "-o", str(dest), *(extra or []), str(source)]
     try:
-        limit = 25 if os.environ.get("EXTRUDE_STUDIO_RENDER") == "1" else 90
+        limit = 25 if studio_render_enabled() else 90
         completed = subprocess.run(command, capture_output=True, text=True, timeout=limit, check=False)
     except subprocess.TimeoutExpired:
         return RenderResult(status="stopped", detail="openscad timed out")
