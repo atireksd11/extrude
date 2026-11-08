@@ -17,3 +17,14 @@ def inspect_electrical(ir: CircuitIR) -> PreflightReport:
         blocking=sorted(set(base.blocking + pins.blocking)),
         warnings=sorted(set(base.warnings + pins.warnings)),
     )
+
+
+def wiring_evidence(ir: CircuitIR) -> bool:
+    """A clean wiring verdict needs parts and actual, attributable connections."""
+    refs = {part.refdes for part in ir.parts}
+    return bool(refs and ir.pins and all(
+        pin.refdes in refs and pin.name.strip() and
+        (pin.state == "nc" or (pin.state == "connected" and pin.net and pin.net.strip()))
+        for pin in ir.pins
+    ) and any(pin.state == "connected" for pin in ir.pins)
+        and refs.issubset({pin.refdes for pin in ir.pins}))

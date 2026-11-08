@@ -60,3 +60,27 @@ def test_both_pages_and_assets_are_served(tmp_path, monkeypatch):
     changed = client.post(f"/v1/projects/{project_id}/demo-change")
     assert changed.status_code == 200
     assert any(check["status"] == "failed" for check in changed.json()["checks"])
+
+
+@pytest.mark.parametrize("text", ["(export (version E))", "(export (components (comp (ref U1))))"])
+def test_empty_wiring_is_unverified_in_copilot_and_project_map(text, tmp_path):
+    from extrude.copilot.api import CopilotRequest, handle
+    from extrude.project_map import _check_file
+    response = handle(CopilotRequest(artifact=text, filename="empty.net", offline=True))
+    assert response.status == "unverified"
+    assert "wiring evidence" in response.detail
+    path = tmp_path / "empty.net"
+    path.write_text(text)
+    assert _check_file(path, "netlist")[0]["status"] == "unverified"
+
+
+def test_wired_and_broken_netlists_keep_verdicts(tmp_path):
+    from extrude.copilot.api import CopilotRequest, handle
+    from extrude.project_map import _check_file
+    text = '(export (components (comp (ref U1)) (comp (ref U2))) (nets (net (name DATA) (node (ref U1) (pin 1)) (node (ref U2) (pin 1)))))'
+    for function, expected in [("", ("checked", "passed")), ('(pinfunction TX)', ("stopped", "failed"))]:
+        content = text.replace('(pin 1)', f'(pin 1) {function}')
+        path = tmp_path / "wired.net"
+        path.write_text(content)
+        assert handle(CopilotRequest(artifact=content, filename="wired.net", offline=True)).status == expected[0]
+        assert _check_file(path, "netlist")[0]["status"] == expected[1]

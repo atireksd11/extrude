@@ -166,7 +166,12 @@ def _head(root: Path) -> str | None:
 def _check_file(path: Path, kind: str) -> list[dict]:
     if path.suffix.lower() == ".net":
         try:
-            report = run_electrical(parse_kicad_netlist(path.read_text(encoding="utf-8")))
+            from extrude.checks.api import wiring_evidence
+            design = parse_kicad_netlist(path.read_text(encoding="utf-8"))
+            report = run_electrical(design)
+            if not report.blocking and not wiring_evidence(design):
+                return [{"name": "Netlist preflight", "status": "unverified",
+                         "detail": "Not checked: netlist has no complete component wiring evidence."}]
             return [{"name": "Netlist preflight", "status": "failed" if report.blocking else "passed",
                      "detail": "; ".join(report.blocking or report.warnings) or "No blocking wiring findings."}]
         except (ValueError, IndexError, UnicodeError) as exc:
