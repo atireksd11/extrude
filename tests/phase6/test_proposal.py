@@ -68,6 +68,17 @@ def test_a_reply_that_uses_aliases_can_be_checked_without_a_second_call():
                 {"ref": "V1", "name": "-", "net": "GND"},
             ],
         }
+        # This positive harness fixture must be a real buck, not a rail source.
+        body["f_sw"] = 500000
+        body["parts"].extend([{"ref": "L1", "value": "10uH"}, {"ref": "R1", "kind": "resistor"}])
+        body["pins"].extend([
+            {"ref": "U1", "name": "SW", "net": "SW"},
+            {"ref": "U1", "name": "VIN", "net": "VIN"},
+            {"ref": "L1", "name": "1", "net": "SW"},
+            {"ref": "L1", "name": "2", "net": "3V3"},
+            {"ref": "R1", "name": "1", "net": "3V3"},
+            {"ref": "R1", "name": "2", "net": "GND"},
+        ])
         return json.dumps(body), {"prompt_tokens": 1, "completion_tokens": 1, "cost_usd": 0.01}
 
     set_client(client)

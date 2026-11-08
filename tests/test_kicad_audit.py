@@ -152,7 +152,7 @@ def test_native_failure_contracts(tmp_path, monkeypatch):
     (tmp_path / "board.kicad_pcb").write_text("fixture")
     monkeypatch.setattr(native, "executable", lambda: None)
     result = native._execute(snapshot, "board.kicad_pcb", "drc", {})["drc"]
-    assert result.outcome == "unavailable"
+    assert result.outcome == "not checked"
     monkeypatch.setattr(native, "executable", lambda: "fake-kicad")
     monkeypatch.setattr(native, "tool_version", lambda: "10.0.6")
     monkeypatch.setattr(native, "_environment", lambda *_: {})

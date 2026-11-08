@@ -47,7 +47,10 @@ def facts(repo, sha, path, *, preview=False):
     if suffix in {".stl", ".obj"}:
         return read_mesh(_blob(repo, sha, path, MAX_MESH_BYTES), suffix, preview=preview)
     if suffix in {".step", ".stp"}:
-        return workspace_cad.read_step(_blob(repo, sha, path, workspace_cad.MAX_STEP_BYTES), preview=preview)
+        try:
+            return workspace_cad.read_step(_blob(repo, sha, path, workspace_cad.MAX_STEP_BYTES), preview=preview)
+        except ValueError as exc:
+            raise ValueError(f"{path}: not checked: {exc}") from exc
     if suffix in {".csv", ".tsv"}:
         return csv_facts(_blob(repo, sha, path, MAX_BOM_BYTES), "\t" if suffix == ".tsv" else ",")
     if suffix in {".c", ".cpp", ".cc", ".cxx", ".h", ".hpp", ".ino", ".py"}:

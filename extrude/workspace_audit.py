@@ -77,7 +77,7 @@ class Coverage(BaseModel):
     domain: str
     check: str
     tool: str
-    outcome: Literal["ran", "unsupported", "unavailable", "failed"]
+    outcome: Literal["ran", "not checked", "unsupported", "unavailable", "failed"]
     detail: str
 
 

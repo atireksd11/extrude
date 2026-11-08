@@ -32,26 +32,10 @@ def _hash(prompt: str) -> str:
 
 
 def _good(spec_hash: str) -> str:
-    return json.dumps(
-        {
-            "spec_hash": spec_hash,
-            "i_load": 2,
-            "limits": {"vin": 5.0, "vout": 3.3, "i_load": 2.0, "ripple_pp": 0.03},
-            "parts": [
-                Part(refdes="U1", kind="ic").model_dump(),
-                Part(refdes="C1", kind="capacitor", capacitance=10e-6, dielectric="C0G", tolerance=0, bias_v=3.3).model_dump(),
-                Part(refdes="V1", kind="ideal_voltage_source").model_dump(),
-            ],
-            "pins": [
-                Pin(refdes="U1", name="VDD", net="3V3", state="connected", role="power").model_dump(),
-                Pin(refdes="U1", name="GND", net="GND", state="connected", role="ground").model_dump(),
-                Pin(refdes="C1", name="A", net="3V3", state="connected").model_dump(),
-                Pin(refdes="C1", name="B", net="GND", state="connected").model_dump(),
-                Pin(refdes="V1", name="+", net="3V3", state="connected", role="positive").model_dump(),
-                Pin(refdes="V1", name="-", net="GND", state="connected", role="negative").model_dump(),
-            ],
-        }
-    )
+    from tests.phase6.test_buck_trust import proposal
+    _, body = proposal()
+    body["spec_hash"] = spec_hash
+    return json.dumps(body)
 
 
 def _bad(spec_hash: str) -> str:
