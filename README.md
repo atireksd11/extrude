@@ -20,6 +20,12 @@ Open http://127.0.0.1:8000/projects. Saved repositories, settings and audits sta
 
 Install KiCad separately for DRC, ERC, schematic netlists, and board/schematic parity. The native integration was exercised with KiCad 10.0.6. Set `KICAD_CLI_PATH` if it is not discovered automatically. Missing tools or unsupported files appear as coverage gaps.
 
+## Temporary public pilot (draft configuration)
+
+See [the deployment audit and manual Render setup](docs/TEMPORARY-DEPLOYMENT.md).
+The container runs the existing app without adding authentication or tenant isolation.
+Use disposable public data only; no deployment is performed by this repository change.
+
 ## Current scope and next work
 
 This is an assisted local pilot, not a hosted team service. See [current product status](docs/CURRENT-STATUS.md) for implemented features and limitations, and [the pilot build plan](docs/PILOT-BUILD-PLAN.md) for the technical phases and acceptance gates. The next step is Phase 5: test the import-to-finding workflow with real builders and fix the problems they encounter.
