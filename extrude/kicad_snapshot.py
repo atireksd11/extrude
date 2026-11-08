@@ -2,6 +2,7 @@
 
 import contextlib
 import json
+import os
 import re
 import tempfile
 from dataclasses import dataclass, field
@@ -15,7 +16,7 @@ MAX_FILES = 256
 MAX_BYTES = 64 * 1024 * 1024
 MAX_FILE_BYTES = 8 * 1024 * 1024
 MAX_TREE = 10000
-EXTENSIONS = {".kicad_pcb", ".kicad_sch", ".kicad_pro", ".kicad_dru", ".kicad_sym", ".kicad_mod", ".lib", ".dcm"}
+EXTENSIONS = {".kicad_pcb", ".kicad_sch", ".kicad_pro", ".kicad_dru", ".kicad_sym", ".kicad_mod", ".lib", ".dcm", ".sch"}
 TABLES = {"fp-lib-table", "sym-lib-table"}
 
 
@@ -32,7 +33,7 @@ def temporary_directory(prefix: str):
 
 
 def safe_path(root: Path, value: str) -> Path:
-    """Also reject Windows ADS, devices, UNC, and case-colliding Git names."""
+    """Reject escaping paths, Windows ADS, devices and UNC names."""
     path = PurePosixPath(value)
     if (not value or path.is_absolute() or "\\" in value or ":" in value or "\x00" in value
             or any(part in {"", ".", ".."} for part in value.split("/"))
@@ -66,6 +67,8 @@ class Snapshot:
     root: Path
     files: set[str] = field(default_factory=set)
     issues: list[tuple[str, str]] = field(default_factory=list)
+
+    warnings: list[tuple[str, str]] = field(default_factory=list)
 
     def sheets(self, root_path: str) -> dict[str, str]:
         """Map hierarchical sheet UUID paths to source files; fail closed."""
@@ -131,7 +134,12 @@ def materialize(repo_id: str, sha: str):
             try:
                 target = safe_path(snapshot.root, path)
                 if path.casefold() in seen:
-                    raise SnapshotError("Case-colliding repository paths cannot be materialized.")
+                    if os.name == "nt":
+                        if target.suffix.lower() == ".dcm":
+                            snapshot.warnings.append((path, "case_collision: duplicate documentation skipped; native design inputs still attempted."))
+                            continue
+                        raise SnapshotError("case_collision: design input cannot be safely preserved on this filesystem.")
+                    snapshot.warnings.append((path, "case_collision: both case-distinct paths preserved; native checks still attempted."))
                 seen.add(path.casefold())
                 data = git.regular_blob(repo_id, sha, path, max_bytes=MAX_FILE_BYTES)
                 if data is None:

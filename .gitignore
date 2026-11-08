@@ -25,3 +25,5 @@ Thumbs.db
 /eval/mechanical_2d/tasks/*/*/
 /eval/arm_benchmark/*/
 /eval/**/results*.json
+
+/work/

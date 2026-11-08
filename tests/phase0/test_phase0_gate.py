@@ -11,12 +11,17 @@ from extrude.eval.tasks import load_tasks
 from extrude.intake.classify import classify
 
 _ROOT = Path(__file__).resolve().parents[2]
-_BASELINE = _ROOT / "eval" / "proxy_tasks" / "results-baseline.json"
 
 
-def test_baseline_snapshot_exists():
-    assert _BASELINE.is_file(), "run: python -m eval.snapshot_baseline"
-    payload = json.loads(_BASELINE.read_text(encoding="utf-8"))
+def test_baseline_snapshot_exists(monkeypatch, tmp_path):
+    from eval import snapshot_baseline
+
+    baseline = tmp_path / "results-baseline.json"
+    monkeypatch.setattr(snapshot_baseline, "_OUT", baseline)
+    monkeypatch.setenv("EXTRUDE_MEMORY_DB", str(tmp_path / "memory.sqlite"))
+    assert snapshot_baseline.main() == 0
+    assert baseline.is_file(), "run: python -m eval.snapshot_baseline"
+    payload = json.loads(baseline.read_text(encoding="utf-8"))
     assert payload["phase"] == 0
     assert payload["task_count"] == 8
 
@@ -39,7 +44,7 @@ def test_frozen_eight_cards_still_resolve():
 
 
 def test_repair_results_use_solid_verifier():
-    path = _ROOT / "eval" / "arm_benchmark" / "results-repair.json"
+    path = _ROOT / "tests" / "fixtures" / "reports" / "solid-repair.json"
     report = json.loads(path.read_text(encoding="utf-8"))
     if report.get("quote_as_improvement"):
         report["verifier_kind"] = report.get("verifier_kind") or "solid"

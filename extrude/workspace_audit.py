@@ -20,7 +20,7 @@ from extrude import kicad_snapshot
 from extrude import workspace_settings, workspace_checks, workspace_cad
 
 SCHEMA_VERSION = 4
-RULE_VERSION = 5
+RULE_VERSION = 6
 _POOL = ThreadPoolExecutor(max_workers=2, thread_name_prefix="atlas-audit")
 _LOCK = threading.RLock()
 _ACTIVE: dict[tuple[Path, str], str] = {}
@@ -77,7 +77,7 @@ class Coverage(BaseModel):
     domain: str
     check: str
     tool: str
-    outcome: Literal["ran", "unsupported", "unavailable", "failed"]
+    outcome: Literal["ran", "not checked", "unsupported", "unavailable", "failed"]
     detail: str
 
 

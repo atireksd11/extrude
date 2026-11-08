@@ -15,7 +15,7 @@ from extrude.kicad_snapshot import temporary_directory
 from extrude.runtime import data_dir
 
 MAX_STEP_BYTES = 32 * 1024 * 1024
-TIMEOUT = 30
+TIMEOUT = 120
 WORKER_VERSION = 4
 _SLOTS = BoundedSemaphore(2)
 

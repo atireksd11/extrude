@@ -1,5 +1,7 @@
 """Shared numbers. Ripple and a later deck must read c_use from this result."""
 
+import math
+
 from extrude.intake.models import FrozenSpec
 from extrude.ir.models import CircuitIR
 from extrude.physics.derate import derate_capacitor, load_curves, minimum_capacitance
@@ -60,6 +62,18 @@ def derive(ir: CircuitIR, spec: FrozenSpec) -> PhysicsValues:
                 detail="inductor current reaches zero, so continuous-conduction ripple is not used",
             )
         )
+    if spec.task_class == "buck":
+        topology = _buck_topology(ir, ripple_ids)
+        limit = spec.values_si.get("ripple_pp")
+        if not topology:
+            findings.append(PhysicsFinding(code="buck_topology", severity="fail",
+                detail="Buck topology incomplete: require a connected regulator, switch-to-output inductor and output-to-ground capacitor."))
+        if ripple is None or not math.isfinite(ripple) or mode != "ccm":
+            findings.append(PhysicsFinding(code="ripple_unverified", severity="fail",
+                detail=f"Buck ripple not checked: {mode}; require frequency, inductance and output capacitance in CCM."))
+        elif limit is None or not math.isfinite(limit) or limit <= 0 or ripple > limit:
+            findings.append(PhysicsFinding(code="ripple_limit", severity="fail",
+                detail=f"Buck ripple {ripple:g} V exceeds or lacks the frozen limit {limit} V."))
     power, tj, note = _heat(ir, spec)
     return PhysicsValues(
         caps=caps,
@@ -107,3 +121,32 @@ def _heat(ir: CircuitIR, spec: FrozenSpec) -> tuple[float | None, float | None, 
         return None, None, None
     power = (vin - vout) * i_load
     return power, _AMBIENT_C + power * theta, _STILL_AIR
+
+
+def _buck_topology(ir: CircuitIR, output_caps: set[str]) -> bool:
+    from extrude.checks.walk import _canon_of
+    canon = _canon_of(ir.tied_nets)
+    grounds = {canon(name) for name in ("GND", "AGND", "PGND", "DGND", "0")}
+    nets = {}
+    for part in ir.parts:
+        pins = [p for p in ir.pins if p.refdes == part.refdes]
+        if not pins or any(p.state != "connected" or not p.net or not p.net.strip() for p in pins):
+            return False
+        nets[part.refdes] = {canon(p.net) for p in pins}
+    if any(p.refdes not in nets for p in ir.pins):
+        return False
+    for cap in ir.parts:
+        cn = nets.get(cap.refdes, set())
+        if cap.refdes not in output_caps or len(cn) != 2 or not cn & grounds:
+            continue
+        output = cn - grounds
+        for coil in ir.parts:
+            ln = nets.get(coil.refdes, set())
+            if coil.kind != "inductor" or len(ln) != 2 or not ln & output or ln & grounds:
+                continue
+            switch = ln - output
+            for ic in ir.parts:
+                un = nets.get(ic.refdes, set())
+                if ic.kind == "ic" and un & switch and un & grounds and len(un - switch - grounds - output) >= 1:
+                    return True
+    return False

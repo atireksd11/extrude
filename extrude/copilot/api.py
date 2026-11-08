@@ -168,7 +168,12 @@ def _audit(body: CopilotRequest, kind: str) -> CopilotResponse:
     if kind == "featurescript":
         return _mechanical(body, kind, parse_featurescript(content))
     if kind == "netlist":
-        report = run_electrical(parse_kicad_netlist(content))
+        from extrude.checks.api import wiring_evidence
+        design = parse_kicad_netlist(content)
+        report = run_electrical(design)
+        if not report.blocking and not wiring_evidence(design):
+            return CopilotResponse(status="unverified", mode="audit", artifact_kind=kind,
+                                   detail="Not checked: netlist has no complete component wiring evidence.")
         return CopilotResponse(
             status="checked" if not report.blocking else "stopped",
             mode="audit",

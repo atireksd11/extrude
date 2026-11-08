@@ -19,11 +19,12 @@ from extrude.kicad_snapshot import Snapshot, SnapshotError, materialize, safe_pa
 from extrude.parse.kicad_schematic import parse_schematic, SchematicParseError
 from extrude import github_history as git
 
-TIMEOUT = 40
+PINNED_VERSION = "9.0.2"
+TIMEOUT = 180
 MAX_REPORT_BYTES = 8 * 1024 * 1024
-MAX_FINDINGS = 500
+MAX_FINDINGS = 5000
 MAX_PROJECTS = 12
-AUDIT_SECONDS = 180
+AUDIT_SECONDS = 1200
 
 
 def executable() -> str | None:
@@ -126,7 +127,7 @@ def _violation(row: object, scope: str, path: str) -> dict:
             "scope": scope, "path": path, "items": normalized}
 
 
-def parse_report(data: bytes, check: str, path: str, sheets: dict[str, str]) -> Result:
+def parse_report(data: bytes, check: str, path: str, sheets: dict[str, str], *, requested_severities=False) -> Result:
     report = json.loads(data.decode("utf-8-sig"))
     if not isinstance(report, dict):
         raise ValueError("Expected report object")
@@ -136,7 +137,11 @@ def parse_report(data: bytes, check: str, path: str, sheets: dict[str, str]) -> 
     if report.get("source") != PurePosixPath(path).name:
         raise ValueError("Native report source does not match the selected file")
     severities = report.get("included_severities")
-    if not isinstance(severities, list) or not {"error", "warning"}.issubset(severities):
+    # KiCad 9.0.2 omits included_severities. Accept it only when this runner
+    # explicitly requested errors and warnings, and the report names that version.
+    explicit_9 = (severities is None and requested_severities
+                  and report.get("kicad_version") == PINNED_VERSION)
+    if not explicit_9 and (not isinstance(severities, list) or not {"error", "warning"}.issubset(severities)):
         raise ValueError("Native error/warning coverage is missing")
     rows = []
     if check == "erc":
@@ -182,11 +187,11 @@ def _execute(snapshot: Snapshot, path: str, check: str, sheets: dict[str, str], 
     def fail(outcome, detail):
         return {name: Result(outcome, detail) for name in names}
     if not binary or tool_version() in {"unavailable", "unsupported"}:
-        return fail("unavailable", "KiCad CLI 9 or 10 is unavailable. Install KiCad or set KICAD_CLI_PATH, then retry.")
+        return fail("not checked", "tool_unavailable: install the pinned KiCad CLI or set KICAD_CLI_PATH.")
     with temporary_directory("report-") as folder:
         output = Path(folder) / "report.json"
         args = [binary, "sch" if check == "erc" else "pcb", check, "--format", "json",
-                "--exit-code-violations", "--output", str(output)]
+                "--exit-code-violations", "--severity-error", "--severity-warning", "--output", str(output)]
         if parity:
             args.append("--schematic-parity")
         args.append(str(safe_path(snapshot.root, path)))
@@ -195,22 +200,64 @@ def _execute(snapshot: Snapshot, path: str, check: str, sheets: dict[str, str], 
                 run = subprocess.run(args, cwd=safe_path(snapshot.root, path).parent,
                                      env=_environment(binary, Path(folder)), timeout=timeout or TIMEOUT,
                                      stdout=stdout, stderr=stderr)
+            evidence = _save_evidence(snapshot, path, check, folder, run.returncode)
+            diagnostics = f" KiCad {tool_version()}; input {path}; evidence {evidence}."
+            with (Path(folder) / "stderr.log").open("rb") as stream:
+                log = stream.read(2000).decode("utf-8", "replace")
             if run.returncode not in {0, 5}:
-                return fail("failed", f"KiCad {check.upper()} failed (exit {run.returncode}). Inspect the saved input and tool version.")
+                authored = _authored_version(safe_path(snapshot.root, path).read_bytes())
+                cause = {1: "invalid_arguments", 2: "output_write_error", 3: "input_load_error",
+                         4: "unknown_tool_error"}.get(run.returncode, "tool_process_error")
+                if run.returncode == 3 and authored and int(authored.split(".")[0]) > int(tool_version().split(".")[0]):
+                    cause = f"newer_format_unsupported: authored KiCad {authored} exceeds running {tool_version()}"
+                return fail("failed", f"{cause}: exit {run.returncode}; {log or 'no stderr emitted.'}" + diagnostics)
             if not output.is_file() or output.stat().st_size > MAX_REPORT_BYTES:
-                return fail("failed", "KiCad produced no bounded JSON report.")
+                return fail("failed", "report_missing_or_oversize: no bounded JSON report." + diagnostics)
             data = output.read_bytes()
             result = {}
             for name in names:
                 try:
-                    result[name] = parse_report(data, name, path, sheets)
-                except (ValueError, KeyError, TypeError, RecursionError):
-                    result[name] = Result("failed", f"KiCad {name.upper()} JSON is invalid or lacks required check coverage.")
+                    result[name] = parse_report(data, name, path, sheets, requested_severities=True)
+                except (ValueError, KeyError, TypeError, RecursionError) as exc:
+                    result[name] = Result("failed", f"report_validation: {exc}.")
+                result[name].detail += diagnostics
+                if tool_version() != PINNED_VERSION:
+                    result[name].detail += f" Version mismatch: tested {PINNED_VERSION}, running {tool_version()}."
+                authored = _authored_version(safe_path(snapshot.root, path).read_bytes())
+                if authored and not authored.startswith("9."):
+                    result[name].detail += f" Authored with KiCad {authored}; migration/library differences need review."
             return result
         except subprocess.TimeoutExpired:
-            return fail("failed", f"KiCad {check.upper()} timed out after {timeout or TIMEOUT:g}s; this check is unverified.")
-        except OSError:
-            return fail("unavailable", "KiCad could not start or write its report; this check is unverified.")
+            evidence = _save_evidence(snapshot, path, check, folder, "timeout")
+            return fail("failed", f"time_budget_exceeded: {check} timed out after {timeout or TIMEOUT:g}s; input {path} unverified; KiCad {tool_version()}; evidence {evidence}.")
+        except OSError as exc:
+            return fail("failed", f"tool_io_error: {type(exc).__name__}; input {path} unverified.")
+
+
+def _authored_version(data: bytes) -> str | None:
+    match = re.search(rb'(?:generator_version|host pcbnew)\s+"?\(?([0-9]+\.[0-9]+(?:\.[0-9]+)?)', data[:4096])
+    return match[1].decode() if match else None
+
+
+def _save_evidence(snapshot: Snapshot, path: str, check: str, folder, exit_code) -> str:
+    """Persist bounded diagnostics before temporary reports are removed."""
+    from extrude.runtime import data_dir
+    import uuid
+    target = data_dir() / "native-evidence" / uuid.uuid4().hex
+    target.mkdir(parents=True)
+    for name in ("report.json", "stdout.log", "stderr.log"):
+        source = Path(folder) / name
+        if source.is_file():
+            with source.open("rb") as stream:
+                (target / name).write_bytes(stream.read(MAX_REPORT_BYTES if name == "report.json" else 8192))
+    source = safe_path(snapshot.root, path)
+    if source.is_file():
+        shutil.copyfile(source, target / ("input" + source.suffix))
+    manifest = dict(path=path, check=check, version=tool_version(), exit_code=exit_code,
+                    files=sorted(snapshot.files), issues=snapshot.issues,
+                    input_sha256=hashlib.sha256(source.read_bytes()).hexdigest() if source.is_file() else None)
+    (target / "run.json").write_text(json.dumps(manifest, indent=2), encoding="utf-8")
+    return str(target)
 
 
 def _stable_key(row: dict) -> str | None:
@@ -254,6 +301,9 @@ def _revision(repo_id: str, sha: str, deadline: float) -> tuple[dict[tuple[str, 
     pairs = {}
     with materialize(repo_id, sha) as snapshot:
         boards = sorted(p for p in snapshot.files if p.lower().endswith(".kicad_pcb"))
+        legacy = sorted(p for p in snapshot.files if p.lower().endswith(".sch"))
+        for path in legacy:
+            results[path, "erc"] = Result("not checked", "legacy_schematic: legacy schematic, no adapter; symbol analysis and ERC not checked.")
         schematics = sorted(p for p in snapshot.files if p.lower().endswith(".kicad_sch"))
         # Roots are files not referenced by another sheet. Parse failures remain
         # candidates so they produce coverage failures rather than disappearing.
@@ -270,10 +320,14 @@ def _revision(repo_id: str, sha: str, deadline: float) -> tuple[dict[tuple[str, 
         targets = [(p, "drc") for p in boards] + [(p, "erc") for p in roots]
         for index, (path, check) in enumerate(targets):
             if index >= MAX_PROJECTS or time.monotonic() >= deadline:
-                results[path, check] = Result("unavailable", "Native audit project/time budget reached; retry a smaller project.")
+                results[path, check] = Result("not checked", "audit_budget_reached: retry a smaller project.")
+                if check == "drc":
+                    results[path, "parity"] = Result("not checked", "audit_budget_reached: parity requires a completed paired run.")
                 continue
             if snapshot.issues:
-                results[path, check] = Result("failed", "Snapshot inputs incomplete: " + "; ".join(f"{p}: {reason}" for p, reason in snapshot.issues)[:2000])
+                results[path, check] = Result("failed", "snapshot_incomplete: " + "; ".join(f"{p}: {reason}" for p, reason in snapshot.issues)[:2000])
+                if check == "drc":
+                    results[path, "parity"] = Result("not checked", "snapshot_incomplete: parity requires complete paired inputs.")
                 continue
             sheets = {}
             sibling = str(PurePosixPath(path).with_suffix(".kicad_sch"))
@@ -301,7 +355,14 @@ def _revision(repo_id: str, sha: str, deadline: float) -> tuple[dict[tuple[str, 
                     result.detail += " No project settings saved; KiCad defaults used."
                 results[path, name] = result
             if check == "drc" and not paired:
-                results[path, "parity"] = Result("unavailable", "No unambiguous root schematic with the same directory and basename; parity was not checked.")
+                results[path, "parity"] = Result("not checked", "No unambiguous root schematic with the same directory and basename; parity was not checked.")
+        if not boards:
+            results["", "drc"] = Result("not checked", "no_board: no native PCB in saved revision; DRC not checked.")
+            results["", "parity"] = Result("not checked", "no_board: schematic/PCB parity not checked.")
+        if not schematics and not legacy:
+            results["", "erc"] = Result("not checked", "no_schematic: no schematic in saved revision; ERC not checked.")
+        for path, reason in snapshot.warnings:
+            results[path, "snapshot"] = Result("not checked", reason)
         for path, reason in snapshot.issues:
             results[path, "snapshot"] = Result("failed", reason)
     return results, pairs
@@ -321,6 +382,9 @@ def collect(repo_id: str, head: str, base: str | None) -> tuple[list[dict], list
             revisions[sha], pairs[sha] = {}, {}
             coverage.append(dict(path="", domain="project", check="KiCad snapshot", tool="git",
                                  outcome="failed", detail=f"{sha[:8]}: {exc}"))
+            for check in ("DRC", "ERC", "parity"):
+                coverage.append(dict(path="", domain="project", check=f"Native {check}", tool="kicad-cli",
+                    outcome="not checked", detail=f"snapshot_unavailable: {sha[:8]}: {exc}"))
         for (path, check), result in revisions[sha].items():
             coverage.append(dict(path=path, domain="schematic" if check == "erc" else "pcb",
                                  check={"drc": "Native PCB DRC", "erc": "Native schematic ERC",

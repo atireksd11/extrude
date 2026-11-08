@@ -1,0 +1,9 @@
+{
+  "off": {
+    "percent": 50.0
+  },
+  "on": {
+    "percent": 75.0
+  },
+  "lift_points": 25.0
+}

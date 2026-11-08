@@ -1,0 +1,11 @@
+{
+  "verifier_kind": "solid",
+  "quote_as_improvement": true,
+  "lift_points": 12.5,
+  "off": {
+    "percent": 75.0
+  },
+  "repaired": {
+    "percent": 87.5
+  }
+}
