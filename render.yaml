@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: extrude-temporary-pilot
+    runtime: docker
+    plan: free
+    autoDeployTrigger: "off"
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /v1/status
+    envVars:
+      - key: PORT
+        value: "8000"
+      - key: EXTRUDE_LOAD_ENV
+        value: "0"
+      - key: EXTRUDE_DATA_DIR
+        value: /app/data
