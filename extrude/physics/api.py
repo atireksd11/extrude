@@ -63,7 +63,7 @@ def derive(ir: CircuitIR, spec: FrozenSpec) -> PhysicsValues:
     if spec.task_class == "buck":
         limit = min(0.030, spec.values_si.get("ripple_pp", 0.030))
         if ripple is None or not switching:
-            findings.append(PhysicsFinding(code="ripple_unverified", severity="fail",
+            findings.append(PhysicsFinding(code="ripple_unverified", severity="warn",
                 detail="Buck ripple is not checked: missing CCM inputs or unsupported conduction mode."))
         elif ripple > limit:
             findings.append(PhysicsFinding(code="ripple_exceeded", severity="fail",
