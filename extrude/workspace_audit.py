@@ -20,7 +20,7 @@ from extrude import kicad_snapshot
 from extrude import workspace_settings, workspace_checks, workspace_cad
 
 SCHEMA_VERSION = 4
-RULE_VERSION = 5
+RULE_VERSION = 6
 _POOL = ThreadPoolExecutor(max_workers=2, thread_name_prefix="atlas-audit")
 _LOCK = threading.RLock()
 _ACTIVE: dict[tuple[Path, str], str] = {}
@@ -66,6 +66,8 @@ class Finding(BaseModel):
     severity: Literal["info", "warning", "error"]
     summary: str
     lifecycle: Literal["new", "existing", "resolved", "present_at_head"] | None = None
+    consequence: str | None = None
+    next_action: str | None = None
     before: object = None
     after: object = None
     evidence: list[Evidence] = Field(default_factory=list)
@@ -110,7 +112,7 @@ def _descriptor(repo_id: str, revision: str, base: str | None) -> Audit:
     head, base = git.comparison_revisions(repo_id, revision, base)
     tools = {"kicad-tools": version("kicad-tools"), "kicad-cli": kicad_audit.tool_version(),
              "trimesh": version("trimesh"),
-             "pcb-inspector": "deferred",
+             "pcb-inspector": version("pcb-inspector"),
              "git": git._text(git._git(git._repository(repo_id), "--version")).strip()}
     tools.update(workspace_cad.tool_versions())
     project_settings = workspace_settings.get(repo_id).model_dump(mode="json")
@@ -256,6 +258,10 @@ def _collect(audit: Audit) -> None:
     audit.coverage.extend(Coverage.model_validate(row) for row in coverage)
     findings, coverage = workspace_checks.collect(audit.repo_id, audit.head_sha, audit.base_sha,
         workspace_settings.Settings.model_validate(audit.project_settings), paths["files"])
+    audit.findings.extend(Finding.model_validate(row) for row in findings)
+    audit.coverage.extend(Coverage.model_validate(row) for row in coverage)
+    from extrude import design_audit
+    findings, coverage = design_audit.collect(audit.repo_id, audit.head_sha)
     audit.findings.extend(Finding.model_validate(row) for row in findings)
     audit.coverage.extend(Coverage.model_validate(row) for row in coverage)
     from extrude import workspace_links

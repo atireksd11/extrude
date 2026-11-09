@@ -1,0 +1,42 @@
+[
+  {
+    "repo": "Bluetooth-Audio-Transmiter",
+    "sha": "f5c2b29347f9eaced1b67b3011b986baca8b7777",
+    "file": "Bluetooth-Audio-Transmiter.json.gz"
+  },
+  {
+    "repo": "Doorman",
+    "sha": "fdec5c030e77bb8e0219d745cc0282139c96836c",
+    "file": "Doorman.json.gz"
+  },
+  {
+    "repo": "ESP32-Camera-PCB",
+    "sha": "d467da91f7a4d41bf72a31ffbbc49c9d9091792f",
+    "file": "ESP32-Camera-PCB.json.gz"
+  },
+  {
+    "repo": "STM32F4-Reference-PCB",
+    "sha": "e0d1d8de53d43a6b82d834afdee54867cc44e89b",
+    "file": "STM32F4-Reference-PCB.json.gz"
+  },
+  {
+    "repo": "bench-psu-monitor",
+    "sha": "cd87301f7cb41831cc9ac8a3b7a62158e6dcd979",
+    "file": "bench-psu-monitor.json.gz"
+  },
+  {
+    "repo": "esp32-4-channel-relays",
+    "sha": "3c7d3b1eb80e781737f5ec5bed8cc10faca1ca0c",
+    "file": "esp32-4-channel-relays.json.gz"
+  },
+  {
+    "repo": "silkscreen-pcb",
+    "sha": "4530931d932cf760c8afc065327d88db94a18671",
+    "file": "silkscreen-pcb.json.gz"
+  },
+  {
+    "repo": "sniffer",
+    "sha": "037c8c2bc562e95e62fe757d1dfc7d8d68e9aca9",
+    "file": "sniffer.json.gz"
+  }
+]

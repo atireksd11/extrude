@@ -60,6 +60,14 @@ def derive(ir: CircuitIR, spec: FrozenSpec) -> PhysicsValues:
                 detail="inductor current reaches zero, so continuous-conduction ripple is not used",
             )
         )
+    if spec.task_class == "buck":
+        limit = min(0.030, spec.values_si.get("ripple_pp", 0.030))
+        if ripple is None or not switching:
+            findings.append(PhysicsFinding(code="ripple_unverified", severity="fail",
+                detail="Buck ripple is not checked: missing CCM inputs or unsupported conduction mode."))
+        elif ripple > limit:
+            findings.append(PhysicsFinding(code="ripple_exceeded", severity="fail",
+                detail=f"Buck ripple {ripple * 1000:.3f} mV exceeds {limit * 1000:.3f} mV."))
     power, tj, note = _heat(ir, spec)
     return PhysicsValues(
         caps=caps,

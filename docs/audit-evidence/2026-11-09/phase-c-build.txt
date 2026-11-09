@@ -1,0 +1,55 @@
+sabas0ba/kicad_skills 730afba6b3a123d6d142d5f72eb01c8f34148a59
+Command: EDA_MOUNT=/workspace/work ./bin/eda.sh doctor
+Docker local socket healthy; no review executed.
+7b5d337ad9bb225377261afef8784175147ab9e94688e29
+#5 extracting sha256:baf664398a411a5f77b5d337ad9bb225377261afef8784175147ab9e94688e29 5.1s
+#5 extracting sha256:baf664398a411a5f77b5d337ad9bb225377261afef8784175147ab9e94688e29 10.3s
+#5 extracting sha256:baf664398a411a5f77b5d337ad9bb225377261afef8784175147ab9e94688e29 15.4s
+#5 extracting sha256:baf664398a411a5f77b5d337ad9bb225377261afef8784175147ab9e94688e29 20.7s
+#5 extracting sha256:baf664398a411a5f77b5d337ad9bb225377261afef8784175147ab9e94688e29 25.7s
+#5 extracting sha256:baf664398a411a5f77b5d337ad9bb225377261afef8784175147ab9e94688e29 30.9s
+#5 extracting sha256:baf664398a411a5f77b5d337ad9bb225377261afef8784175147ab9e94688e29 36.0s
+#5 extracting sha256:baf664398a411a5f77b5d337ad9bb225377261afef8784175147ab9e94688e29 41.1s
+#5 extracting sha256:baf664398a411a5f77b5d337ad9bb225377261afef8784175147ab9e94688e29 46.2s
+#5 extracting sha256:baf664398a411a5f77b5d337ad9bb225377261afef8784175147ab9e94688e29 51.3s
+#5 extracting sha256:baf664398a411a5f77b5d337ad9bb225377261afef8784175147ab9e94688e29 56.4s
+#5 extracting sha256:baf664398a411a5f77b5d337ad9bb225377261afef8784175147ab9e94688e29 61.5s
+#5 extracting sha256:baf664398a411a5f77b5d337ad9bb225377261afef8784175147ab9e94688e29 66.7s
+#5 extracting sha256:baf664398a411a5f77b5d337ad9bb225377261afef8784175147ab9e94688e29 71.8s
+#5 extracting sha256:baf664398a411a5f77b5d337ad9bb225377261afef8784175147ab9e94688e29 76.9s
+#5 extracting sha256:baf664398a411a5f77b5d337ad9bb225377261afef8784175147ab9e94688e29 83.1s
+#5 extracting sha256:baf664398a411a5f77b5d337ad9bb225377261afef8784175147ab9e94688e29 88.2s
+#5 extracting sha256:baf664398a411a5f77b5d337ad9bb225377261afef8784175147ab9e94688e29 93.3s
+#5 extracting sha256:baf664398a411a5f77b5d337ad9bb225377261afef8784175147ab9e94688e29 98.3s
+#5 extracting sha256:baf664398a411a5f77b5d337ad9bb225377261afef8784175147ab9e94688e29 104.2s
+#5 extracting sha256:baf664398a411a5f77b5d337ad9bb225377261afef8784175147ab9e94688e29 104.9s done
+#5 extracting sha256:f2d0ba412653fff5f08703c1f98054e779fb2a690cedd9feceb48efb0af98abf
+#5 extracting sha256:f2d0ba412653fff5f08703c1f98054e779fb2a690cedd9feceb48efb0af98abf 5.1s
+#5 extracting sha256:f2d0ba412653fff5f08703c1f98054e779fb2a690cedd9feceb48efb0af98abf 10.2s
+#5 extracting sha256:f2d0ba412653fff5f08703c1f98054e779fb2a690cedd9feceb48efb0af98abf 12.0s done
+#5 extracting sha256:abe21fe0d4bc7e3a3caea661bbd067c004d7c0df86e1014341a18efe73238975
+#5 extracting sha256:abe21fe0d4bc7e3a3caea661bbd067c004d7c0df86e1014341a18efe73238975 7.2s
+#5 extracting sha256:abe21fe0d4bc7e3a3caea661bbd067c004d7c0df86e1014341a18efe73238975 12.5s
+#5 extracting sha256:abe21fe0d4bc7e3a3caea661bbd067c004d7c0df86e1014341a18efe73238975 20.2s
+#5 extracting sha256:abe21fe0d4bc7e3a3caea661bbd067c004d7c0df86e1014341a18efe73238975 27.7s
+#5 extracting sha256:abe21fe0d4bc7e3a3caea661bbd067c004d7c0df86e1014341a18efe73238975 34.1s
+#5 extracting sha256:abe21fe0d4bc7e3a3caea661bbd067c004d7c0df86e1014341a18efe73238975 40.6s
+#5 extracting sha256:abe21fe0d4bc7e3a3caea661bbd067c004d7c0df86e1014341a18efe73238975 45.6s
+#5 extracting sha256:abe21fe0d4bc7e3a3caea661bbd067c004d7c0df86e1014341a18efe73238975 50.7s
+#5 extracting sha256:abe21fe0d4bc7e3a3caea661bbd067c004d7c0df86e1014341a18efe73238975 55.8s
+#5 extracting sha256:abe21fe0d4bc7e3a3caea661bbd067c004d7c0df86e1014341a18efe73238975 57.9s done
+#5 extracting sha256:40c5a95b8ab42629a6535b7cf6117d12c3ef46b6f46ba2125d980d4f78d48202
+#5 extracting sha256:40c5a95b8ab42629a6535b7cf6117d12c3ef46b6f46ba2125d980d4f78d48202 8.6s
+#5 ERROR: failed to register layer: symlink libgstmpegts-1.0.so.0.2602.0 /home/dockerd/.local/share/docker/vfs/dir/03f8c8f94cbc450c17c7150c3eacc814ccaffff426115b6a8fc3342ec9e321a2/usr/lib/x86_64-linux-gnu/libgstmpegts-1.0.so.0: no space left on device
+------
+ > [ 1/15] FROM docker.io/kicad/kicad:10.0.4@sha256:770e2fa006695077b5ba218742d5c3137896af91257b2ca971243fa56b01bb86:
+------
+Dockerfile:18
+--------------------
+  16 |     ARG KICAD_VERSION=10.0.4
+  17 |     ARG KICAD_DIGEST=sha256:770e2fa006695077b5ba218742d5c3137896af91257b2ca971243fa56b01bb86
+  18 | >>> FROM kicad/kicad:${KICAD_VERSION}@${KICAD_DIGEST}
+  19 |
+  20 |     ARG KICAD_VERSION
+--------------------
+ERROR: failed to build: failed to solve: failed to register layer: symlink libgstmpegts-1.0.so.0.2602.0 /home/dockerd/.local/share/docker/vfs/dir/03f8c8f94cbc450c17c7150c3eacc814ccaffff426115b6a8fc3342ec9e321a2/usr/lib/x86_64-linux-gnu/libgstmpegts-1.0.so.0: no space left on device

@@ -3,7 +3,7 @@ name = "extrude"
 version = "0.0.0"
 description = "Extrude local project map and hardware design checks."
 requires-python = ">=3.11"
-dependencies = ["pydantic==2.12.5", "fastapi==0.141.1", "httpx==0.28.1", "uvicorn==0.52.4", "kicad-tools==0.27.0", "trimesh==5.2.0", "cadquery==2.8.0", "cadquery-ocp==7.9.3.1.1"]
+dependencies = ["pydantic==2.12.5", "fastapi==0.141.1", "httpx==0.28.1", "uvicorn==0.52.4", "kicad-tools==0.28.1", "pcb-inspector @ git+https://github.com/takzen/pcb-inspector.git@952ab1d9bb39bf48f3b553e6343dc151f3c408bc", "trimesh==5.2.0", "cadquery==2.8.0", "cadquery-ocp==7.9.3.1.1"]
 
 [project.optional-dependencies]
 dev = ["pytest==9.0.2"]

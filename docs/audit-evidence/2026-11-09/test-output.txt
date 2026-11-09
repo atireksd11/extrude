@@ -1,0 +1,16 @@
+Fresh changed-area test output, 9 November 2026
+
+Changed audit/parser/workspace/gating tests
+$ python -m pytest tests/test_design_audit_tools.py tests/test_parse.py tests/test_kicad_audit.py tests/test_workspace_phase3.py tests/test_workspace_phase4.py tests/test_pins_audit.py tests/test_card_gating.py -q
+........................................................................ [ 94%]
+....                                                                     [100%]
+76 passed in 62.67s (0:01:02)
+
+Additional physics/harness regression tests
+$ python -m pytest tests/audit/test_phase0_3.py tests/phase1/test_real.py tests/phase3/test_checkpoint.py tests/phase3/test_retest.py tests/test_rag_keys.py -q
+..................................                                       [100%]
+34 passed in 0.73s
+
+git diff --check: exit 0
+Python compileall of new modules and benchmark runner: exit 0
+No deployment-container or live-site success is claimed.

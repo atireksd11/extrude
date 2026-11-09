@@ -1,0 +1,549 @@
+[
+  {
+    "repo": "Bluetooth-Audio-Transmiter",
+    "sha": "f5c2b29347f9eaced1b67b3011b986baca8b7777",
+    "boards": [
+      {
+        "path": "hardware/Bluetooth-Audio-Transmiter.kicad_pcb",
+        "status": "ran",
+        "findings": [
+          {
+            "rule": "boot.gpio0",
+            "severity": "warning",
+            "summary": "U3 ESP32-WROOM-32UE: GPIO0 has no external pull-up; boot relies on the internal pull-up and external circuitry.",
+            "consequence": "GPIO0 has no external pull-up; boot relies on the internal pull-up and external circuitry.",
+            "next_action": "Review the strapping load and add a suitable external pull-up.",
+            "evidence": [
+              {
+                "path": "hardware/Bluetooth-Audio-Transmiter.kicad_pcb",
+                "line": 1072,
+                "part": "U3",
+                "pin": "25",
+                "function": "IO0",
+                "net": "Net-(Q2-C)",
+                "value": "ESP32-WROOM-32UE"
+              }
+            ],
+            "measurements": {}
+          },
+          {
+            "rule": "pcm1808.vref",
+            "severity": "error",
+            "summary": "U4 PCM1808PWR: VREF is floating: the ADC reference bypass is absent.",
+            "consequence": "VREF is floating: the ADC reference bypass is absent.",
+            "next_action": "Connect the datasheet reference capacitor to AGND.",
+            "evidence": [
+              {
+                "path": "hardware/Bluetooth-Audio-Transmiter.kicad_pcb",
+                "line": 3221,
+                "part": "U4",
+                "pin": "1",
+                "function": "VREF",
+                "net": "unconnected-(U4-VREF-Pad1)",
+                "value": "PCM1808PWR"
+              }
+            ],
+            "measurements": {}
+          },
+          {
+            "rule": "pcm1808.scki",
+            "severity": "error",
+            "summary": "U4 PCM1808PWR: SCKI is floating: the ADC has no system clock.",
+            "consequence": "SCKI is floating: the ADC has no system clock.",
+            "next_action": "Route a valid SCKI source.",
+            "evidence": [
+              {
+                "path": "hardware/Bluetooth-Audio-Transmiter.kicad_pcb",
+                "line": 3271,
+                "part": "U4",
+                "pin": "6",
+                "function": "SCKI",
+                "net": "unconnected-(U4-SCKI-Pad6)",
+                "value": "PCM1808PWR"
+              }
+            ],
+            "measurements": {}
+          },
+          {
+            "rule": "i2s.clock_master",
+            "severity": "error",
+            "summary": "U4 PCM1808PWR: MD0/MD1 select ADC slave mode and firmware selects I2S slave: neither endpoint supplies BCK/LRCK.",
+            "consequence": "MD0/MD1 select ADC slave mode and firmware selects I2S slave: neither endpoint supplies BCK/LRCK.",
+            "next_action": "Choose one clock master, provide SCKI, and align firmware mode.",
+            "evidence": [
+              {
+                "path": "hardware/Bluetooth-Audio-Transmiter.kicad_pcb",
+                "line": 3311,
+                "part": "U4",
+                "pin": "10",
+                "function": "MD0",
+                "net": "Net-(J3-GND)",
+                "value": "PCM1808PWR"
+              },
+              {
+                "path": "hardware/Bluetooth-Audio-Transmiter.kicad_pcb",
+                "line": 3321,
+                "part": "U4",
+                "pin": "11",
+                "function": "MD1",
+                "net": "Net-(J3-GND)",
+                "value": "PCM1808PWR"
+              },
+              {
+                "path": "firmware.ino",
+                "line": 16,
+                "expression": "I2S_MODE_SLAVE"
+              }
+            ],
+            "measurements": {}
+          },
+          {
+            "rule": "firmware.i2s_ws",
+            "severity": "error",
+            "summary": "U4 PCM1808PWR: Firmware WS=28 differs from the connected GPIO27.",
+            "consequence": "Firmware WS=28 differs from the connected GPIO27.",
+            "next_action": "Set ws_io_num to the board GPIO27 and verify that it exists on the selected MCU.",
+            "evidence": [
+              {
+                "path": "hardware/Bluetooth-Audio-Transmiter.kicad_pcb",
+                "line": 3281,
+                "part": "U4",
+                "pin": "7",
+                "function": "LRCK",
+                "net": "Net-(U3-IO27)",
+                "value": "PCM1808PWR"
+              },
+              {
+                "path": "firmware.ino",
+                "line": 31,
+                "expression": "ws_io_num = 28"
+              }
+            ],
+            "measurements": {}
+          }
+        ],
+        "not_checked": [
+          "Fuse/load limits and relay CTR/drive margin without sourced operating limits",
+          "Full correct-design checklist (SPI, dividers, BOOT0, SWD, USB-C, SSR, WS2812B)",
+          "Footprint pinout against exact manufacturer datasheet",
+          "Routed copper continuity (native DRC required)",
+          "Dynamic firmware expressions and cross-translation-unit dataflow"
+        ]
+      }
+    ]
+  },
+  {
+    "repo": "Doorman",
+    "sha": "fdec5c030e77bb8e0219d745cc0282139c96836c",
+    "boards": [
+      {
+        "path": "pcb/doorman.kicad_pcb",
+        "status": "ran",
+        "findings": [
+          {
+            "rule": "boot.gpio0",
+            "severity": "warning",
+            "summary": "U1 ESP32-S3-WROOM-1: GPIO0 has no external pull-up; boot relies on the internal pull-up and external circuitry.",
+            "consequence": "GPIO0 has no external pull-up; boot relies on the internal pull-up and external circuitry.",
+            "next_action": "Review the strapping load and add a suitable external pull-up.",
+            "evidence": [
+              {
+                "path": "pcb/doorman.kicad_pcb",
+                "line": 8051,
+                "part": "U1",
+                "pin": "27",
+                "function": "IO0",
+                "net": "/FLASH",
+                "value": "ESP32-S3-WROOM-1"
+              }
+            ],
+            "measurements": {}
+          }
+        ],
+        "not_checked": [
+          "Fuse/load limits and relay CTR/drive margin without sourced operating limits",
+          "Full correct-design checklist (SPI, dividers, BOOT0, SWD, USB-C, SSR, WS2812B)",
+          "Footprint pinout against exact manufacturer datasheet",
+          "Routed copper continuity (native DRC required)",
+          "Dynamic firmware expressions and cross-translation-unit dataflow"
+        ]
+      },
+      {
+        "path": "pcb_slot/doorman_slot.kicad_pcb",
+        "status": "ran",
+        "findings": [
+          {
+            "rule": "boot.gpio0",
+            "severity": "warning",
+            "summary": "U3 ESP32-PICO-MINI-02: GPIO0 has no external pull-up; boot relies on the internal pull-up and external circuitry.",
+            "consequence": "GPIO0 has no external pull-up; boot relies on the internal pull-up and external circuitry.",
+            "next_action": "Review the strapping load and add a suitable external pull-up.",
+            "evidence": [
+              {
+                "path": "pcb_slot/doorman_slot.kicad_pcb",
+                "line": 4046,
+                "part": "U3",
+                "pin": "23",
+                "function": "IO0",
+                "net": "GPIO0",
+                "value": "ESP32-PICO-MINI-02"
+              }
+            ],
+            "measurements": {}
+          }
+        ],
+        "not_checked": [
+          "Fuse/load limits and relay CTR/drive margin without sourced operating limits",
+          "Full correct-design checklist (SPI, dividers, BOOT0, SWD, USB-C, SSR, WS2812B)",
+          "Footprint pinout against exact manufacturer datasheet",
+          "Routed copper continuity (native DRC required)",
+          "Dynamic firmware expressions and cross-translation-unit dataflow"
+        ]
+      },
+      {
+        "path": "pcb_slot_programmer/doorman_slot_programmer.kicad_pcb",
+        "status": "ran",
+        "findings": [],
+        "not_checked": [
+          "Fuse/load limits and relay CTR/drive margin without sourced operating limits",
+          "Full correct-design checklist (SPI, dividers, BOOT0, SWD, USB-C, SSR, WS2812B)",
+          "Footprint pinout against exact manufacturer datasheet",
+          "Routed copper continuity (native DRC required)",
+          "Dynamic firmware expressions and cross-translation-unit dataflow"
+        ]
+      }
+    ]
+  },
+  {
+    "repo": "ESP32-Camera-PCB",
+    "sha": "d467da91f7a4d41bf72a31ffbbc49c9d9091792f",
+    "boards": [
+      {
+        "path": "ESP32 Camera PCB.kicad_pcb",
+        "status": "ran",
+        "findings": [
+          {
+            "rule": "charge.input",
+            "severity": "warning",
+            "summary": "B7 PowerBoost_500_Breakout: The USB charge input is unconnected; the carrier cannot supply charging power.",
+            "consequence": "The USB charge input is unconnected; the carrier cannot supply charging power.",
+            "next_action": "Provide a charge-input connection or document charging through the module connector.",
+            "evidence": [
+              {
+                "path": "ESP32 Camera PCB.kicad_pcb",
+                "line": 481,
+                "part": "B7",
+                "pin": "8",
+                "function": "USB",
+                "net": "unconnected-(B7-Pad8)",
+                "value": "PowerBoost_500_Breakout"
+              }
+            ],
+            "measurements": {}
+          }
+        ],
+        "not_checked": [
+          "Fuse/load limits and relay CTR/drive margin without sourced operating limits",
+          "Full correct-design checklist (SPI, dividers, BOOT0, SWD, USB-C, SSR, WS2812B)",
+          "Footprint pinout against exact manufacturer datasheet",
+          "Routed copper continuity (native DRC required)",
+          "Dynamic firmware expressions and cross-translation-unit dataflow"
+        ]
+      }
+    ]
+  },
+  {
+    "repo": "STM32F4-Reference-PCB",
+    "sha": "e0d1d8de53d43a6b82d834afdee54867cc44e89b",
+    "boards": [
+      {
+        "path": "STM32F4_REV2.kicad_pcb",
+        "status": "ran",
+        "findings": [
+          {
+            "rule": "reset.nrst",
+            "severity": "warning",
+            "summary": "U2 STM32F405RGT6: NRST (LQFP64 pin 7) has no external pull-up or capacitor.",
+            "consequence": "NRST (LQFP64 pin 7) has no external pull-up or capacitor.",
+            "next_action": "Review reset immunity; add the recommended reset network. Internal reset circuitry may suffice under benign conditions.",
+            "evidence": [
+              {
+                "path": "STM32F4_REV2.kicad_pcb",
+                "line": 2611,
+                "part": "U2",
+                "pin": "7",
+                "function": "",
+                "net": "NRST",
+                "value": "STM32F405RGT6"
+              }
+            ],
+            "measurements": {}
+          }
+        ],
+        "not_checked": [
+          "Fuse/load limits and relay CTR/drive margin without sourced operating limits",
+          "Full correct-design checklist (SPI, dividers, BOOT0, SWD, USB-C, SSR, WS2812B)",
+          "Footprint pinout against exact manufacturer datasheet",
+          "Routed copper continuity (native DRC required)",
+          "Dynamic firmware expressions and cross-translation-unit dataflow"
+        ]
+      }
+    ]
+  },
+  {
+    "repo": "bench-psu-monitor",
+    "sha": "cd87301f7cb41831cc9ac8a3b7a62158e6dcd979",
+    "boards": [
+      {
+        "path": "bench-psu-monitor.kicad_pcb",
+        "status": "ran",
+        "findings": [
+          {
+            "rule": "firmware.ina_address",
+            "severity": "error",
+            "summary": "U1 INA3221: A0 has no fixed bias as built; firmware assumes 0x40, so begin() can fail.",
+            "consequence": "A0 has no fixed bias as built; firmware assumes 0x40, so begin() can fail.",
+            "next_action": "Close the intended address jumper and verify the address against the firmware.",
+            "evidence": [
+              {
+                "path": "bench-psu-monitor.kicad_pcb",
+                "line": 1690,
+                "part": "U1",
+                "pin": "5",
+                "function": "A0",
+                "net": "/ADDR",
+                "value": "INA3221"
+              },
+              {
+                "path": "firmware/bench-psu-monitor.ino",
+                "line": 15,
+                "expression": "INA3221_ADDR 0x40"
+              }
+            ],
+            "measurements": {}
+          },
+          {
+            "rule": "firmware.ina_channels",
+            "severity": "warning",
+            "summary": "U1 INA3221: Hardware channels [2, 3] are wired but no supported firmware reads reference them.",
+            "consequence": "Hardware channels [2, 3] are wired but no supported firmware reads reference them.",
+            "next_action": "Read and calibrate each wired channel; verify shunt resistance per channel. Dynamic channel selection is not resolved.",
+            "evidence": [
+              {
+                "path": "bench-psu-monitor.kicad_pcb",
+                "line": 1660,
+                "part": "U1",
+                "pin": "2",
+                "function": "IN+3",
+                "net": "Net-(U1-IN+3)",
+                "value": "INA3221"
+              },
+              {
+                "path": "bench-psu-monitor.kicad_pcb",
+                "line": 1790,
+                "part": "U1",
+                "pin": "15",
+                "function": "IN+2",
+                "net": "Net-(U1-IN+2)",
+                "value": "INA3221"
+              },
+              {
+                "path": "firmware/bench-psu-monitor.ino",
+                "line": 44,
+                "expression": "getCurrentAmps(CH1)"
+              },
+              {
+                "path": "firmware/bench-psu-monitor.ino",
+                "line": 162,
+                "expression": "getBusVoltage(CH1)"
+              },
+              {
+                "path": "firmware/bench-psu-monitor.ino",
+                "line": 163,
+                "expression": "getCurrentAmps(CH1)"
+              },
+              {
+                "path": "firmware/bench-psu-monitor.ino",
+                "line": 177,
+                "expression": "getBusVoltage(CH1)"
+              },
+              {
+                "path": "firmware/bench-psu-monitor.ino",
+                "line": 178,
+                "expression": "getCurrentAmps(CH1)"
+              }
+            ],
+            "measurements": {}
+          }
+        ],
+        "not_checked": [
+          "Fuse/load limits and relay CTR/drive margin without sourced operating limits",
+          "Full correct-design checklist (SPI, dividers, BOOT0, SWD, USB-C, SSR, WS2812B)",
+          "Footprint pinout against exact manufacturer datasheet",
+          "Routed copper continuity (native DRC required)",
+          "Dynamic firmware expressions and cross-translation-unit dataflow"
+        ]
+      }
+    ]
+  },
+  {
+    "repo": "esp32-4-channel-relays",
+    "sha": "3c7d3b1eb80e781737f5ec5bed8cc10faca1ca0c",
+    "boards": [
+      {
+        "path": "esp32-4-channel-relays.kicad_pcb",
+        "status": "ran",
+        "findings": [
+          {
+            "rule": "boot.gpio0",
+            "severity": "warning",
+            "summary": "U4 ESP32-WROOM-32: GPIO0 has no external pull-up; boot relies on the internal pull-up and external circuitry.",
+            "consequence": "GPIO0 has no external pull-up; boot relies on the internal pull-up and external circuitry.",
+            "next_action": "Review the strapping load and add a suitable external pull-up.",
+            "evidence": [
+              {
+                "path": "esp32-4-channel-relays.kicad_pcb",
+                "line": 3160,
+                "part": "U4",
+                "pin": "25",
+                "function": "IO0",
+                "net": "/IO_0",
+                "value": "ESP32-WROOM-32"
+              }
+            ],
+            "measurements": {}
+          }
+        ],
+        "not_checked": [
+          "Fuse/load limits and relay CTR/drive margin without sourced operating limits",
+          "Full correct-design checklist (SPI, dividers, BOOT0, SWD, USB-C, SSR, WS2812B)",
+          "Footprint pinout against exact manufacturer datasheet",
+          "Routed copper continuity (native DRC required)",
+          "Dynamic firmware expressions and cross-translation-unit dataflow"
+        ]
+      }
+    ]
+  },
+  {
+    "repo": "silkscreen-pcb",
+    "sha": "4530931d932cf760c8afc065327d88db94a18671",
+    "boards": [
+      {
+        "path": "silkscreen_pcb.kicad_pcb",
+        "status": "ran",
+        "findings": [
+          {
+            "rule": "protection.pinout",
+            "severity": "warning",
+            "summary": "U5 DW01A: DW01A OD/OC connect to dual-MOSFET pads Q1.4, Q1.6; footprint pinout needs verification.",
+            "consequence": "DW01A OD/OC connect to dual-MOSFET pads Q1.4, Q1.6; footprint pinout needs verification.",
+            "next_action": "Compare the exact manufacturer pinout and footprint numbering; continuity alone cannot establish correctness.",
+            "evidence": [
+              {
+                "path": "silkscreen_pcb.kicad_pcb",
+                "line": 33148,
+                "part": "U5",
+                "pin": "1",
+                "function": "OD",
+                "net": "Net-(U5-OD)",
+                "value": "DW01A"
+              },
+              {
+                "path": "silkscreen_pcb.kicad_pcb",
+                "line": 33168,
+                "part": "U5",
+                "pin": "3",
+                "function": "OC",
+                "net": "Net-(U5-OC)",
+                "value": "DW01A"
+              },
+              {
+                "path": "silkscreen_pcb.kicad_pcb",
+                "line": 7983,
+                "part": "Q1",
+                "pin": "4",
+                "net": "Net-(U5-OC)"
+              },
+              {
+                "path": "silkscreen_pcb.kicad_pcb",
+                "line": 8003,
+                "part": "Q1",
+                "pin": "6",
+                "net": "Net-(U5-OD)"
+              },
+              {
+                "path": "silkscreen_pcb.kicad_pcb",
+                "line": 7963,
+                "part": "Q1",
+                "pin": "2",
+                "net": "unconnected-(Q1-Pad2)"
+              },
+              {
+                "path": "silkscreen_pcb.kicad_pcb",
+                "line": 7993,
+                "part": "Q1",
+                "pin": "5",
+                "net": "unconnected-(Q1-Pad5)"
+              }
+            ],
+            "measurements": {}
+          }
+        ],
+        "not_checked": [
+          "Fuse/load limits and relay CTR/drive margin without sourced operating limits",
+          "Full correct-design checklist (SPI, dividers, BOOT0, SWD, USB-C, SSR, WS2812B)",
+          "Footprint pinout against exact manufacturer datasheet",
+          "Routed copper continuity (native DRC required)",
+          "Dynamic firmware expressions and cross-translation-unit dataflow"
+        ]
+      }
+    ]
+  },
+  {
+    "repo": "sniffer",
+    "sha": "037c8c2bc562e95e62fe757d1dfc7d8d68e9aca9",
+    "boards": [
+      {
+        "path": "kicad/sniffer.kicad_pcb",
+        "status": "ran",
+        "findings": [
+          {
+            "rule": "sensor.mode_review",
+            "severity": "warning",
+            "summary": "J1 Conn_01x06: CJMCU-680 breakout pins are floating. Verify whether these are SDO/CS: floating address/mode pins leave I2C selection undefined unless the module has bias resistors.",
+            "consequence": "CJMCU-680 breakout pins are floating. Verify whether these are SDO/CS: floating address/mode pins leave I2C selection undefined unless the module has bias resistors.",
+            "next_action": "Verify module pinout and on-module pull resistors; strap CS high and choose SDO bias for the intended I2C address. Pin functions are not proven by this generic connector symbol.",
+            "evidence": [
+              {
+                "path": "kicad/sniffer.kicad_pcb",
+                "line": 208,
+                "part": "J1",
+                "pin": "6",
+                "function": "",
+                "net": "Net-(J1-Pad6)",
+                "value": "Conn_01x06"
+              },
+              {
+                "path": "kicad/sniffer.kicad_pcb",
+                "line": 210,
+                "part": "J1",
+                "pin": "5",
+                "function": "",
+                "net": "Net-(J1-Pad5)",
+                "value": "Conn_01x06"
+              }
+            ],
+            "measurements": {}
+          }
+        ],
+        "not_checked": [
+          "Fuse/load limits and relay CTR/drive margin without sourced operating limits",
+          "Full correct-design checklist (SPI, dividers, BOOT0, SWD, USB-C, SSR, WS2812B)",
+          "Footprint pinout against exact manufacturer datasheet",
+          "Routed copper continuity (native DRC required)",
+          "Dynamic firmware expressions and cross-translation-unit dataflow"
+        ]
+      }
+    ]
+  }
+]
