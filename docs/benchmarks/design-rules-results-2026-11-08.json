@@ -1,0 +1,3009 @@
+{
+  "baseline": "Nov 8 live audit: 0/10",
+  "native_checks": "not checked: Phase 1/PR #6 is separate; no fresh native checks in this replay",
+  "scoring": "5/10 unique audit checklist groups caught; shared GPIO0 group counted once. 6 repo/check occurrences. Correct-design PASS group remains not checked, not awarded.",
+  "results": [
+    {
+      "repo": "leomanangka/esp32-4-channel-relays",
+      "sha": "3c7d3b1eb80e781737f5ec5bed8cc10faca1ca0c",
+      "before_caught": 0,
+      "after_caught": [
+        "design.boot_bias"
+      ],
+      "findings": [
+        {
+          "rule_id": "design.boot_bias",
+          "domain": "electrical",
+          "status": "verified",
+          "severity": "warning",
+          "summary": "WEAKNESS: U4 ESP32-WROOM-32 pin 25 IO0 has no external resistor on its PCB net. Boot selection relies on the internal pull-up; consider an external pull-up for robust booting and verify the boot switch.",
+          "lifecycle": "present_at_head",
+          "evidence": [
+            {
+              "id": "40e91c3510c88c60dff7c521",
+              "repo_id": "leomanangka/esp32-4-channel-relays",
+              "sha": "3c7d3b1eb80e781737f5ec5bed8cc10faca1ca0c",
+              "path": "esp32-4-channel-relays.kicad_pcb",
+              "locator": "line 3160: U4 ESP32-WROOM-32, pin 25 IO0, net='/IO_0'"
+            },
+            {
+              "id": "011d12ddd14bb85cb8c84295",
+              "repo_id": "leomanangka/esp32-4-channel-relays",
+              "sha": "3c7d3b1eb80e781737f5ec5bed8cc10faca1ca0c",
+              "path": "esp32-4-channel-relays.kicad_pcb",
+              "locator": "line 478: SW2 SW_SKQG, pin 1 , net='/IO_0'"
+            },
+            {
+              "id": "b938e9c5b4175c184be74db6",
+              "repo_id": "leomanangka/esp32-4-channel-relays",
+              "sha": "3c7d3b1eb80e781737f5ec5bed8cc10faca1ca0c",
+              "path": "esp32-4-channel-relays.kicad_pcb",
+              "locator": "line 3694: C9 0.1uF, pin 2 , net='/IO_0'"
+            },
+            {
+              "id": "6872a3cdf217d1d670fc2c8c",
+              "repo_id": "leomanangka/esp32-4-channel-relays",
+              "sha": "3c7d3b1eb80e781737f5ec5bed8cc10faca1ca0c",
+              "path": "esp32-4-channel-relays.kicad_pcb",
+              "locator": "line 4202: Q1 MBT3904DW1, pin 6 C1, net='/IO_0'"
+            }
+          ]
+        }
+      ],
+      "coverage": [
+        {
+          "path": "esp32-4-channel-relays.kicad_sch",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: schematic electrical solving belongs to native ERC; these rules use PCB pad/net assignments"
+        },
+        {
+          "path": "esp32-4-channel-relays.kicad_pcb",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Logical PCB pin/net rules inspected. Copper continuity, analog margins, and all rules not named here are not checked."
+        },
+        {
+          "path": "esp32-4-channel-relays.kicad_pcb",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware absent or unsupported; pin mapping and clock-master firmware checks not checked"
+        }
+      ]
+    },
+    {
+      "repo": "fixthepixel/bench-psu-monitor",
+      "sha": "cd87301f7cb41831cc9ac8a3b7a62158e6dcd979",
+      "before_caught": 0,
+      "after_caught": [
+        "design.address_strap",
+        "design.unused_channels"
+      ],
+      "findings": [
+        {
+          "rule_id": "design.unused_channels",
+          "domain": "electrical",
+          "status": "verified",
+          "severity": "error",
+          "summary": "BUG: U1 INA3221 has IN+/IN- nets wired for channels 1, 2 and 3, but the recognized firmware reads select only channel 1 (index 0). CH2/CH3 measurements are absent; read and calibrate each intended channel, including its actual shunt resistance. Other dynamic/library behavior is not checked.",
+          "lifecycle": "present_at_head",
+          "evidence": [
+            {
+              "id": "fe719dd51d37e522ceed95fa",
+              "repo_id": "fixthepixel/bench-psu-monitor",
+              "sha": "cd87301f7cb41831cc9ac8a3b7a62158e6dcd979",
+              "path": "bench-psu-monitor.kicad_pcb",
+              "locator": "line 1650: U1 INA3221, pin 1 IN-3_1, net='Net-(U1-IN-3)'"
+            },
+            {
+              "id": "9d486858c7bbf8052a929df4",
+              "repo_id": "fixthepixel/bench-psu-monitor",
+              "sha": "cd87301f7cb41831cc9ac8a3b7a62158e6dcd979",
+              "path": "bench-psu-monitor.kicad_pcb",
+              "locator": "line 1660: U1 INA3221, pin 2 IN+3_2, net='Net-(U1-IN+3)'"
+            },
+            {
+              "id": "84bb31c44756d5650892b3ca",
+              "repo_id": "fixthepixel/bench-psu-monitor",
+              "sha": "cd87301f7cb41831cc9ac8a3b7a62158e6dcd979",
+              "path": "bench-psu-monitor.kicad_pcb",
+              "locator": "line 1750: U1 INA3221, pin 11 IN-1_11, net='Net-(U1-IN-1)'"
+            },
+            {
+              "id": "d34888f1883206993bbe3a36",
+              "repo_id": "fixthepixel/bench-psu-monitor",
+              "sha": "cd87301f7cb41831cc9ac8a3b7a62158e6dcd979",
+              "path": "bench-psu-monitor.kicad_pcb",
+              "locator": "line 1760: U1 INA3221, pin 12 IN+1_12, net='Net-(U1-IN+1)'"
+            },
+            {
+              "id": "a642295a2e5ae364fd7aa1e1",
+              "repo_id": "fixthepixel/bench-psu-monitor",
+              "sha": "cd87301f7cb41831cc9ac8a3b7a62158e6dcd979",
+              "path": "bench-psu-monitor.kicad_pcb",
+              "locator": "line 1780: U1 INA3221, pin 14 IN-2_14, net='Net-(U1-IN-2)'"
+            },
+            {
+              "id": "26cdd47d02c038ed2ebff114",
+              "repo_id": "fixthepixel/bench-psu-monitor",
+              "sha": "cd87301f7cb41831cc9ac8a3b7a62158e6dcd979",
+              "path": "bench-psu-monitor.kicad_pcb",
+              "locator": "line 1790: U1 INA3221, pin 15 IN+2_15, net='Net-(U1-IN+2)'"
+            },
+            {
+              "id": "a1283fab3c0519c7833b31cc",
+              "repo_id": "fixthepixel/bench-psu-monitor",
+              "sha": "cd87301f7cb41831cc9ac8a3b7a62158e6dcd979",
+              "path": "firmware/bench-psu-monitor.ino",
+              "locator": "line 44: ina3221.getCurrentAmps(CH1)"
+            },
+            {
+              "id": "b20a7e5f8898b137d5d2e489",
+              "repo_id": "fixthepixel/bench-psu-monitor",
+              "sha": "cd87301f7cb41831cc9ac8a3b7a62158e6dcd979",
+              "path": "firmware/bench-psu-monitor.ino",
+              "locator": "line 162: ina3221.getBusVoltage(CH1)"
+            },
+            {
+              "id": "953fc951c02c39180e56e5a1",
+              "repo_id": "fixthepixel/bench-psu-monitor",
+              "sha": "cd87301f7cb41831cc9ac8a3b7a62158e6dcd979",
+              "path": "firmware/bench-psu-monitor.ino",
+              "locator": "line 163: ina3221.getCurrentAmps(CH1)"
+            },
+            {
+              "id": "be7dc7126b981418a8900d74",
+              "repo_id": "fixthepixel/bench-psu-monitor",
+              "sha": "cd87301f7cb41831cc9ac8a3b7a62158e6dcd979",
+              "path": "firmware/bench-psu-monitor.ino",
+              "locator": "line 177: ina3221.getBusVoltage(CH1)"
+            },
+            {
+              "id": "88da9c0d161c62cbdac932f1",
+              "repo_id": "fixthepixel/bench-psu-monitor",
+              "sha": "cd87301f7cb41831cc9ac8a3b7a62158e6dcd979",
+              "path": "firmware/bench-psu-monitor.ino",
+              "locator": "line 178: ina3221.getCurrentAmps(CH1)"
+            }
+          ]
+        },
+        {
+          "rule_id": "design.address_strap",
+          "domain": "electrical",
+          "status": "verified",
+          "severity": "error",
+          "summary": "BUG: U1 INA3221 pin 5 A0 has no fixed address strap (only open jumpers or no peers), but firmware requests 0x40. The sensor may not respond; bridge the GND address jumper/add a pull-down and verify the address.",
+          "lifecycle": "present_at_head",
+          "evidence": [
+            {
+              "id": "74438dc4eee4c9e4d3cf92b8",
+              "repo_id": "fixthepixel/bench-psu-monitor",
+              "sha": "cd87301f7cb41831cc9ac8a3b7a62158e6dcd979",
+              "path": "bench-psu-monitor.kicad_pcb",
+              "locator": "line 1690: U1 INA3221, pin 5 A0_5, net='/ADDR'"
+            },
+            {
+              "id": "94df48f8bcd533beab513dd4",
+              "repo_id": "fixthepixel/bench-psu-monitor",
+              "sha": "cd87301f7cb41831cc9ac8a3b7a62158e6dcd979",
+              "path": "bench-psu-monitor.kicad_pcb",
+              "locator": "line 7343: JP1 ADDR1, pin 1 A_1, net='/ADDR'"
+            },
+            {
+              "id": "f3b84b66210797b79019bb6f",
+              "repo_id": "fixthepixel/bench-psu-monitor",
+              "sha": "cd87301f7cb41831cc9ac8a3b7a62158e6dcd979",
+              "path": "bench-psu-monitor.kicad_pcb",
+              "locator": "line 8782: JP2 ADDR2, pin 1 A_1, net='/ADDR'"
+            },
+            {
+              "id": "4e2be59135fa5c6ac17e72e5",
+              "repo_id": "fixthepixel/bench-psu-monitor",
+              "sha": "cd87301f7cb41831cc9ac8a3b7a62158e6dcd979",
+              "path": "firmware/bench-psu-monitor.ino",
+              "locator": "line 15: INA3221_ADDR=0x40"
+            }
+          ]
+        }
+      ],
+      "coverage": [
+        {
+          "path": "bench-psu-monitor.kicad_sch",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: schematic electrical solving belongs to native ERC; these rules use PCB pad/net assignments"
+        },
+        {
+          "path": "firmware/bench-psu-monitor.ino",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "overlay/bridge.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "bench-psu-monitor.kicad_pcb",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Logical PCB pin/net rules inspected. Copper continuity, analog margins, and all rules not named here are not checked."
+        }
+      ]
+    },
+    {
+      "repo": "pms67/STM32F4-Reference-PCB",
+      "sha": "e0d1d8de53d43a6b82d834afdee54867cc44e89b",
+      "before_caught": 0,
+      "after_caught": [
+        "design.reset_bias"
+      ],
+      "findings": [
+        {
+          "rule_id": "design.reset_bias",
+          "domain": "electrical",
+          "status": "verified",
+          "severity": "warning",
+          "summary": "WEAKNESS: U2 STM32F405RGT6 pin 7 NRST has no external resistor or capacitor on its PCB net. Reset noise margin relies on the MCU internal circuit; review an external pull-up/filter against the datasheet.",
+          "lifecycle": "present_at_head",
+          "evidence": [
+            {
+              "id": "6f7a97be83646586e6830024",
+              "repo_id": "pms67/STM32F4-Reference-PCB",
+              "sha": "e0d1d8de53d43a6b82d834afdee54867cc44e89b",
+              "path": "STM32F4_REV2.kicad_pcb",
+              "locator": "line 2611: U2 STM32F405RGT6, pin 7 , net='NRST'"
+            },
+            {
+              "id": "11e3486024360a06496584ba",
+              "repo_id": "pms67/STM32F4-Reference-PCB",
+              "sha": "e0d1d8de53d43a6b82d834afdee54867cc44e89b",
+              "path": "STM32F4_REV2.kicad_pcb",
+              "locator": "line 791: J2 SWD, pin 10 , net='NRST'"
+            }
+          ]
+        }
+      ],
+      "coverage": [
+        {
+          "path": "STM32F4_REV2.sch",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: schematic electrical solving belongs to native ERC; these rules use PCB pad/net assignments"
+        },
+        {
+          "path": "STM32F4_REV2.kicad_pcb",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Logical PCB pin/net rules inspected. Copper continuity, analog margins, and all rules not named here are not checked."
+        },
+        {
+          "path": "STM32F4_REV2.kicad_pcb",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware absent or unsupported; pin mapping and clock-master firmware checks not checked"
+        }
+      ]
+    },
+    {
+      "repo": "iandchasse/silkscreen-pcb",
+      "sha": "4530931d932cf760c8afc065327d88db94a18671",
+      "before_caught": 0,
+      "after_caught": [],
+      "findings": [],
+      "coverage": [
+        {
+          "path": ".github/FUNDING.yml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "docs/audit-2026-09-16/analyze_bom_and_limits.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "docs/audit-2026-09-16/compare_gerber_geometry.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "docs/audit-2026-09-16/complete_block_review.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "docs/audit-2026-09-16/complete_review_sources.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "docs/audit-2026-09-16/extract_board.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "docs/audit-2026-09-16/fetch_followup_sources.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "docs/audit-2026-09-16/fetch_sources.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "docs/audit-2026-09-16/finalize_audit.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "docs/audit-2026-09-16/geometry_review.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "docs/audit-2026-09-16/inspect_sources.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "docs/audit-2026-09-16/inspect_vendor_pages.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "docs/audit-2026-09-16/mechanical_comparison.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "docs/audit-2026-09-16/reverse_polarity_concept.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "docs/audit-2026-09-16/run_revpol.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "docs/audit-2026-09-16/run_revpol2.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "docs/audit-2026-09-16/thermal_scenarios.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "docs/audit-2026-09-16/verify_production.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "docs/audit-2026-09-18/checkpoint-2/cost_model.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "docs/audit-2026-10-15/sch2-sim/proto_layout.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "docs/audit-2026-10-15/sch2-sim/r79_study.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "docs/audit-2026-10-15/sch2-sim/run_sch2.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "docs/audit-2026-10-29/efuse-sim/draw_efuse.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "docs/audit-2026-10-29/efuse-sim/draw_limiter.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "docs/audit-2026-10-29/efuse-sim/run_efuse.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "docs/audit-2026-10-29/efuse-sim/summarize.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "docs/audit-2026-10-29/ptc-thermal/battery_sense.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "docs/audit-2026-10-29/ptc-thermal/branches.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "docs/audit-2026-10-29/ptc-thermal/ptc_thermal.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "docs/audit-2026-10-29/test-pads/tp_front.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "fabrication/apply_part_fields.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "fabrication/make_fab_files.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "silkscreen_pcb.kicad_sch",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: schematic electrical solving belongs to native ERC; these rules use PCB pad/net assignments"
+        },
+        {
+          "path": "silkscreen_pcb.kicad_pcb",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Logical PCB pin/net rules inspected. Copper continuity, analog margins, and all rules not named here are not checked."
+        },
+        {
+          "path": "silkscreen_pcb.kicad_pcb",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware absent or unsupported; pin mapping and clock-master firmware checks not checked"
+        }
+      ]
+    },
+    {
+      "repo": "AzonInc/Doorman",
+      "sha": "fdec5c030e77bb8e0219d745cc0282139c96836c",
+      "before_caught": 0,
+      "after_caught": [
+        "design.boot_bias"
+      ],
+      "findings": [
+        {
+          "rule_id": "design.boot_bias",
+          "domain": "electrical",
+          "status": "verified",
+          "severity": "warning",
+          "summary": "WEAKNESS: U1 ESP32-S3-WROOM-1 pin 27 IO0 has no external resistor on its PCB net. Boot selection relies on the internal pull-up; consider an external pull-up for robust booting and verify the boot switch.",
+          "lifecycle": "present_at_head",
+          "evidence": [
+            {
+              "id": "08136756363a4efeaad00a42",
+              "repo_id": "AzonInc/Doorman",
+              "sha": "fdec5c030e77bb8e0219d745cc0282139c96836c",
+              "path": "pcb/doorman.kicad_pcb",
+              "locator": "line 8051: U1 ESP32-S3-WROOM-1, pin 27 IO0, net='/FLASH'"
+            },
+            {
+              "id": "8fa7646012c5f25ae272efca",
+              "repo_id": "AzonInc/Doorman",
+              "sha": "fdec5c030e77bb8e0219d745cc0282139c96836c",
+              "path": "pcb/doorman.kicad_pcb",
+              "locator": "line 5991: SW2 Flash Button, pin 1 1, net='/FLASH'"
+            }
+          ]
+        },
+        {
+          "rule_id": "design.boot_bias",
+          "domain": "electrical",
+          "status": "verified",
+          "severity": "warning",
+          "summary": "WEAKNESS: U3 ESP32-PICO-MINI-02 pin 23 IO0 has no external resistor on its PCB net. Boot selection relies on the internal pull-up; consider an external pull-up for robust booting and verify the boot switch.",
+          "lifecycle": "present_at_head",
+          "evidence": [
+            {
+              "id": "f67b9552438a85de16021ea3",
+              "repo_id": "AzonInc/Doorman",
+              "sha": "fdec5c030e77bb8e0219d745cc0282139c96836c",
+              "path": "pcb_slot/doorman_slot.kicad_pcb",
+              "locator": "line 4046: U3 ESP32-PICO-MINI-02, pin 23 IO0, net='GPIO0'"
+            },
+            {
+              "id": "cb9efdac90bac0fd4f4358aa",
+              "repo_id": "AzonInc/Doorman",
+              "sha": "fdec5c030e77bb8e0219d745cc0282139c96836c",
+              "path": "pcb_slot/doorman_slot.kicad_pcb",
+              "locator": "line 8046: TP10 GPIO0 TestPoint, pin 1 1, net='GPIO0'"
+            }
+          ]
+        }
+      ],
+      "coverage": [
+        {
+          "path": ".github/FUNDING.yml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": ".github/ISSUE_TEMPLATE/bug_report_component.yml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": ".github/ISSUE_TEMPLATE/bug_report_fw.yml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": ".github/ISSUE_TEMPLATE/feature_request.yml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": ".github/workflows/build-docs.yml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": ".github/workflows/build-esphome.yml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": ".github/workflows/build-nightly.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": ".github/workflows/build-webserver.yml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": ".github/workflows/bundle-assets.yml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": ".github/workflows/deploy.yml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": ".pre-commit-config.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "blueprints/confirmable_open_door_notification.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "blueprints/open_door_on_pattern.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "collect_entities.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "components/captive_portal/__init__.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "components/captive_portal/captive_index.h",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/captive_portal/captive_portal.cpp",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/captive_portal/captive_portal.h",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/captive_portal/dns_server_esp32_idf.cpp",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/captive_portal/dns_server_esp32_idf.h",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/configo/__init__.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "components/configo/configo_component.cpp",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/configo/configo_component.h",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/hardware/__init__.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "components/hardware/hardware_text_sensor.cpp",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/hardware/hardware_text_sensor.h",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/hardware/text_sensor.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "components/homekit/__init__.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "components/homekit/automation.cpp",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/homekit/automation.h",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/homekit/binary_sensor.hpp",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/homekit/button.hpp",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/homekit/climate.hpp",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/homekit/doorbell.hpp",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/homekit/event.hpp",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/homekit/fan.hpp",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/homekit/homekit.cpp",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/homekit/homekit.h",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/homekit/light.hpp",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/homekit/lock.hpp",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/homekit/sensor.hpp",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/homekit/switch.hpp",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/homekit_bridge/__init__.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "components/homekit_bridge/automation.h",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/homekit_bridge/button/__init__.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "components/homekit_bridge/button/factory_reset.cpp",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/homekit_bridge/button/factory_reset.h",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/homekit_bridge/const.h",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/homekit_bridge/homekit_bridge.cpp",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/homekit_bridge/homekit_bridge.h",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/homekit_bridge/util.cpp",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/homekit_bridge/util.h",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/tc_bus/__init__.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "components/tc_bus/automation.h",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/tc_bus/binary_sensor/__init__.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "components/tc_bus/binary_sensor/bus_telegram_listener_binary_sensor.cpp",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/tc_bus/binary_sensor/bus_telegram_listener_binary_sensor.h",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/tc_bus/lock/__init__.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "components/tc_bus/lock/automation.h",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/tc_bus/lock/bus_telegram_listener_lock.cpp",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/tc_bus/lock/bus_telegram_listener_lock.h",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/tc_bus/protocol.cpp",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/tc_bus/protocol.h",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/tc_bus/queue.h",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/tc_bus/tc_bus.cpp",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/tc_bus/tc_bus.h",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/tc_bus/text_sensor.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "components/tc_bus_device/__init__.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "components/tc_bus_device/automation.h",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/tc_bus_device/binary_sensor/__init__.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "components/tc_bus_device/binary_sensor/tc_bus_device_binary_sensor.cpp",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/tc_bus_device/binary_sensor/tc_bus_device_binary_sensor.h",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/tc_bus_device/button/__init__.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "components/tc_bus_device/button/tc_bus_device_button.cpp",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/tc_bus_device/button/tc_bus_device_button.h",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/tc_bus_device/number/__init__.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "components/tc_bus_device/number/tc_bus_device_number.cpp",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/tc_bus_device/number/tc_bus_device_number.h",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/tc_bus_device/select/__init__.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "components/tc_bus_device/select/tc_bus_device_select.cpp",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/tc_bus_device/select/tc_bus_device_select.h",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/tc_bus_device/switch/__init__.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "components/tc_bus_device/switch/tc_bus_device_switch.cpp",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/tc_bus_device/switch/tc_bus_device_switch.h",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/tc_bus_device/tc_bus_device.cpp",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/tc_bus_device/tc_bus_device.h",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/tc_bus_device/util.cpp",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/tc_bus_device/util.h",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/tc_bus_serial/__init__.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "components/tc_bus_serial/tc_bus_serial_component.cpp",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "components/tc_bus_serial/tc_bus_serial_component.h",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "docs/de/guide/firmware/minimal.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "docs/en/guide/firmware/minimal.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/base.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/components/api.custom.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/components/api.homeassistant.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/components/api.homekit.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/components/api.mqtt.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/components/bluedroid-ble.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/components/configo.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/components/dashboard-import.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/components/debug-component.psram.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/components/debug-component.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/components/debug-utilities.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/components/external-components.local.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/components/external-components.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/components/indoor-station-settings.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/components/interactive-setup.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/components/nuki-bridge.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/components/ota-update.esphome.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/components/ota-update.http.dev.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/components/ota-update.http.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/components/outdoor-station.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/components/pattern-events.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/components/rgb-status-led.effects.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/components/rgb-status-led.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/components/ring-to-open-nuki.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/components/ring-to-open.homekit.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/components/ring-to-open.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/components/web-server.dev.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3-quad.custom.nuki-bridge.dev.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3-quad.custom.nuki-bridge.local.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3-quad.custom.nuki-bridge.master.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3-quad.custom.standard.dev.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3-quad.custom.standard.local.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3-quad.custom.standard.master.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3-quad.ha.nuki-bridge.dev.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3-quad.ha.nuki-bridge.local.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3-quad.ha.nuki-bridge.master.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3-quad.ha.standard.dev.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3-quad.ha.standard.local.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3-quad.ha.standard.master.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3-quad.homekit.nuki-bridge.dev.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3-quad.homekit.nuki-bridge.local.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3-quad.homekit.nuki-bridge.master.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3-quad.homekit.standard.dev.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3-quad.homekit.standard.local.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3-quad.homekit.standard.master.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3-quad.mqtt.standard.dev.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3-quad.mqtt.standard.local.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3-quad.mqtt.standard.master.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3.custom.nuki-bridge.dev.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3.custom.nuki-bridge.local.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3.custom.nuki-bridge.master.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3.custom.standard.dev.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3.custom.standard.local.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3.custom.standard.master.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3.ha.nuki-bridge.dev.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3.ha.nuki-bridge.local.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3.ha.nuki-bridge.master.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3.ha.standard.dev.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3.ha.standard.local.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3.ha.standard.master.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3.homekit.nuki-bridge.dev.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3.homekit.nuki-bridge.local.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3.homekit.nuki-bridge.master.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3.homekit.standard.dev.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3.homekit.standard.local.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3.homekit.standard.master.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3.mqtt.standard.dev.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3.mqtt.standard.local.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32-s3.mqtt.standard.master.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32.custom.nuki-bridge.dev.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32.custom.nuki-bridge.local.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32.custom.nuki-bridge.master.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32.custom.standard.dev.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32.custom.standard.local.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32.custom.standard.master.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32.ha.nuki-bridge.dev.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32.ha.nuki-bridge.local.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32.ha.nuki-bridge.master.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32.ha.standard.dev.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32.ha.standard.local.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32.ha.standard.master.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32.homekit.nuki-bridge.dev.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32.homekit.nuki-bridge.local.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32.homekit.nuki-bridge.master.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32.homekit.standard.dev.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32.homekit.standard.local.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32.homekit.standard.master.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32.mqtt.standard.dev.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32.mqtt.standard.local.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/configurations/esp32.mqtt.standard.master.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3-quad.custom.nuki-bridge.dev.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3-quad.custom.nuki-bridge.local.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3-quad.custom.nuki-bridge.master.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3-quad.custom.standard.dev.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3-quad.custom.standard.local.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3-quad.custom.standard.master.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3-quad.ha.nuki-bridge.dev.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3-quad.ha.nuki-bridge.local.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3-quad.ha.nuki-bridge.master.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3-quad.ha.standard.dev.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3-quad.ha.standard.local.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3-quad.ha.standard.master.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3-quad.homekit.nuki-bridge.dev.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3-quad.homekit.nuki-bridge.local.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3-quad.homekit.nuki-bridge.master.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3-quad.homekit.standard.dev.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3-quad.homekit.standard.local.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3-quad.homekit.standard.master.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3-quad.mqtt.standard.dev.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3-quad.mqtt.standard.local.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3-quad.mqtt.standard.master.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3.custom.nuki-bridge.dev.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3.custom.nuki-bridge.local.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3.custom.nuki-bridge.master.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3.custom.standard.dev.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3.custom.standard.local.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3.custom.standard.master.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3.ha.nuki-bridge.dev.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3.ha.nuki-bridge.local.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3.ha.nuki-bridge.master.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3.ha.standard.dev.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3.ha.standard.local.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3.ha.standard.master.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3.homekit.nuki-bridge.dev.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3.homekit.nuki-bridge.local.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3.homekit.nuki-bridge.master.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3.homekit.standard.dev.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3.homekit.standard.local.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3.homekit.standard.master.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3.mqtt.standard.dev.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3.mqtt.standard.local.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32-s3.mqtt.standard.master.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32.custom.nuki-bridge.dev.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32.custom.nuki-bridge.local.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32.custom.nuki-bridge.master.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32.custom.standard.dev.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32.custom.standard.local.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32.custom.standard.master.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32.ha.nuki-bridge.dev.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32.ha.nuki-bridge.local.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32.ha.nuki-bridge.master.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32.ha.standard.dev.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32.ha.standard.local.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32.ha.standard.master.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32.homekit.nuki-bridge.dev.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32.homekit.nuki-bridge.local.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32.homekit.nuki-bridge.master.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32.homekit.standard.dev.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32.homekit.standard.local.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32.homekit.standard.master.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32.mqtt.standard.dev.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32.mqtt.standard.local.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/examples/esp32.mqtt.standard.master.example.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/hosts/esp32-s3-quad.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/hosts/esp32-s3.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/hosts/esp32.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "firmware/tc-bus-component.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "generate_firmware_yaml.py",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "pcb/doorman.kicad_sch",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: schematic electrical solving belongs to native ERC; these rules use PCB pad/net assignments"
+        },
+        {
+          "path": "pcb_slot/doorman_slot.kicad_sch",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: schematic electrical solving belongs to native ERC; these rules use PCB pad/net assignments"
+        },
+        {
+          "path": "pcb_slot_programmer/doorman_slot_programmer.kicad_sch",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: schematic electrical solving belongs to native ERC; these rules use PCB pad/net assignments"
+        },
+        {
+          "path": "pcb/doorman.kicad_pcb",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Logical PCB pin/net rules inspected. Copper continuity, analog margins, and all rules not named here are not checked."
+        },
+        {
+          "path": "pcb_slot/doorman_slot.kicad_pcb",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Logical PCB pin/net rules inspected. Copper continuity, analog margins, and all rules not named here are not checked."
+        },
+        {
+          "path": "pcb_slot_programmer/doorman_slot_programmer.kicad_pcb",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Logical PCB pin/net rules inspected. Copper continuity, analog margins, and all rules not named here are not checked."
+        }
+      ]
+    },
+    {
+      "repo": "kylemanna/sniffer",
+      "sha": "037c8c2bc562e95e62fe757d1dfc7d8d68e9aca9",
+      "before_caught": 0,
+      "after_caught": [],
+      "findings": [],
+      "coverage": [
+        {
+          "path": "esphome/bme280.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "esphome/bme680.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "esphome/ds18b20.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "esphome/secrets.template.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "esphome/sniffer.template.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "esphome/sniffer_common.yaml",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware language/peripheral semantics unsupported; no verdict"
+        },
+        {
+          "path": "kicad/sniffer.sch",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: schematic electrical solving belongs to native ERC; these rules use PCB pad/net assignments"
+        },
+        {
+          "path": "kicad/sniffer.kicad_pcb",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Logical PCB pin/net rules inspected. Copper continuity, analog margins, and all rules not named here are not checked."
+        },
+        {
+          "path": "kicad/sniffer.kicad_pcb",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware absent or unsupported; pin mapping and clock-master firmware checks not checked"
+        }
+      ]
+    },
+    {
+      "repo": "UnsignedArduino/ESP32-Camera-PCB",
+      "sha": "d467da91f7a4d41bf72a31ffbbc49c9d9091792f",
+      "before_caught": 0,
+      "after_caught": [
+        "design.charge_input"
+      ],
+      "findings": [
+        {
+          "rule_id": "design.charge_input",
+          "domain": "electrical",
+          "status": "verified",
+          "severity": "warning",
+          "summary": "RISK: B7 PowerBoost_500_Breakout pin 8 USB has no connected peer. This carrier supplies no charge input; wire the input if on-board charging is intended, or document external charging.",
+          "lifecycle": "present_at_head",
+          "evidence": [
+            {
+              "id": "206d43ffddf5d0eaf230c992",
+              "repo_id": "UnsignedArduino/ESP32-Camera-PCB",
+              "sha": "d467da91f7a4d41bf72a31ffbbc49c9d9091792f",
+              "path": "ESP32 Camera PCB.kicad_pcb",
+              "locator": "line 481: B7 PowerBoost_500_Breakout, pin 8 USB, net='unconnected-(B7-Pad8)'"
+            }
+          ]
+        }
+      ],
+      "coverage": [
+        {
+          "path": "ESP32 Camera PCB.kicad_sch",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: schematic electrical solving belongs to native ERC; these rules use PCB pad/net assignments"
+        },
+        {
+          "path": "ESP32 Camera PCB.kicad_pcb",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Logical PCB pin/net rules inspected. Copper continuity, analog margins, and all rules not named here are not checked."
+        },
+        {
+          "path": "ESP32 Camera PCB.kicad_pcb",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: firmware absent or unsupported; pin mapping and clock-master firmware checks not checked"
+        }
+      ]
+    },
+    {
+      "repo": "Shashvat1333/Bluetooth-Audio-Transmiter",
+      "sha": "f5c2b29347f9eaced1b67b3011b986baca8b7777",
+      "before_caught": 0,
+      "after_caught": [
+        "design.boot_bias",
+        "design.clock_master",
+        "design.critical_pin",
+        "design.firmware_pin"
+      ],
+      "findings": [
+        {
+          "rule_id": "design.critical_pin",
+          "domain": "electrical",
+          "status": "verified",
+          "severity": "error",
+          "summary": "BUG: U4 PCM1808 pin 6 SCKI has no connected peer. Conversion cannot be relied on; route a valid system clock.",
+          "lifecycle": "present_at_head",
+          "evidence": [
+            {
+              "id": "370366f81618d16f82139ebb",
+              "repo_id": "Shashvat1333/Bluetooth-Audio-Transmiter",
+              "sha": "f5c2b29347f9eaced1b67b3011b986baca8b7777",
+              "path": "hardware/Bluetooth-Audio-Transmiter.kicad_pcb",
+              "locator": "line 3271: U4 PCM1808PWR, pin 6 SCKI_6, net='unconnected-(U4-SCKI-Pad6)'"
+            }
+          ]
+        },
+        {
+          "rule_id": "design.critical_pin",
+          "domain": "electrical",
+          "status": "verified",
+          "severity": "error",
+          "summary": "BUG: U4 PCM1808 pin 1 VREF has no connected peer. Conversion cannot be relied on; connect the reference bypass capacitor to AGND per the PCM1808 datasheet.",
+          "lifecycle": "present_at_head",
+          "evidence": [
+            {
+              "id": "7ec54a5e38a8cd44821b93bf",
+              "repo_id": "Shashvat1333/Bluetooth-Audio-Transmiter",
+              "sha": "f5c2b29347f9eaced1b67b3011b986baca8b7777",
+              "path": "hardware/Bluetooth-Audio-Transmiter.kicad_pcb",
+              "locator": "line 3221: U4 PCM1808PWR, pin 1 VREF_1, net='unconnected-(U4-VREF-Pad1)'"
+            }
+          ]
+        },
+        {
+          "rule_id": "design.firmware_pin",
+          "domain": "electrical",
+          "status": "verified",
+          "severity": "error",
+          "summary": "BUG: firmware.ino ws_io_num=28, but U4 pin 7 LRCK_7 is assigned to U3 IO27_12. GPIO28 does not exist on ESP32-WROOM-32UE. Audio pin selection is wrong; set ws_io_num=27 to match this PCB.",
+          "lifecycle": "present_at_head",
+          "evidence": [
+            {
+              "id": "62b021b813521588f70ce454",
+              "repo_id": "Shashvat1333/Bluetooth-Audio-Transmiter",
+              "sha": "f5c2b29347f9eaced1b67b3011b986baca8b7777",
+              "path": "firmware.ino",
+              "locator": "line 31: .ws_io_num = 28,"
+            },
+            {
+              "id": "22e668da8a29494f763ca34d",
+              "repo_id": "Shashvat1333/Bluetooth-Audio-Transmiter",
+              "sha": "f5c2b29347f9eaced1b67b3011b986baca8b7777",
+              "path": "hardware/Bluetooth-Audio-Transmiter.kicad_pcb",
+              "locator": "line 3281: U4 PCM1808PWR, pin 7 LRCK_7, net='Net-(U3-IO27)'"
+            },
+            {
+              "id": "fc517c17ee0d6be7574b82cb",
+              "repo_id": "Shashvat1333/Bluetooth-Audio-Transmiter",
+              "sha": "f5c2b29347f9eaced1b67b3011b986baca8b7777",
+              "path": "hardware/Bluetooth-Audio-Transmiter.kicad_pcb",
+              "locator": "line 955: U3 ESP32-WROOM-32UE, pin 12 IO27_12, net='Net-(U3-IO27)'"
+            }
+          ]
+        },
+        {
+          "rule_id": "design.clock_master",
+          "domain": "electrical",
+          "status": "verified",
+          "severity": "error",
+          "summary": "BUG: U4 PCM1808 MD0/MD1 are grounded (slave mode), and firmware.ino selects I2S_MODE_SLAVE. Neither endpoint generates BCK/LRCK; choose one clock master, route SCKI and align firmware before ordering.",
+          "lifecycle": "present_at_head",
+          "evidence": [
+            {
+              "id": "97224c075c3cadcf95cf737f",
+              "repo_id": "Shashvat1333/Bluetooth-Audio-Transmiter",
+              "sha": "f5c2b29347f9eaced1b67b3011b986baca8b7777",
+              "path": "hardware/Bluetooth-Audio-Transmiter.kicad_pcb",
+              "locator": "line 3311: U4 PCM1808PWR, pin 10 MD0_10, net='Net-(J3-GND)'"
+            },
+            {
+              "id": "60d4e12f05e5d6632d168e10",
+              "repo_id": "Shashvat1333/Bluetooth-Audio-Transmiter",
+              "sha": "f5c2b29347f9eaced1b67b3011b986baca8b7777",
+              "path": "hardware/Bluetooth-Audio-Transmiter.kicad_pcb",
+              "locator": "line 3321: U4 PCM1808PWR, pin 11 MD1_11, net='Net-(J3-GND)'"
+            },
+            {
+              "id": "c1c8566bfe02800a82778ae2",
+              "repo_id": "Shashvat1333/Bluetooth-Audio-Transmiter",
+              "sha": "f5c2b29347f9eaced1b67b3011b986baca8b7777",
+              "path": "firmware.ino",
+              "locator": "line 16: .mode = (i2s_mode_t)(I2S_MODE_SLAVE | I2S_MODE_RX),"
+            }
+          ]
+        },
+        {
+          "rule_id": "design.boot_bias",
+          "domain": "electrical",
+          "status": "verified",
+          "severity": "warning",
+          "summary": "WEAKNESS: U3 ESP32-WROOM-32UE pin 25 IO0 has no external resistor on its PCB net. Boot selection relies on the internal pull-up; consider an external pull-up for robust booting and verify the boot switch.",
+          "lifecycle": "present_at_head",
+          "evidence": [
+            {
+              "id": "3756838bb0cd1878950d26ec",
+              "repo_id": "Shashvat1333/Bluetooth-Audio-Transmiter",
+              "sha": "f5c2b29347f9eaced1b67b3011b986baca8b7777",
+              "path": "hardware/Bluetooth-Audio-Transmiter.kicad_pcb",
+              "locator": "line 1072: U3 ESP32-WROOM-32UE, pin 25 IO0_25, net='Net-(Q2-C)'"
+            },
+            {
+              "id": "6dbf6e42ee388ea880167957",
+              "repo_id": "Shashvat1333/Bluetooth-Audio-Transmiter",
+              "sha": "f5c2b29347f9eaced1b67b3011b986baca8b7777",
+              "path": "hardware/Bluetooth-Audio-Transmiter.kicad_pcb",
+              "locator": "line 6015: Q2 BC817, pin 3 C_3, net='Net-(Q2-C)'"
+            }
+          ]
+        }
+      ],
+      "coverage": [
+        {
+          "path": "firmware.ino",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Literal C/C++/Arduino I2S and INA3221 patterns inspected; other firmware behavior not checked."
+        },
+        {
+          "path": "hardware/Bluetooth-Audio-Transmiter.kicad_sch",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "unavailable",
+          "detail": "not checked: schematic electrical solving belongs to native ERC; these rules use PCB pad/net assignments"
+        },
+        {
+          "path": "hardware/Bluetooth-Audio-Transmiter.kicad_pcb",
+          "domain": "project",
+          "check": "Whole-design electrical rules",
+          "tool": "Extrude rules",
+          "outcome": "ran",
+          "detail": "Logical PCB pin/net rules inspected. Copper continuity, analog margins, and all rules not named here are not checked."
+        }
+      ]
+    }
+  ]
+}

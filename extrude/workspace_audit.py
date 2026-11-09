@@ -20,7 +20,7 @@ from extrude import kicad_snapshot
 from extrude import workspace_settings, workspace_checks, workspace_cad
 
 SCHEMA_VERSION = 4
-RULE_VERSION = 5
+RULE_VERSION = 6
 _POOL = ThreadPoolExecutor(max_workers=2, thread_name_prefix="atlas-audit")
 _LOCK = threading.RLock()
 _ACTIVE: dict[tuple[Path, str], str] = {}
@@ -251,11 +251,16 @@ def _collect(audit: Audit) -> None:
                 path=path, domain="pcb", check="PCB placement and pad nets", tool="kicad-tools",
                 outcome="failed", detail="Could not read this board comparison. Retry or inspect the file.",
             ))
+    from extrude.design_rules import explain_native
     findings, coverage = kicad_audit.collect(audit.repo_id, audit.head_sha, audit.base_sha)
-    audit.findings.extend(Finding.model_validate(row) for row in findings)
+    audit.findings.extend(Finding.model_validate(explain_native(row)) for row in findings)
     audit.coverage.extend(Coverage.model_validate(row) for row in coverage)
     findings, coverage = workspace_checks.collect(audit.repo_id, audit.head_sha, audit.base_sha,
         workspace_settings.Settings.model_validate(audit.project_settings), paths["files"])
+    audit.findings.extend(Finding.model_validate(row) for row in findings)
+    audit.coverage.extend(Coverage.model_validate(row) for row in coverage)
+    from extrude import design_rules
+    findings, coverage = design_rules.collect(audit.repo_id, audit.head_sha)
     audit.findings.extend(Finding.model_validate(row) for row in findings)
     audit.coverage.extend(Coverage.model_validate(row) for row in coverage)
     from extrude import workspace_links
