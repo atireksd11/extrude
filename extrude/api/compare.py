@@ -456,7 +456,33 @@ def _compare_audit(
         )
 
     if kind == "netlist":
-        parsed = parse_kicad_netlist(artifact)
+        try:
+            parsed = parse_kicad_netlist(artifact)
+        except ValueError as exc:
+            # Empty netlists stay unverified: the parser refuses to
+            # claim connectivity, and the audit must not claim a pass.
+            lane = CompareLane(
+                label="raw",
+                status="unverified",
+                percent=None,
+                passed=0,
+                out_of=0,
+                checks=[CheckRow(id="electrical_preflight", passed=None, detail=str(exc))],
+                netlist=artifact,
+                detail=str(exc),
+            )
+            return CompareResponse(
+                session_id=session_id,
+                status=lane.status,
+                mode="audit",
+                domain="electrical",
+                task_class="circuit",
+                tooling=tooling,
+                raw=lane,
+                harness=lane.model_copy(update={"label": "harness"}),
+                lift_points=None,
+                seconds=time.perf_counter() - started,
+            )
         report = run_electrical(parsed)
         has_wiring = bool(parsed.parts and parsed.pins)
         verdict = False if report.blocking else (True if has_wiring else None)
