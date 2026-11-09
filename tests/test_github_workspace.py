@@ -221,7 +221,7 @@ def test_core_workspace_workers_and_restart(pilot, monkeypatch):
             break
         time.sleep(.05)
     assert audit.state == "partial", audit
-    assert {row.rule_id for row in audit.findings} == {"pcb.position_changed", "pcb.pad_disconnected", "firmware.constant_changed"}
+    assert {row.rule_id for row in audit.findings} == {"pcb.position_changed", "pcb.pad_disconnected", "firmware.constant_changed", "design.kct.model_coverage", "design.kct.courtyard_missing"}
     assert all(row.status != "verified" for row in audit.findings)
     assert audit.findings[0].related[0].basis == "same_name"
     assert audit.findings[0].related[0].path == "electronics/main.kicad_sch"

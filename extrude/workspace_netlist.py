@@ -56,7 +56,10 @@ def read_netlist(data: bytes) -> dict:
             seen_pins.add((ref, pin))
             pins.append(dict(reference=ref, pad=pin, function=_string_field(node, "pinfunction")))
         nets[name] = pins
-    return dict(components=components, nets=nets)
+    if not components or not nets or not seen_pins:
+        raise ValueError("Empty netlist is unverified; no connectivity was checked.")
+    from extrude.netlist_rules import review
+    return dict(components=components, nets=nets, review=review(text))
 
 
 class Reader:

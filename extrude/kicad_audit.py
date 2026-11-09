@@ -47,6 +47,7 @@ def _environment(binary: str, folder: Path) -> dict[str, str]:
     config.mkdir(exist_ok=True)
     env.update({"PATH": str(Path(binary).parent) + os.pathsep + os.defpath,
                 "KICAD_CONFIG_HOME": str(config), "XDG_CONFIG_HOME": str(config),
+                "XDG_CACHE_HOME": str(folder / "cache"), "XDG_DATA_HOME": str(folder / "share"),
                 "HOME": str(folder), "USERPROFILE": str(folder), "APPDATA": str(config),
                 "LOCALAPPDATA": str(config), "TMP": str(folder), "TEMP": str(folder),
                 "LANG": "en_US.UTF-8", "LC_ALL": "C.UTF-8"})
@@ -126,7 +127,7 @@ def _violation(row: object, scope: str, path: str) -> dict:
             "scope": scope, "path": path, "items": normalized}
 
 
-def parse_report(data: bytes, check: str, path: str, sheets: dict[str, str]) -> Result:
+def parse_report(data: bytes, check: str, path: str, sheets: dict[str, str], *, requested_error_warning: bool = False) -> Result:
     report = json.loads(data.decode("utf-8-sig"))
     if not isinstance(report, dict):
         raise ValueError("Expected report object")
@@ -136,6 +137,10 @@ def parse_report(data: bytes, check: str, path: str, sheets: dict[str, str]) -> 
     if report.get("source") != PurePosixPath(path).name:
         raise ValueError("Native report source does not match the selected file")
     severities = report.get("included_severities")
+    if severities is None and requested_error_warning:
+        # KiCad 9 omits this metadata. Only our explicit CLI invocation may
+        # establish coverage; imported reports still fail closed.
+        severities = ["error", "warning"]
     if not isinstance(severities, list) or not {"error", "warning"}.issubset(severities):
         raise ValueError("Native error/warning coverage is missing")
     rows = []
@@ -186,7 +191,7 @@ def _execute(snapshot: Snapshot, path: str, check: str, sheets: dict[str, str], 
     with temporary_directory("report-") as folder:
         output = Path(folder) / "report.json"
         args = [binary, "sch" if check == "erc" else "pcb", check, "--format", "json",
-                "--exit-code-violations", "--output", str(output)]
+                "--exit-code-violations", "--severity-error", "--severity-warning", "--output", str(output)]
         if parity:
             args.append("--schematic-parity")
         args.append(str(safe_path(snapshot.root, path)))
@@ -203,7 +208,7 @@ def _execute(snapshot: Snapshot, path: str, check: str, sheets: dict[str, str], 
             result = {}
             for name in names:
                 try:
-                    result[name] = parse_report(data, name, path, sheets)
+                    result[name] = parse_report(data, name, path, sheets, requested_error_warning=True)
                 except (ValueError, KeyError, TypeError, RecursionError):
                     result[name] = Result("failed", f"KiCad {name.upper()} JSON is invalid or lacks required check coverage.")
             return result

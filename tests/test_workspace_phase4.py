@@ -62,6 +62,9 @@ def project(tmp_path, monkeypatch):
         pin_assignments=[dict(firmware_file="firmware/main.cpp",firmware_symbol="Pins::motor",netlist_file="a/board.kicad_sch",schematic_net="unconnected-(U1-OUT-Pad1)",mcu_ref="U1",numbering="package")])
     settings.save(repo, config)
     monkeypatch.setattr(audit.kicad_audit, "collect", lambda *_: ([], []))
+    # Explanation/relationship fixtures isolate all native and ingredient layers.
+    from extrude import design_audit
+    monkeypatch.setattr(design_audit, "collect", lambda *_: ([], []))
     monkeypatch.setattr(links.Reader, "get", lambda *_: read_netlist(NET))
     report = audit._descriptor(repo, head, base)
     audit._collect(report)

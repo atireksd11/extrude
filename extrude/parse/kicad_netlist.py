@@ -73,6 +73,8 @@ def parse_kicad_netlist(text: str) -> CircuitIR:
                     state="connected",
                 )
             )
+    if not parts or not pins or not nets:
+        raise ValueError("Empty netlist is unverified; no electrical connectivity was checked.")
     return CircuitIR(
         parts=parts,
         pins=pins,
