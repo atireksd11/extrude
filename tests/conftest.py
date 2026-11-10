@@ -33,7 +33,7 @@ def pytest_addoption(parser) -> None:  # noqa: ANN001
 
 
 def pytest_collection_modifyitems(items) -> None:  # noqa: ANN001
-    atlas = {"test_project_map_product.py", "test_stabilization.py", "test_github_history.py",
+    atlas = {"test_electrical_reasoning.py", "test_project_map_product.py", "test_stabilization.py", "test_github_history.py",
              "test_github_workspace.py", "test_kicad_pcb.py", "test_kicad_audit.py", "test_workspace_phase3.py", "test_workspace_phase4.py"}
     for item in items:
         item.add_marker("atlas" if item.path.name in atlas else "legacy")

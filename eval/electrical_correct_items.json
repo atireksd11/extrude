@@ -1,0 +1,168 @@
+{
+  "method": "There are no separate PASS-group repositories. These are the user-supplied Correct items inside the SAME seven defect repositories at the SAME pinned SHAs. Each emitted finding is reviewed against these items. The allowed finding patterns below record non-conflicting defect claims, not runtime rule exceptions. Any unreviewed/new finding fails this false-flag gate pending review.",
+  "repositories": [
+    {
+      "repo": "esp-rs/esp-rust-board",
+      "sha": "5552bea5ae95a0de4bb136b2a53e4c048b56dd49",
+      "correct_items": [
+        "ESP32-C3 I2C with 10k pull-ups",
+        "USB-C with 5.1k CC pull-downs",
+        "D+/D- to U3 pins 27/26 with TVS",
+        "shield via R5 to GND",
+        "U3 NC pads",
+        "U2 RESV pads",
+        "D9 DOUT unconnected for single LED",
+        "J1 SBU1/SBU2 unconnected for USB 2.0",
+        "U4 header SPI pins broken out only",
+        "U1 SHTC3 EXP pad to GND",
+        "power-OR diodes",
+        "MCP73831 charger wiring",
+        "SW1 RESET / SW2 BOOT with pull-ups"
+      ],
+      "reviewed_nonconflicting_findings": {
+        "electrical.clock": [
+          "^Y1: crystal assembly is incomplete"
+        ]
+      }
+    },
+    {
+      "repo": "Neotron-Compute/Neotron-Pico",
+      "sha": "85418d6f60ce2ad1edcb914e59545fd9f991bb9b",
+      "correct_items": [
+        "VGA R2R ladders",
+        "TLV320AIC23B codec I2C mode MODE/CS to GND and 12MHz crystal",
+        "MCP23S17 INTB not INTA",
+        "Pico 3V3/3V3_EN/ADC_VREF/SWD unconnected",
+        "Q201/JP201 power path",
+        "SPI MISO combining via 0R",
+        "74HC138 enables",
+        "expansion-slot EEPROM addresses unique",
+        "connector-side DDC pull-ups R405/R406",
+        "RTC crystal with DNF caps",
+        "reverse-polarity FET power",
+        "connector NC pins"
+      ],
+      "reviewed_nonconflicting_findings": {
+        "electrical.pullup": [
+          "^U1001: PB[67] .*no external pull-up"
+        ],
+        "electrical.models": [
+          "3D STEP file .*does not resolve"
+        ]
+      }
+    },
+    {
+      "repo": "aronreid/ups-to-esp32",
+      "sha": "8b607d55b22a3b87fba569c61781188e9781fece",
+      "correct_items": [
+        "firmware VBUS_EN GPIO4 / VBUS_FAULT GPIO5 / LEDs GPIO48/47 / I2C GPIO8/9 / BOOT GPIO0",
+        "CH340C V3 to 3.3V and floating unused handshake pins",
+        "auto-reset Q1/Q2 cross-coupled circuit",
+        "AP2171W with R11 pull-down / R12 pull-up",
+        "USB-C CC 5.1k pull-downs",
+        "SBU unconnected",
+        "AP2114H dropout and bulk caps",
+        "LED polarity",
+        "J5 expansion electrical wiring"
+      ],
+      "reviewed_nonconflicting_findings": {
+        "electrical.capacitor": [
+          "^C7: .*79.4%"
+        ],
+        "electrical.assembly": [
+          "^J[35]: is omitted"
+        ]
+      }
+    },
+    {
+      "repo": "gcormier/megadesk",
+      "sha": "8ab3f6d0ce9593610484be577eccb80c1d576875",
+      "correct_items": [
+        "firmware PB0/PB1 buttons / PA7 buzzer / PA1/PA2 LIN UART / PA4/PA5 debug UART",
+        "LIN pull-up via D1/D2/R6",
+        "D3 SMF33A TVS",
+        "J3 ISP sharing via 1k resistors",
+        "7812/HT7550 power dissipation",
+        "U4-8 VREN unconnected",
+        "U3-5 PB2 unconnected",
+        "J2 FFC unused pins"
+      ],
+      "reviewed_nonconflicting_findings": {
+        "electrical.assembly": [
+          "^U2: symbol .*HT7550-1"
+        ]
+      }
+    },
+    {
+      "repo": "beekeeb/piantor",
+      "sha": "237ae92738af27e34bc5353903e42a68af22f32d",
+      "correct_items": [
+        "direct-pin keys without matrix or diodes",
+        "TRRS crossing left tx pin4/rx pin1 and right tx pin1/rx pin4 with shared VSYS/GND",
+        "Pico RUN and 3V3_EN unconnected with on-module pull-ups",
+        "GP26/27/29 unused",
+        "3V3 OUT unconnected",
+        "duplicate keyswitch pads connected"
+      ],
+      "reviewed_nonconflicting_findings": {
+        "electrical.assembly": [
+          "^J1: connector symbol has resistor footprint"
+        ],
+        "electrical.divider": [
+          "^U2: pin 34 GPIO28_ADC2 .*3.37V"
+        ]
+      }
+    },
+    {
+      "repo": "Pippadi/combadge",
+      "sha": "d9708cd28ed40a150a666db1b3b7e80358dbff34",
+      "correct_items": [
+        "firmware LED / mic I2S / speaker I2S and enable / touch / UART / native USB pins match hardware",
+        "SPH0645 SEL grounded for left channel",
+        "MAX98357 NC pins and gain resistor",
+        "MCP73831 PROG 4k = 250mA",
+        "SW1 SPDT power switch",
+        "SW3 EN pull-up and RC delay",
+        "SW2 BOOT GPIO0 internal pull-up",
+        "U3 pin4 NC",
+        "J1 pin4 ID unconnected"
+      ],
+      "reviewed_nonconflicting_findings": {
+        "electrical.protection": [
+          "^J4: SHIELD is unconnected",
+          "^J4: D\\+/D- have no identifiable external ESD"
+        ],
+        "electrical.models": [
+          "3D STEP file .*does not resolve"
+        ]
+      }
+    },
+    {
+      "repo": "larry-wong/tiny_sensor",
+      "sha": "5fe0756383225ca80fee7981360e2dd1f234154d",
+      "correct_items": [
+        "ESPHome I2C GPIO11/10 with 10k pull-ups / UART GPIO47/48 / status LED GPIO12 through R3 / IR_PIN GPIO14 through R2",
+        "HDC1080 NC pins",
+        "unused GPIOs",
+        "J3 SBU unconnected",
+        "J2-1 OUT unconnected when UART used",
+        "EN pull-up",
+        "AMS1117 caps",
+        "J3 shield to GND",
+        "strapping pins floating"
+      ],
+      "reviewed_nonconflicting_findings": {
+        "electrical.switch": [
+          "^Q1: base B is grounded while emitter E is driven"
+        ],
+        "electrical.usb": [
+          "^J3: CC[12] has no independent",
+          "^J3: D[+-] routes .*UART"
+        ],
+        "electrical.protection": [
+          "^J3: D\\+/D- have no identifiable external ESD"
+        ]
+      }
+    }
+  ]
+}

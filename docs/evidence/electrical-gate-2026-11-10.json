@@ -1,0 +1,2030 @@
+{
+  "engine": "whole-design electrical_reasoning.collect",
+  "new_repositories_score": "11/13",
+  "shashvat_score": "4/4",
+  "pass_group": {
+    "method": "There are no separate PASS-group repositories. These are the user-supplied Correct items inside the SAME seven defect repositories at the SAME pinned SHAs. Each emitted finding is reviewed against these items. The allowed finding patterns below record non-conflicting defect claims, not runtime rule exceptions. Any unreviewed/new finding fails this false-flag gate pending review.",
+    "false_flags": 0,
+    "correct_items_reviewed": 66,
+    "reviews": [
+      {
+        "repo": "esp-rs/esp-rust-board",
+        "sha": "5552bea5ae95a0de4bb136b2a53e4c048b56dd49",
+        "correct_items": [
+          "ESP32-C3 I2C with 10k pull-ups",
+          "USB-C with 5.1k CC pull-downs",
+          "D+/D- to U3 pins 27/26 with TVS",
+          "shield via R5 to GND",
+          "U3 NC pads",
+          "U2 RESV pads",
+          "D9 DOUT unconnected for single LED",
+          "J1 SBU1/SBU2 unconnected for USB 2.0",
+          "U4 header SPI pins broken out only",
+          "U1 SHTC3 EXP pad to GND",
+          "power-OR diodes",
+          "MCP73831 charger wiring",
+          "SW1 RESET / SW2 BOOT with pull-ups"
+        ],
+        "conflicting_or_unreviewed_findings": []
+      },
+      {
+        "repo": "Neotron-Compute/Neotron-Pico",
+        "sha": "85418d6f60ce2ad1edcb914e59545fd9f991bb9b",
+        "correct_items": [
+          "VGA R2R ladders",
+          "TLV320AIC23B codec I2C mode MODE/CS to GND and 12MHz crystal",
+          "MCP23S17 INTB not INTA",
+          "Pico 3V3/3V3_EN/ADC_VREF/SWD unconnected",
+          "Q201/JP201 power path",
+          "SPI MISO combining via 0R",
+          "74HC138 enables",
+          "expansion-slot EEPROM addresses unique",
+          "connector-side DDC pull-ups R405/R406",
+          "RTC crystal with DNF caps",
+          "reverse-polarity FET power",
+          "connector NC pins"
+        ],
+        "conflicting_or_unreviewed_findings": []
+      },
+      {
+        "repo": "aronreid/ups-to-esp32",
+        "sha": "8b607d55b22a3b87fba569c61781188e9781fece",
+        "correct_items": [
+          "firmware VBUS_EN GPIO4 / VBUS_FAULT GPIO5 / LEDs GPIO48/47 / I2C GPIO8/9 / BOOT GPIO0",
+          "CH340C V3 to 3.3V and floating unused handshake pins",
+          "auto-reset Q1/Q2 cross-coupled circuit",
+          "AP2171W with R11 pull-down / R12 pull-up",
+          "USB-C CC 5.1k pull-downs",
+          "SBU unconnected",
+          "AP2114H dropout and bulk caps",
+          "LED polarity",
+          "J5 expansion electrical wiring"
+        ],
+        "conflicting_or_unreviewed_findings": []
+      },
+      {
+        "repo": "gcormier/megadesk",
+        "sha": "8ab3f6d0ce9593610484be577eccb80c1d576875",
+        "correct_items": [
+          "firmware PB0/PB1 buttons / PA7 buzzer / PA1/PA2 LIN UART / PA4/PA5 debug UART",
+          "LIN pull-up via D1/D2/R6",
+          "D3 SMF33A TVS",
+          "J3 ISP sharing via 1k resistors",
+          "7812/HT7550 power dissipation",
+          "U4-8 VREN unconnected",
+          "U3-5 PB2 unconnected",
+          "J2 FFC unused pins"
+        ],
+        "conflicting_or_unreviewed_findings": []
+      },
+      {
+        "repo": "beekeeb/piantor",
+        "sha": "237ae92738af27e34bc5353903e42a68af22f32d",
+        "correct_items": [
+          "direct-pin keys without matrix or diodes",
+          "TRRS crossing left tx pin4/rx pin1 and right tx pin1/rx pin4 with shared VSYS/GND",
+          "Pico RUN and 3V3_EN unconnected with on-module pull-ups",
+          "GP26/27/29 unused",
+          "3V3 OUT unconnected",
+          "duplicate keyswitch pads connected"
+        ],
+        "conflicting_or_unreviewed_findings": []
+      },
+      {
+        "repo": "Pippadi/combadge",
+        "sha": "d9708cd28ed40a150a666db1b3b7e80358dbff34",
+        "correct_items": [
+          "firmware LED / mic I2S / speaker I2S and enable / touch / UART / native USB pins match hardware",
+          "SPH0645 SEL grounded for left channel",
+          "MAX98357 NC pins and gain resistor",
+          "MCP73831 PROG 4k = 250mA",
+          "SW1 SPDT power switch",
+          "SW3 EN pull-up and RC delay",
+          "SW2 BOOT GPIO0 internal pull-up",
+          "U3 pin4 NC",
+          "J1 pin4 ID unconnected"
+        ],
+        "conflicting_or_unreviewed_findings": []
+      },
+      {
+        "repo": "larry-wong/tiny_sensor",
+        "sha": "5fe0756383225ca80fee7981360e2dd1f234154d",
+        "correct_items": [
+          "ESPHome I2C GPIO11/10 with 10k pull-ups / UART GPIO47/48 / status LED GPIO12 through R3 / IR_PIN GPIO14 through R2",
+          "HDC1080 NC pins",
+          "unused GPIOs",
+          "J3 SBU unconnected",
+          "J2-1 OUT unconnected when UART used",
+          "EN pull-up",
+          "AMS1117 caps",
+          "J3 shield to GND",
+          "strapping pins floating"
+        ],
+        "conflicting_or_unreviewed_findings": []
+      }
+    ],
+    "conflicts": []
+  },
+  "acceptance": "MEETS measured gate: >=10/13, 4/4, zero Correct-list false flags",
+  "still_open": [
+    "Item 5 partial: J3/J5 omitted; SW1/SW2 present at pinned SHA, no credit",
+    "Item 9: cutoff polarity lacks sourced operating limits"
+  ],
+  "scoring": "Reference/pin AND specific problem required; partial item 5 gets no credit. Suggestions count only when they name the problem; they remain suggestions in audit output.",
+  "checklist": [
+    {
+      "item": 1,
+      "repo": "esp-rs/esp-rust-board",
+      "caught": true,
+      "finding_indices": [
+        0
+      ]
+    },
+    {
+      "item": 2,
+      "repo": "Neotron-Compute/Neotron-Pico",
+      "caught": true,
+      "finding_indices": [
+        0,
+        1
+      ]
+    },
+    {
+      "item": 3,
+      "repo": "Neotron-Compute/Neotron-Pico",
+      "caught": true,
+      "finding_indices": [
+        2,
+        3,
+        4,
+        5
+      ]
+    },
+    {
+      "item": 4,
+      "repo": "aronreid/ups-to-esp32",
+      "caught": true,
+      "finding_indices": [
+        0
+      ]
+    },
+    {
+      "item": 5,
+      "repo": "aronreid/ups-to-esp32",
+      "caught": false,
+      "finding_indices": [
+        1,
+        2
+      ]
+    },
+    {
+      "item": 6,
+      "repo": "gcormier/megadesk",
+      "caught": true,
+      "finding_indices": [
+        0,
+        1
+      ]
+    },
+    {
+      "item": 7,
+      "repo": "beekeeb/piantor",
+      "caught": true,
+      "finding_indices": [
+        0,
+        2
+      ]
+    },
+    {
+      "item": 8,
+      "repo": "beekeeb/piantor",
+      "caught": true,
+      "finding_indices": [
+        1,
+        3
+      ]
+    },
+    {
+      "item": 9,
+      "repo": "Pippadi/combadge",
+      "caught": false,
+      "finding_indices": []
+    },
+    {
+      "item": 10,
+      "repo": "Pippadi/combadge",
+      "caught": true,
+      "finding_indices": [
+        0,
+        1
+      ]
+    },
+    {
+      "item": 11,
+      "repo": "larry-wong/tiny_sensor",
+      "caught": true,
+      "finding_indices": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "item": 12,
+      "repo": "larry-wong/tiny_sensor",
+      "caught": true,
+      "finding_indices": [
+        1,
+        2,
+        3,
+        4
+      ]
+    },
+    {
+      "item": 13,
+      "repo": "larry-wong/tiny_sensor",
+      "caught": true,
+      "finding_indices": [
+        0
+      ]
+    },
+    {
+      "item": "S1",
+      "repo": "Shashvat1333/Bluetooth-Audio-Transmiter",
+      "caught": true,
+      "finding_indices": [
+        2
+      ]
+    },
+    {
+      "item": "S2",
+      "repo": "Shashvat1333/Bluetooth-Audio-Transmiter",
+      "caught": true,
+      "finding_indices": [
+        0,
+        1,
+        3
+      ]
+    },
+    {
+      "item": "S3",
+      "repo": "Shashvat1333/Bluetooth-Audio-Transmiter",
+      "caught": true,
+      "finding_indices": [
+        0,
+        1,
+        3
+      ]
+    },
+    {
+      "item": "S4",
+      "repo": "Shashvat1333/Bluetooth-Audio-Transmiter",
+      "caught": true,
+      "finding_indices": [
+        0,
+        1,
+        3
+      ]
+    }
+  ],
+  "repositories": {
+    "esp-rs/esp-rust-board": {
+      "sha": "5552bea5ae95a0de4bb136b2a53e4c048b56dd49",
+      "findings": [
+        {
+          "rule_id": "electrical.clock",
+          "domain": "schematic",
+          "status": "verified",
+          "severity": "warning",
+          "summary": "Y1: crystal assembly is incomplete: BOM included=False, fitted=True, footprint=Crystal:Crystal_SMD_3215-2Pin_3.2x1.5mm; missing/unvalued/DNP load capacitors: C12, C13. Fit the crystal and specified load capacitors, or document an internal-clock configuration.",
+          "lifecycle": "present_at_head",
+          "evidence": [
+            {
+              "id": "f950a02ef06626fb640e7a4b",
+              "repo_id": "esp-rs/esp-rust-board",
+              "sha": "5552bea5ae95a0de4bb136b2a53e4c048b56dd49",
+              "path": "hardware/esp-rust-board/esp-rust-board.kicad_sch",
+              "locator": "Y1 (32.768Hz) pin 1 1, pin 2 2"
+            }
+          ]
+        }
+      ],
+      "coverage": [
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical graph",
+          "tool": "offline net graph",
+          "outcome": "ran",
+          "detail": "Analyzed 115 placed symbols and 63 nets from embedded geometry; no kicad-cli used."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical usb",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical divider",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical capacitor",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical clock",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical assembly",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical switch",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical pullup",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical protection",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical polarity",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "hardware/esp-rust-board/esp-rust-board.kicad_pcb",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: external library model ${KICAD6_3DMODEL_DIR}/Crystal.3dshapes/Crystal_SMD_SeikoEpson_TSX3225-4Pin_3.2x2.5mm.step"
+        },
+        {
+          "path": "hardware/esp-rust-board/esp-rust-board.kicad_pcb",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: external library model ${ESPRESSIF_3DMODELS}/ESP32-C3-MINI-1.STEP"
+        },
+        {
+          "path": "hardware/esp-rust-board/esp-rust-board.kicad_pcb",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: external library model ${RUST3D}/PTS810SJK250SMTRLFS.step"
+        },
+        {
+          "path": "hardware/esp-rust-board/esp-rust-board.kicad_pcb",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: external library model ${RUST3D}/ICM-42670-P.step"
+        },
+        {
+          "path": "hardware/esp-rust-board/esp-rust-board.kicad_pcb",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: external library model ${RUST3D}/SHTC3.step"
+        },
+        {
+          "path": "hardware/esp-rust-board/esp-rust-board.kicad_pcb",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: external library model ${RUST3D}/USB4105-GF-A.step"
+        },
+        {
+          "path": "hardware/esp-rust-board/esp-rust-board.kicad_pcb",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: external library model ${RUST3D}/WS2812B-MINI.step"
+        },
+        {
+          "path": "hardware/esp-rust-board/esp-rust-board.kicad_pcb",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: external library model ${RUST3D}/SOD-882.step"
+        },
+        {
+          "path": "kicad_libs/Rust_Board.pretty/GCT_USB4105-GF-A.kicad_mod",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: external library model ${RUST3D}/USB4105-GF-A.step"
+        },
+        {
+          "path": "kicad_libs/Rust_Board.pretty/SON100P200X200X80-5N.kicad_mod",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: external library model ${RUST3D}/SHTC3.step"
+        }
+      ]
+    },
+    "Neotron-Compute/Neotron-Pico": {
+      "sha": "85418d6f60ce2ad1edcb914e59545fd9f991bb9b",
+      "findings": [
+        {
+          "rule_id": "electrical.pullup",
+          "domain": "schematic",
+          "status": "suggestion",
+          "severity": "warning",
+          "summary": "U1001: PB6 (PB6/BMC_SCL/DDC_SCL/I2C_SCL) has no external pull-up to a known supply. I2C/DDC open-drain signaling requires pull-ups; fit them or document pull-ups on the connected module.",
+          "lifecycle": "present_at_head",
+          "evidence": [
+            {
+              "id": "081a0cc0c53058cd7f3e2897",
+              "repo_id": "Neotron-Compute/Neotron-Pico",
+              "sha": "85418d6f60ce2ad1edcb914e59545fd9f991bb9b",
+              "path": "Kicad/bmc.kicad_sch",
+              "locator": "U1001 (STM32F030K6T6) pin 29 PB6"
+            }
+          ]
+        },
+        {
+          "rule_id": "electrical.pullup",
+          "domain": "schematic",
+          "status": "suggestion",
+          "severity": "warning",
+          "summary": "U1001: PB7 (PB7/BMC_SDA/DDC_SDA/I2C_SDA) has no external pull-up to a known supply. I2C/DDC open-drain signaling requires pull-ups; fit them or document pull-ups on the connected module.",
+          "lifecycle": "present_at_head",
+          "evidence": [
+            {
+              "id": "c73422b48130442e1157c637",
+              "repo_id": "Neotron-Compute/Neotron-Pico",
+              "sha": "85418d6f60ce2ad1edcb914e59545fd9f991bb9b",
+              "path": "Kicad/bmc.kicad_sch",
+              "locator": "U1001 (STM32F030K6T6) pin 30 PB7"
+            }
+          ]
+        },
+        {
+          "rule_id": "electrical.models",
+          "domain": "schematic",
+          "status": "verified",
+          "severity": "warning",
+          "summary": "J903: referenced 3D STEP file ${KIPRJMOD}/Models/5-5530843-0--3DModel-STEP-1.STEP does not resolve at Kicad/Models/5-5530843-0--3DModel-STEP-1.STEP. Correct the path/case or include the model.",
+          "lifecycle": "present_at_head",
+          "evidence": [
+            {
+              "id": "24daa4b138ec1c724a575f82",
+              "repo_id": "Neotron-Compute/Neotron-Pico",
+              "sha": "85418d6f60ce2ad1edcb914e59545fd9f991bb9b",
+              "path": "Kicad/neotron-pico.kicad_pcb",
+              "locator": "J903 () "
+            },
+            {
+              "id": "5bc6b1a9f8a6f83ab4bbff4f",
+              "repo_id": "Neotron-Compute/Neotron-Pico",
+              "sha": "85418d6f60ce2ad1edcb914e59545fd9f991bb9b",
+              "path": "Kicad/neotron-pico.kicad_pcb",
+              "locator": "${KIPRJMOD}/Models/5-5530843-0--3DModel-STEP-1.STEP"
+            }
+          ]
+        },
+        {
+          "rule_id": "electrical.models",
+          "domain": "schematic",
+          "status": "verified",
+          "severity": "warning",
+          "summary": "J1101: referenced 3D STEP file ${KIPRJMOD}/CM4_MATX.3dshapes/GSD090012SEU.stp does not resolve at Kicad/CM4_MATX.3dshapes/GSD090012SEU.stp. Correct the path/case or include the model.",
+          "lifecycle": "present_at_head",
+          "evidence": [
+            {
+              "id": "1c545745c1369f60debe4357",
+              "repo_id": "Neotron-Compute/Neotron-Pico",
+              "sha": "85418d6f60ce2ad1edcb914e59545fd9f991bb9b",
+              "path": "Kicad/neotron-pico.kicad_pcb",
+              "locator": "J1101 () "
+            },
+            {
+              "id": "9dcf2d4a86acd7919b808ef8",
+              "repo_id": "Neotron-Compute/Neotron-Pico",
+              "sha": "85418d6f60ce2ad1edcb914e59545fd9f991bb9b",
+              "path": "Kicad/neotron-pico.kicad_pcb",
+              "locator": "${KIPRJMOD}/CM4_MATX.3dshapes/GSD090012SEU.stp"
+            }
+          ]
+        },
+        {
+          "rule_id": "electrical.models",
+          "domain": "schematic",
+          "status": "verified",
+          "severity": "warning",
+          "summary": "U802: referenced 3D STEP file ${KIPRJMOD}/Models/STX-4335-5BGP-S1_rB3.STEP does not resolve at Kicad/Models/STX-4335-5BGP-S1_rB3.STEP. Correct the path/case or include the model.",
+          "lifecycle": "present_at_head",
+          "evidence": [
+            {
+              "id": "d701b93e06d53f6045c411bf",
+              "repo_id": "Neotron-Compute/Neotron-Pico",
+              "sha": "85418d6f60ce2ad1edcb914e59545fd9f991bb9b",
+              "path": "Kicad/neotron-pico.kicad_pcb",
+              "locator": "U802 () "
+            },
+            {
+              "id": "9e949318b0c8e6b4d6952099",
+              "repo_id": "Neotron-Compute/Neotron-Pico",
+              "sha": "85418d6f60ce2ad1edcb914e59545fd9f991bb9b",
+              "path": "Kicad/neotron-pico.kicad_pcb",
+              "locator": "${KIPRJMOD}/Models/STX-4335-5BGP-S1_rB3.STEP"
+            }
+          ]
+        },
+        {
+          "rule_id": "electrical.models",
+          "domain": "schematic",
+          "status": "verified",
+          "severity": "warning",
+          "summary": "J1007: referenced 3D STEP file ${KIPRJMOD}/Models/KMDGX-6S-6S-S4N_rB8.STEP does not resolve at Kicad/Models/KMDGX-6S-6S-S4N_rB8.STEP. Correct the path/case or include the model.",
+          "lifecycle": "present_at_head",
+          "evidence": [
+            {
+              "id": "aedb8baba6f3f9f964c83786",
+              "repo_id": "Neotron-Compute/Neotron-Pico",
+              "sha": "85418d6f60ce2ad1edcb914e59545fd9f991bb9b",
+              "path": "Kicad/neotron-pico.kicad_pcb",
+              "locator": "J1007 () "
+            },
+            {
+              "id": "e4c90320444ea2b4bd047e25",
+              "repo_id": "Neotron-Compute/Neotron-Pico",
+              "sha": "85418d6f60ce2ad1edcb914e59545fd9f991bb9b",
+              "path": "Kicad/neotron-pico.kicad_pcb",
+              "locator": "${KIPRJMOD}/Models/KMDGX-6S-6S-S4N_rB8.STEP"
+            }
+          ]
+        }
+      ],
+      "coverage": [
+        {
+          "path": "Kicad/dac4.kicad_sch",
+          "domain": "schematic",
+          "check": "Electrical graph",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: repeated sheet instances require placement-specific references. This sheet is excluded; other sheets are analyzed."
+        },
+        {
+          "path": "Kicad/bmc.kicad_sch",
+          "domain": "schematic",
+          "check": "Electrical pullup",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: U1001 pin 4 NRST has no external pull-up; datasheet/internal pull-up and strap polarity are required before a verdict."
+        },
+        {
+          "path": "Kicad/rtc.kicad_sch",
+          "domain": "schematic",
+          "check": "Electrical clock",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: Y1201 has optional/unvalued external load capacitors; integrated load capacitance must be checked in the oscillator documentation before a defect verdict."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical graph",
+          "tool": "offline net graph",
+          "outcome": "ran",
+          "detail": "Analyzed 372 placed symbols and 218 nets from embedded geometry; no kicad-cli used."
+        },
+        {
+          "path": "Kicad/video12.kicad_sch",
+          "domain": "schematic",
+          "check": "Electrical graph",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: unresolved sheet port dac4.kicad_sch:ANALOG_OUT."
+        },
+        {
+          "path": "Kicad/video12.kicad_sch",
+          "domain": "schematic",
+          "check": "Electrical graph",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: unresolved sheet port dac4.kicad_sch:DIGITAL_IN[0..3]."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical usb",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical divider",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical capacitor",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical clock",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical assembly",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical switch",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical pullup",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical protection",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical polarity",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical graph",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: some hierarchy could not be analyzed."
+        }
+      ]
+    },
+    "aronreid/ups-to-esp32": {
+      "sha": "8b607d55b22a3b87fba569c61781188e9781fece",
+      "findings": [
+        {
+          "rule_id": "electrical.capacitor",
+          "domain": "schematic",
+          "status": "verified",
+          "severity": "warning",
+          "summary": "C7: 100uF 6.3V sees 5V (79.4% of 6.3V rating), above the 70% derating limit. Select a higher voltage rating.",
+          "lifecycle": "present_at_head",
+          "evidence": [
+            {
+              "id": "a4fd9655ef95b22376ab1f53",
+              "repo_id": "aronreid/ups-to-esp32",
+              "sha": "8b607d55b22a3b87fba569c61781188e9781fece",
+              "path": "hardware/kicad/ups-adaptor.kicad_sch",
+              "locator": "C7 (100uF 6.3V) pin 1 , pin 2 "
+            }
+          ]
+        },
+        {
+          "rule_id": "electrical.assembly",
+          "domain": "schematic",
+          "status": "verified",
+          "severity": "warning",
+          "summary": "J3: is omitted from hardware/bom/bom.csv reference column Designator. Add its fitted part or explicitly mark the assembly exclusion.",
+          "lifecycle": "present_at_head",
+          "evidence": [
+            {
+              "id": "0b7983e3392830c1a4c012c2",
+              "repo_id": "aronreid/ups-to-esp32",
+              "sha": "8b607d55b22a3b87fba569c61781188e9781fece",
+              "path": "hardware/kicad/ups-adaptor.kicad_sch",
+              "locator": "J3 (OLED (optional)) "
+            },
+            {
+              "id": "f39ba5fd28130380b2f1d545",
+              "repo_id": "aronreid/ups-to-esp32",
+              "sha": "8b607d55b22a3b87fba569c61781188e9781fece",
+              "path": "hardware/bom/bom.csv",
+              "locator": "Designator"
+            }
+          ]
+        },
+        {
+          "rule_id": "electrical.assembly",
+          "domain": "schematic",
+          "status": "verified",
+          "severity": "warning",
+          "summary": "J5: is omitted from hardware/bom/bom.csv reference column Designator. Add its fitted part or explicitly mark the assembly exclusion.",
+          "lifecycle": "present_at_head",
+          "evidence": [
+            {
+              "id": "92852edd823cbdc6726b49b1",
+              "repo_id": "aronreid/ups-to-esp32",
+              "sha": "8b607d55b22a3b87fba569c61781188e9781fece",
+              "path": "hardware/kicad/ups-adaptor.kicad_sch",
+              "locator": "J5 (expansion) "
+            },
+            {
+              "id": "f39ba5fd28130380b2f1d545",
+              "repo_id": "aronreid/ups-to-esp32",
+              "sha": "8b607d55b22a3b87fba569c61781188e9781fece",
+              "path": "hardware/bom/bom.csv",
+              "locator": "Designator"
+            }
+          ]
+        }
+      ],
+      "coverage": [
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical graph",
+          "tool": "offline net graph",
+          "outcome": "ran",
+          "detail": "Analyzed 91 placed symbols and 61 nets from embedded geometry; no kicad-cli used."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical usb",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical divider",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical capacitor",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical clock",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical assembly",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical switch",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical pullup",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical protection",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical polarity",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "hardware/kicad/ups-adaptor.kicad_pcb",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/RF_Module.3dshapes/ESP32-S3-WROOM-1.step"
+        },
+        {
+          "path": "hardware/kicad/ups-adaptor.kicad_pcb",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0805_2012Metric.step"
+        },
+        {
+          "path": "hardware/kicad/ups-adaptor.kicad_pcb",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_1206_3216Metric.step"
+        },
+        {
+          "path": "hardware/kicad/ups-adaptor.kicad_pcb",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0402_1005Metric.step"
+        },
+        {
+          "path": "hardware/kicad/ups-adaptor.kicad_pcb",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0402_1005Metric.step"
+        },
+        {
+          "path": "hardware/kicad/ups-adaptor.kicad_pcb",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Package_SO.3dshapes/SOIC-16_3.9x9.9mm_P1.27mm.step"
+        },
+        {
+          "path": "hardware/kicad/ups-adaptor.kicad_pcb",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Button_Switch_SMD.3dshapes/SW_Push_1P1T_XKB_TS-1187A.step"
+        },
+        {
+          "path": "hardware/kicad/ups-adaptor.kicad_pcb",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x07_P2.54mm_Vertical.step"
+        },
+        {
+          "path": "hardware/kicad/ups-adaptor.kicad_pcb",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/LED_SMD.3dshapes/LED_0603_1608Metric.step"
+        },
+        {
+          "path": "hardware/kicad/ups-adaptor.kicad_pcb",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Package_TO_SOT_SMD.3dshapes/SOT-23-6.step"
+        },
+        {
+          "path": "hardware/kicad/ups-adaptor.kicad_pcb",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Connector_USB.3dshapes/USB_A_Receptacle_XKB_U231-091N-4BLRA00-S.step"
+        },
+        {
+          "path": "hardware/kicad/ups-adaptor.kicad_pcb",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Package_TO_SOT_SMD.3dshapes/SOT-23.step"
+        },
+        {
+          "path": "hardware/kicad/ups-adaptor.kicad_pcb",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Connector_USB.3dshapes/USB_C_Receptacle_HRO_TYPE-C-31-M-12.step"
+        },
+        {
+          "path": "hardware/kicad/ups-adaptor.kicad_pcb",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Package_TO_SOT_SMD.3dshapes/SOT-23-5.step"
+        },
+        {
+          "path": "hardware/kicad/ups-adaptor.kicad_pcb",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x04_P2.54mm_Vertical.step"
+        },
+        {
+          "path": "hardware/kicad/ups-adaptor.kicad_pcb",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Package_TO_SOT_SMD.3dshapes/SOT-223.step"
+        },
+        {
+          "path": "hardware/kicad/ups-adaptor.kicad_pcb",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Fuse.3dshapes/Fuse_1206_3216Metric.step"
+        }
+      ]
+    },
+    "gcormier/megadesk": {
+      "sha": "8ab3f6d0ce9593610484be577eccb80c1d576875",
+      "findings": [
+        {
+          "rule_id": "electrical.assembly",
+          "domain": "schematic",
+          "status": "verified",
+          "severity": "warning",
+          "summary": "U2: symbol Regulator_Linear:MCP1700x-120xxMB (250mA Low Quiscent Current LDO, 1.2V output, SOT-89) disagrees with fitted Value HT7550-1; output voltage and pin compatibility are not established. Use the fitted regulator symbol and verify its documented output.",
+          "lifecycle": "present_at_head",
+          "evidence": [
+            {
+              "id": "fd1e41d587625c203b057c1d",
+              "repo_id": "gcormier/megadesk",
+              "sha": "8ab3f6d0ce9593610484be577eccb80c1d576875",
+              "path": "pcb/megadesk.kicad_sch",
+              "locator": "U2 (HT7550-1) pin 1 GND, pin 2 VI, pin 3 VO"
+            }
+          ]
+        },
+        {
+          "rule_id": "electrical.assembly",
+          "domain": "schematic",
+          "status": "verified",
+          "severity": "warning",
+          "summary": "U2: symbol specifies 1.2V output but fitted Value is HT7550-1 and output pin 3 VO is on a 5V net. The symbol and intended fitted output disagree. Select the fitted part symbol and verify its output and pinout.",
+          "lifecycle": "present_at_head",
+          "evidence": [
+            {
+              "id": "a2874e4ac50567b7f2c752c5",
+              "repo_id": "gcormier/megadesk",
+              "sha": "8ab3f6d0ce9593610484be577eccb80c1d576875",
+              "path": "pcb/megadesk.kicad_sch",
+              "locator": "U2 (HT7550-1) pin 3 VO"
+            }
+          ]
+        }
+      ],
+      "coverage": [
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical graph",
+          "tool": "offline net graph",
+          "outcome": "ran",
+          "detail": "Analyzed 55 placed symbols and 31 nets from embedded geometry; no kicad-cli used."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical usb",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical divider",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical capacitor",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical clock",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical assembly",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical switch",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical pullup",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical protection",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical polarity",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        }
+      ]
+    },
+    "beekeeb/piantor": {
+      "sha": "237ae92738af27e34bc5353903e42a68af22f32d",
+      "findings": [
+        {
+          "rule_id": "electrical.assembly",
+          "domain": "schematic",
+          "status": "verified",
+          "severity": "warning",
+          "summary": "J1: connector symbol has resistor footprint Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder; its pads/mechanics cannot implement this jack. Assign the connector footprint.",
+          "lifecycle": "present_at_head",
+          "evidence": [
+            {
+              "id": "7305271f7005889c47698c2d",
+              "repo_id": "beekeeb/piantor",
+              "sha": "237ae92738af27e34bc5353903e42a68af22f32d",
+              "path": "pcb/left/keyboard_pcb.kicad_sch",
+              "locator": "J1 (TRRS) pin 1 SLEEVE, pin 2 TIP, pin 3 RING1, pin 4 RING2"
+            }
+          ]
+        },
+        {
+          "rule_id": "electrical.divider",
+          "domain": "schematic",
+          "status": "verified",
+          "severity": "warning",
+          "summary": "U2: pin 34 GPIO28_ADC2 divider R1=5k6/R2=10k produces 3.37V at 5.25V input, above the declared 3.3V ADC reference/supply. Change the divider ratio and check pin absolute maximum in the datasheet.",
+          "lifecycle": "present_at_head",
+          "evidence": [
+            {
+              "id": "90868659d772a8bf93c67af1",
+              "repo_id": "beekeeb/piantor",
+              "sha": "237ae92738af27e34bc5353903e42a68af22f32d",
+              "path": "pcb/left/keyboard_pcb.kicad_sch",
+              "locator": "U2 (Pico) pin 34 GPIO28_ADC2"
+            },
+            {
+              "id": "681747f9205518a803cc84b9",
+              "repo_id": "beekeeb/piantor",
+              "sha": "237ae92738af27e34bc5353903e42a68af22f32d",
+              "path": "pcb/left/keyboard_pcb.kicad_sch",
+              "locator": "R1"
+            },
+            {
+              "id": "172550db5c4cf879766bde6c",
+              "repo_id": "beekeeb/piantor",
+              "sha": "237ae92738af27e34bc5353903e42a68af22f32d",
+              "path": "pcb/left/keyboard_pcb.kicad_sch",
+              "locator": "R2"
+            }
+          ]
+        },
+        {
+          "rule_id": "electrical.assembly",
+          "domain": "schematic",
+          "status": "verified",
+          "severity": "warning",
+          "summary": "J1: connector symbol has resistor footprint Resistor_SMD:R_1206_3216Metric_Pad1.30x1.75mm_HandSolder; its pads/mechanics cannot implement this jack. Assign the connector footprint.",
+          "lifecycle": "present_at_head",
+          "evidence": [
+            {
+              "id": "bae2043ec863e82ae89253f8",
+              "repo_id": "beekeeb/piantor",
+              "sha": "237ae92738af27e34bc5353903e42a68af22f32d",
+              "path": "pcb/right/keyboard_pcb.kicad_sch",
+              "locator": "J1 (TRRS) pin 1 SLEEVE, pin 2 TIP, pin 3 RING1, pin 4 RING2"
+            }
+          ]
+        },
+        {
+          "rule_id": "electrical.divider",
+          "domain": "schematic",
+          "status": "verified",
+          "severity": "warning",
+          "summary": "U2: pin 34 GPIO28_ADC2 divider R1=5k6/R2=10k produces 3.37V at 5.25V input, above the declared 3.3V ADC reference/supply. Change the divider ratio and check pin absolute maximum in the datasheet.",
+          "lifecycle": "present_at_head",
+          "evidence": [
+            {
+              "id": "d88ed74bdd46143c2428700d",
+              "repo_id": "beekeeb/piantor",
+              "sha": "237ae92738af27e34bc5353903e42a68af22f32d",
+              "path": "pcb/right/keyboard_pcb.kicad_sch",
+              "locator": "U2 (Pico) pin 34 GPIO28_ADC2"
+            },
+            {
+              "id": "d235b6cd7a389e65596dce73",
+              "repo_id": "beekeeb/piantor",
+              "sha": "237ae92738af27e34bc5353903e42a68af22f32d",
+              "path": "pcb/right/keyboard_pcb.kicad_sch",
+              "locator": "R1"
+            },
+            {
+              "id": "b558cea79dead6f4137463cd",
+              "repo_id": "beekeeb/piantor",
+              "sha": "237ae92738af27e34bc5353903e42a68af22f32d",
+              "path": "pcb/right/keyboard_pcb.kicad_sch",
+              "locator": "R2"
+            }
+          ]
+        }
+      ],
+      "coverage": [
+        {
+          "path": "pcb/left/keyboard_pcb.kicad_sch",
+          "domain": "schematic",
+          "check": "Electrical assembly",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: multiple independent designs require explicit BOM scope."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical graph",
+          "tool": "offline net graph",
+          "outcome": "ran",
+          "detail": "Analyzed 68 placed symbols and 36 nets from embedded geometry; no kicad-cli used."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical usb",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical divider",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical capacitor",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical clock",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical assembly",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical switch",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical pullup",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical protection",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical polarity",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "pcb/right/keyboard_pcb.kicad_sch",
+          "domain": "schematic",
+          "check": "Electrical assembly",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: multiple independent designs require explicit BOM scope."
+        },
+        {
+          "path": "pcb/left/keyboard_pcb.kicad_pcb",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: absolute external model /Users/danny/syncproj/kicad-libs/footprints/Keebio-Parts.pretty/3dmodels/PJ-320A.step"
+        },
+        {
+          "path": "pcb/right/keyboard_pcb.kicad_pcb",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: absolute external model /Users/danny/syncproj/kicad-libs/footprints/Keebio-Parts.pretty/3dmodels/PJ-320A.step"
+        }
+      ]
+    },
+    "Pippadi/combadge": {
+      "sha": "d9708cd28ed40a150a666db1b3b7e80358dbff34",
+      "findings": [
+        {
+          "rule_id": "electrical.protection",
+          "domain": "schematic",
+          "status": "verified",
+          "severity": "warning",
+          "summary": "J4: SHIELD is unconnected. Provide an intentional chassis/ground termination.",
+          "lifecycle": "present_at_head",
+          "evidence": [
+            {
+              "id": "561af75c18d47a6b09f0affd",
+              "repo_id": "Pippadi/combadge",
+              "sha": "d9708cd28ed40a150a666db1b3b7e80358dbff34",
+              "path": "hardware/pcb/Combadge.kicad_sch",
+              "locator": "J4 (USB_B_Micro) pin 6 Shield"
+            }
+          ]
+        },
+        {
+          "rule_id": "electrical.protection",
+          "domain": "schematic",
+          "status": "suggestion",
+          "severity": "warning",
+          "summary": "J4: D+/D- have no identifiable external ESD protection in this schematic. Add a suitable low-capacitance ESD array or document integrated protection.",
+          "lifecycle": "present_at_head",
+          "evidence": [
+            {
+              "id": "05388816d9a2524179e427b5",
+              "repo_id": "Pippadi/combadge",
+              "sha": "d9708cd28ed40a150a666db1b3b7e80358dbff34",
+              "path": "hardware/pcb/Combadge.kicad_sch",
+              "locator": "J4 (USB_B_Micro) pin 2 D-, pin 3 D+"
+            }
+          ]
+        },
+        {
+          "rule_id": "electrical.models",
+          "domain": "schematic",
+          "status": "verified",
+          "severity": "warning",
+          "summary": "U4: referenced 3D STEP file ${KIPRJMOD}/third-party/esp32-kicad/3d/ESP32-S3-WROOM-1.STEP does not resolve at hardware/pcb/third-party/esp32-kicad/3d/ESP32-S3-WROOM-1.STEP. Correct the path/case or include the model.",
+          "lifecycle": "present_at_head",
+          "evidence": [
+            {
+              "id": "cade238b3ce3669f1881ae3f",
+              "repo_id": "Pippadi/combadge",
+              "sha": "d9708cd28ed40a150a666db1b3b7e80358dbff34",
+              "path": "hardware/pcb/Combadge.kicad_pcb",
+              "locator": "U4 () "
+            },
+            {
+              "id": "a66111a3fe5f0653592f8f54",
+              "repo_id": "Pippadi/combadge",
+              "sha": "d9708cd28ed40a150a666db1b3b7e80358dbff34",
+              "path": "hardware/pcb/Combadge.kicad_pcb",
+              "locator": "${KIPRJMOD}/third-party/esp32-kicad/3d/ESP32-S3-WROOM-1.STEP"
+            }
+          ]
+        }
+      ],
+      "coverage": [
+        {
+          "path": "hardware/pcb/Power.kicad_sch",
+          "domain": "schematic",
+          "check": "Electrical polarity",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: U2 REF/K/A polarity requires ReferenceVoltage, HealthyVoltage, LowVoltage and EnableActiveHigh metadata plus a resolved divider. No cutoff verdict is inferred."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical graph",
+          "tool": "offline net graph",
+          "outcome": "ran",
+          "detail": "Analyzed 62 placed symbols and 60 nets from embedded geometry; no kicad-cli used."
+        },
+        {
+          "path": "hardware/pcb/ESP32.kicad_sch",
+          "domain": "schematic",
+          "check": "Electrical graph",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: #PWR014 embedded symbol is missing."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical usb",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical divider",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical capacitor",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical clock",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical assembly",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical switch",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical pullup",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical protection",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical polarity",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        }
+      ]
+    },
+    "larry-wong/tiny_sensor": {
+      "sha": "5fe0756383225ca80fee7981360e2dd1f234154d",
+      "findings": [
+        {
+          "rule_id": "electrical.switch",
+          "domain": "schematic",
+          "status": "verified",
+          "severity": "warning",
+          "summary": "Q1: base B is grounded while emitter E is driven through a resistor by U3 GPIO14/TOUCH14/ADC2_CH3/FSPIWP/FSPIDQS/SUBSPIWP. This reverses the usual low-side switch drive and cannot forward-bias an NPN base-emitter junction from a positive GPIO. Connect emitter to GND and drive base through the resistor after verifying transistor polarity.",
+          "lifecycle": "present_at_head",
+          "evidence": [
+            {
+              "id": "3df9fbb715825d56f141314c",
+              "repo_id": "larry-wong/tiny_sensor",
+              "sha": "5fe0756383225ca80fee7981360e2dd1f234154d",
+              "path": "circut/pcb.kicad_sch",
+              "locator": "Q1 (S8050) pin 2 B, pin 1 E, pin 22 GPIO14/TOUCH14/ADC2_CH3/FSPIWP/FSPIDQS/SUBSPIWP"
+            }
+          ]
+        },
+        {
+          "rule_id": "electrical.usb",
+          "domain": "schematic",
+          "status": "verified",
+          "severity": "warning",
+          "summary": "J3: CC1 has no independent 5.1k\u03a9 Rd to GND for a USB-C sink; connected to U3 GPIO0/BOOT. Fit separate Rd resistors and remove non-CC connections.",
+          "lifecycle": "present_at_head",
+          "evidence": [
+            {
+              "id": "3dea8b5b40b22a56f9727b20",
+              "repo_id": "larry-wong/tiny_sensor",
+              "sha": "5fe0756383225ca80fee7981360e2dd1f234154d",
+              "path": "circut/pcb.kicad_sch",
+              "locator": "J3 (USB_C_Receptacle_USB2.0) pin A5 CC1"
+            }
+          ]
+        },
+        {
+          "rule_id": "electrical.usb",
+          "domain": "schematic",
+          "status": "verified",
+          "severity": "warning",
+          "summary": "J3: D+ routes to U3 pin 37 U0TXD/GPIO43/CLK_OUT1, a UART function rather than a USB data pin. Route the pair to documented native USB D+/D- pins or a USB bridge.",
+          "lifecycle": "present_at_head",
+          "evidence": [
+            {
+              "id": "5d4d8f45211af74eb931954a",
+              "repo_id": "larry-wong/tiny_sensor",
+              "sha": "5fe0756383225ca80fee7981360e2dd1f234154d",
+              "path": "circut/pcb.kicad_sch",
+              "locator": "J3 (USB_C_Receptacle_USB2.0) pin A6 D+, pin 37 U0TXD/GPIO43/CLK_OUT1"
+            }
+          ]
+        },
+        {
+          "rule_id": "electrical.usb",
+          "domain": "schematic",
+          "status": "verified",
+          "severity": "warning",
+          "summary": "J3: D- routes to U3 pin 36 U0RXD/GPIO44/CLK_OUT2, a UART function rather than a USB data pin. Route the pair to documented native USB D+/D- pins or a USB bridge.",
+          "lifecycle": "present_at_head",
+          "evidence": [
+            {
+              "id": "0dd036f9c2b128f3516dca96",
+              "repo_id": "larry-wong/tiny_sensor",
+              "sha": "5fe0756383225ca80fee7981360e2dd1f234154d",
+              "path": "circut/pcb.kicad_sch",
+              "locator": "J3 (USB_C_Receptacle_USB2.0) pin A7 D-, pin 36 U0RXD/GPIO44/CLK_OUT2"
+            }
+          ]
+        },
+        {
+          "rule_id": "electrical.usb",
+          "domain": "schematic",
+          "status": "verified",
+          "severity": "warning",
+          "summary": "J3: CC2 has no independent 5.1k\u03a9 Rd to GND for a USB-C sink; connected to U3 GPIO0/BOOT. Fit separate Rd resistors and remove non-CC connections.",
+          "lifecycle": "present_at_head",
+          "evidence": [
+            {
+              "id": "7022900ab3db5796d0e6c03c",
+              "repo_id": "larry-wong/tiny_sensor",
+              "sha": "5fe0756383225ca80fee7981360e2dd1f234154d",
+              "path": "circut/pcb.kicad_sch",
+              "locator": "J3 (USB_C_Receptacle_USB2.0) pin B5 CC2"
+            }
+          ]
+        },
+        {
+          "rule_id": "electrical.protection",
+          "domain": "schematic",
+          "status": "suggestion",
+          "severity": "warning",
+          "summary": "J3: D+/D- have no identifiable external ESD protection in this schematic. Add a suitable low-capacitance ESD array or document integrated protection.",
+          "lifecycle": "present_at_head",
+          "evidence": [
+            {
+              "id": "9a6216f3616f07b7e55e2aab",
+              "repo_id": "larry-wong/tiny_sensor",
+              "sha": "5fe0756383225ca80fee7981360e2dd1f234154d",
+              "path": "circut/pcb.kicad_sch",
+              "locator": "J3 (USB_C_Receptacle_USB2.0) pin A6 D+, pin A7 D-, pin B6 D+, pin B7 D-"
+            }
+          ]
+        }
+      ],
+      "coverage": [
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical graph",
+          "tool": "offline net graph",
+          "outcome": "ran",
+          "detail": "Analyzed 18 placed symbols and 49 nets from embedded geometry; no kicad-cli used."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical usb",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical divider",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical capacitor",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical clock",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical assembly",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical switch",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical pullup",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical protection",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical polarity",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "circut/pcb.kicad_pcb",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: external library model ${ESPRESSIF_3DMODELS}/ESP32-S3-WROOM-1.STEP"
+        }
+      ]
+    },
+    "Shashvat1333/Bluetooth-Audio-Transmiter": {
+      "sha": "f5c2b29347f9eaced1b67b3011b986baca8b7777",
+      "findings": [
+        {
+          "rule_id": "electrical.clock",
+          "domain": "schematic",
+          "status": "verified",
+          "severity": "warning",
+          "summary": "U4: pin 1 VREF reference is floating with no reference source or bypass network. Connect the reference circuit required by the datasheet.",
+          "lifecycle": "present_at_head",
+          "evidence": [
+            {
+              "id": "a0f76ae7153370f3561e072e",
+              "repo_id": "Shashvat1333/Bluetooth-Audio-Transmiter",
+              "sha": "f5c2b29347f9eaced1b67b3011b986baca8b7777",
+              "path": "hardware/Bluetooth-Audio-Transmiter.kicad_sch",
+              "locator": "U4 (PCM1808PWR) pin 1 VREF"
+            }
+          ]
+        },
+        {
+          "rule_id": "electrical.clock",
+          "domain": "schematic",
+          "status": "verified",
+          "severity": "warning",
+          "summary": "U4: pin 6 SCKI clock input is floating; there is no clock source connected. Connect the required clock or document an internal-clock mode.",
+          "lifecycle": "present_at_head",
+          "evidence": [
+            {
+              "id": "d09efdeb45f51e68a09e5dc3",
+              "repo_id": "Shashvat1333/Bluetooth-Audio-Transmiter",
+              "sha": "f5c2b29347f9eaced1b67b3011b986baca8b7777",
+              "path": "hardware/Bluetooth-Audio-Transmiter.kicad_sch",
+              "locator": "U4 (PCM1808PWR) pin 6 SCKI"
+            }
+          ]
+        },
+        {
+          "rule_id": "electrical.firmware",
+          "domain": "schematic",
+          "status": "verified",
+          "severity": "warning",
+          "summary": "U4: LRCK connects to U3 IO27 (GPIO27), but firmware ws_io_num selects GPIO28. Set ws_io_num to 27 or correct the wiring.",
+          "lifecycle": "present_at_head",
+          "evidence": [
+            {
+              "id": "b033536f8268811ae27f6b7c",
+              "repo_id": "Shashvat1333/Bluetooth-Audio-Transmiter",
+              "sha": "f5c2b29347f9eaced1b67b3011b986baca8b7777",
+              "path": "hardware/Bluetooth-Audio-Transmiter.kicad_sch",
+              "locator": "U4 (PCM1808PWR) pin 7 LRCK, pin 12 IO27"
+            },
+            {
+              "id": "d17b44dd985cc4c7967e23ff",
+              "repo_id": "Shashvat1333/Bluetooth-Audio-Transmiter",
+              "sha": "f5c2b29347f9eaced1b67b3011b986baca8b7777",
+              "path": "firmware.ino",
+              "locator": "ws_io_num"
+            }
+          ]
+        },
+        {
+          "rule_id": "electrical.clock",
+          "domain": "schematic",
+          "status": "suggestion",
+          "severity": "warning",
+          "summary": "U4: BCK/LRCK have no established clock master: firmware explicitly configures I2S_MODE_SLAVE and the schematic shows no output-type clock driver. Configure and verify one clock master and its source.",
+          "lifecycle": "present_at_head",
+          "evidence": [
+            {
+              "id": "bfee428d14976a0a001248c3",
+              "repo_id": "Shashvat1333/Bluetooth-Audio-Transmiter",
+              "sha": "f5c2b29347f9eaced1b67b3011b986baca8b7777",
+              "path": "hardware/Bluetooth-Audio-Transmiter.kicad_sch",
+              "locator": "U4 (PCM1808PWR) pin 7 LRCK, pin 8 BCK"
+            },
+            {
+              "id": "6cee4ba7b2516861c3ba1e65",
+              "repo_id": "Shashvat1333/Bluetooth-Audio-Transmiter",
+              "sha": "f5c2b29347f9eaced1b67b3011b986baca8b7777",
+              "path": "firmware.ino",
+              "locator": "I2S_MODE_SLAVE"
+            }
+          ]
+        }
+      ],
+      "coverage": [
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical graph",
+          "tool": "offline net graph",
+          "outcome": "ran",
+          "detail": "Analyzed 22 placed symbols and 54 nets from embedded geometry; no kicad-cli used."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical usb",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical divider",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical capacitor",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical clock",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical assembly",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical switch",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical pullup",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical protection",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical polarity",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+        },
+        {
+          "path": "hardware/Bluetooth-Audio-Transmiter.kicad_pcb",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/RF_Module.3dshapes/ESP32-WROOM-32UE.step"
+        },
+        {
+          "path": "hardware/Bluetooth-Audio-Transmiter.kicad_pcb",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Capacitor_THT.3dshapes/C_Disc_D5.0mm_W2.5mm_P5.00mm.step"
+        },
+        {
+          "path": "hardware/Bluetooth-Audio-Transmiter.kicad_pcb",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Resistor_THT.3dshapes/R_Axial_DIN0207_L6.3mm_D2.5mm_P10.16mm_Horizontal.step"
+        },
+        {
+          "path": "hardware/Bluetooth-Audio-Transmiter.kicad_pcb",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Connector_Audio.3dshapes/Jack_3.5mm_CUI_SJ-3523-SMT_Horizontal.step"
+        },
+        {
+          "path": "hardware/Bluetooth-Audio-Transmiter.kicad_pcb",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Package_SO.3dshapes/TSSOP-14_4.4x5mm_P0.65mm.step"
+        },
+        {
+          "path": "hardware/Bluetooth-Audio-Transmiter.kicad_pcb",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Package_TO_SOT_SMD.3dshapes/SOT-23.step"
+        },
+        {
+          "path": "hardware/Bluetooth-Audio-Transmiter.kicad_pcb",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Package_TO_SOT_SMD.3dshapes/SOT-23-5.step"
+        },
+        {
+          "path": "hardware/Bluetooth-Audio-Transmiter.kicad_pcb",
+          "domain": "schematic",
+          "check": "Electrical models",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Package_SO.3dshapes/SOIC-16_3.9x9.9mm_P1.27mm.step"
+        }
+      ]
+    }
+  },
+  "runtime_source_sha256": {
+    "extrude/electrical_graph.py": "e2b3f5d86849e9ffe8f56f435331d7d4cf5d0b441d37377d864eae2804e1940e",
+    "extrude/electrical_reasoning.py": "c08f3e922ffabba1687cd9d240715d2bfc05e64ca29a24148bf78373d78bbf65",
+    "eval/electrical_gate.py": "362ae6fd8a65d4ffc115728c43cb0ddbaf45dafb901e60413fac903e545ec38d",
+    "eval/electrical_manifest.json": "34d84c204d3d49bd2439a8a1777e6ab36b9f1b2976972dfca2841c32b7955080",
+    "eval/electrical_correct_items.json": "eee29066588721a0804aad1405bf4b94d230bcc9483d70786af139e0f564d863"
+  },
+  "evaluation_date": "2026-11-10",
+  "finding_indices_note": "Checklist finding_indices address the findings array in that criterion repo; no duplicate full findings are stored."
+}

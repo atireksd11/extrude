@@ -1,0 +1,248 @@
+{
+  "repositories": [
+    {
+      "repo": "esp-rs/esp-rust-board",
+      "sha": "5552bea5ae95a0de4bb136b2a53e4c048b56dd49"
+    },
+    {
+      "repo": "Neotron-Compute/Neotron-Pico",
+      "sha": "85418d6f60ce2ad1edcb914e59545fd9f991bb9b"
+    },
+    {
+      "repo": "aronreid/ups-to-esp32",
+      "sha": "8b607d55b22a3b87fba569c61781188e9781fece"
+    },
+    {
+      "repo": "gcormier/megadesk",
+      "sha": "8ab3f6d0ce9593610484be577eccb80c1d576875"
+    },
+    {
+      "repo": "beekeeb/piantor",
+      "sha": "237ae92738af27e34bc5353903e42a68af22f32d"
+    },
+    {
+      "repo": "Pippadi/combadge",
+      "sha": "d9708cd28ed40a150a666db1b3b7e80358dbff34"
+    },
+    {
+      "repo": "larry-wong/tiny_sensor",
+      "sha": "5fe0756383225ca80fee7981360e2dd1f234154d"
+    },
+    {
+      "repo": "Shashvat1333/Bluetooth-Audio-Transmiter",
+      "sha": "f5c2b29347f9eaced1b67b3011b986baca8b7777"
+    }
+  ],
+  "checklist": [
+    {
+      "item": 1,
+      "repo": "esp-rs/esp-rust-board",
+      "rules": [
+        "electrical.clock"
+      ],
+      "requires": [
+        "Y1:",
+        "BOM included=False",
+        "C12",
+        "C13"
+      ]
+    },
+    {
+      "item": 2,
+      "repo": "Neotron-Compute/Neotron-Pico",
+      "rules": [
+        "electrical.pullup"
+      ],
+      "requires": [
+        "U1001:",
+        "PB6|PB7",
+        "DDC",
+        "no external pull-up"
+      ]
+    },
+    {
+      "item": 3,
+      "repo": "Neotron-Compute/Neotron-Pico",
+      "rules": [
+        "electrical.models"
+      ],
+      "requires": [
+        "J903:|U802:",
+        "STEP file",
+        "does not resolve"
+      ]
+    },
+    {
+      "item": 4,
+      "repo": "aronreid/ups-to-esp32",
+      "rules": [
+        "electrical.capacitor"
+      ],
+      "requires": [
+        "C7:",
+        "5V",
+        "79.4%",
+        "6.3V"
+      ]
+    },
+    {
+      "item": 5,
+      "repo": "aronreid/ups-to-esp32",
+      "rules": [
+        "electrical.assembly"
+      ],
+      "requires": [
+        "SW1: is omitted",
+        "SW2: is omitted",
+        "J3: is omitted",
+        "J5: is omitted"
+      ]
+    },
+    {
+      "item": 6,
+      "repo": "gcormier/megadesk",
+      "rules": [
+        "electrical.assembly"
+      ],
+      "requires": [
+        "U2:",
+        "1.2V",
+        "HT7550-1",
+        "5V"
+      ]
+    },
+    {
+      "item": 7,
+      "repo": "beekeeb/piantor",
+      "rules": [
+        "electrical.assembly"
+      ],
+      "requires": [
+        "J1:",
+        "resistor footprint",
+        "R_1206"
+      ]
+    },
+    {
+      "item": 8,
+      "repo": "beekeeb/piantor",
+      "rules": [
+        "electrical.divider"
+      ],
+      "requires": [
+        "U2:",
+        "GPIO28_ADC2",
+        "3.37V",
+        "5.25V"
+      ]
+    },
+    {
+      "item": 9,
+      "repo": "Pippadi/combadge",
+      "rules": [
+        "electrical.polarity"
+      ],
+      "requires": [
+        "U2:",
+        "invert",
+        "healthy",
+        "low"
+      ]
+    },
+    {
+      "item": 10,
+      "repo": "Pippadi/combadge",
+      "rules": [
+        "electrical.protection"
+      ],
+      "requires": [
+        "J4:",
+        "SHIELD is unconnected",
+        "D\\+/D-.*no identifiable external ESD"
+      ]
+    },
+    {
+      "item": 11,
+      "repo": "larry-wong/tiny_sensor",
+      "rules": [
+        "electrical.usb"
+      ],
+      "requires": [
+        "J3:",
+        "D\\+.*GPIO43.*UART",
+        "D-.*GPIO44.*UART"
+      ]
+    },
+    {
+      "item": 12,
+      "repo": "larry-wong/tiny_sensor",
+      "rules": [
+        "electrical.usb"
+      ],
+      "requires": [
+        "J3:",
+        "CC1.*no independent 5.1k",
+        "CC2.*no independent 5.1k",
+        "GPIO0/BOOT"
+      ]
+    },
+    {
+      "item": 13,
+      "repo": "larry-wong/tiny_sensor",
+      "rules": [
+        "electrical.switch"
+      ],
+      "requires": [
+        "Q1:",
+        "base B is grounded",
+        "emitter E is driven",
+        "GPIO14"
+      ]
+    },
+    {
+      "item": "S1",
+      "repo": "Shashvat1333/Bluetooth-Audio-Transmiter",
+      "rules": [
+        "electrical.firmware"
+      ],
+      "requires": [
+        "U4:",
+        "LRCK.*IO27.*GPIO28"
+      ]
+    },
+    {
+      "item": "S2",
+      "repo": "Shashvat1333/Bluetooth-Audio-Transmiter",
+      "rules": [
+        "electrical.clock"
+      ],
+      "requires": [
+        "U4:",
+        "SCKI clock input is floating"
+      ]
+    },
+    {
+      "item": "S3",
+      "repo": "Shashvat1333/Bluetooth-Audio-Transmiter",
+      "rules": [
+        "electrical.clock"
+      ],
+      "requires": [
+        "U4:",
+        "VREF reference is floating"
+      ]
+    },
+    {
+      "item": "S4",
+      "repo": "Shashvat1333/Bluetooth-Audio-Transmiter",
+      "rules": [
+        "electrical.clock"
+      ],
+      "requires": [
+        "U4:",
+        "BCK/LRCK have no established clock master",
+        "I2S_MODE_SLAVE"
+      ]
+    }
+  ]
+}

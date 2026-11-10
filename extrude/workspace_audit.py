@@ -20,7 +20,7 @@ from extrude import kicad_snapshot
 from extrude import workspace_settings, workspace_checks, workspace_cad
 
 SCHEMA_VERSION = 4
-RULE_VERSION = 5
+RULE_VERSION = 6
 _POOL = ThreadPoolExecutor(max_workers=2, thread_name_prefix="atlas-audit")
 _LOCK = threading.RLock()
 _ACTIVE: dict[tuple[Path, str], str] = {}
@@ -258,6 +258,14 @@ def _collect(audit: Audit) -> None:
         workspace_settings.Settings.model_validate(audit.project_settings), paths["files"])
     audit.findings.extend(Finding.model_validate(row) for row in findings)
     audit.coverage.extend(Coverage.model_validate(row) for row in coverage)
+    from extrude import electrical_reasoning
+    try:
+        findings, coverage = electrical_reasoning.collect(audit.repo_id, audit.head_sha)
+        audit.findings.extend(Finding.model_validate(row) for row in findings)
+        audit.coverage.extend(Coverage.model_validate(row) for row in coverage)
+    except (ValueError, git.BlobUnavailable, git.GitHubError, KeyError, RecursionError) as exc:
+        audit.coverage.append(Coverage(path="", domain="schematic", check="Whole-design electrical reasoning",
+                                       tool="offline net graph", outcome="unavailable", detail=str(exc)))
     from extrude import workspace_links
     relationships, coverage = workspace_links.collect(audit)
     audit.relationships = [Relationship.model_validate(row) for row in relationships]
