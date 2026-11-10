@@ -1,0 +1,20 @@
+Module SHA256: abbad9e40c10ff5d9e878dbfd6d19407361085a46f23b4603ccfe928480fd179
+{"time": "2026-11-10T16:28:49.808323+00:00", "event": "request_rejected", "route": "api", "method": "GET", "status": 401, "ip": "127.0.0.1", "agent_hash": "e3b0c44298fc1c14"}
+{"time": "2026-11-10T16:28:49.846985+00:00", "event": "request_rejected", "route": "api", "method": "GET", "status": 403, "ip": "127.0.0.1", "agent_hash": "e3b0c44298fc1c14"}
+{"time": "2026-11-10T16:28:49.848058+00:00", "event": "request_rejected", "route": "page", "method": "GET", "status": 404, "ip": "127.0.0.1", "agent_hash": "e3b0c44298fc1c14"}
+PASS final container UID 10001, writable data, no pip/httpx, debug off; real HTTP: absent token 401, valid token 200, hosted local feature 403, .env 404, HTTP 308
+{
+  "verified_https_response_status": 200,
+  "headers": {
+    "date": "Tue, 10 Nov 2026 16:28:49 GMT",
+    "server": "uvicorn",
+    "content-length": "164",
+    "content-type": "application/json",
+    "x-content-type-options": "nosniff",
+    "x-frame-options": "DENY",
+    "referrer-policy": "no-referrer",
+    "content-security-policy": "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'",
+    "strict-transport-security": "max-age=31536000",
+    "cache-control": "no-store"
+  }
+}

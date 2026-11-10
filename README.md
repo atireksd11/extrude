@@ -56,3 +56,22 @@ explicit provider-data disclosure and click. Its citations and certainty are
 validated against the original report. See the [Phase 4 report](docs/PHASE-4-AUDIT-REVIEW.md).
 
 The older circuit-generation claim remains gated by the practice-set bar in [docs/GROUND-RULES.md](docs/GROUND-RULES.md): Luna at least 40%, and Astra at least 73%, each on two full runs. The project map is a separate local pilot for invited testers.
+
+## Hosted security configuration
+
+The Docker image runs as UID 10001 and enables `EXTRUDE_HOSTED=1`. Render also
+enables hosted mode through its `RENDER=true` environment variable. Set
+`EXTRUDE_PUBLIC_ORIGIN` to your canonical HTTPS origin and configure trusted
+forwarded-protocol handling for your platform's ingress. Generate a random
+shared access token out of band (at least 32 bytes), and save it as
+`EXTRUDE_API_TOKEN` in the hosting environment settings, never in Git.
+Missing or short tokens disable hosted API/data access. Enter the token in the
+browser's shared-access dialog; it stays in page memory and clears on reload.
+
+This is **interim shared access, not user authentication or tenant isolation**.
+All token holders share repositories, settings, audits and cached files. Use
+throwaway public projects only. Hosted server-folder projects and legacy
+design/copilot/compare endpoints are disabled. Keep local mode bound to
+`127.0.0.1`; use `EXTRUDE_RATE_LIMIT=1` to apply request budgets locally.
+See [the dated security review](docs/security-review-2026-11-10.md) for remaining
+quota, sandbox, deployment and dependency findings before public deployment.

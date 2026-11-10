@@ -1,0 +1,45 @@
+Security verification — 2026-11-10
+
+.venv/bin/python -m pytest -q tests
+24 failed, 339 passed, 2 skipped, 1 warning in 38.65s
+All 24 failure IDs match a separate clean main checkout. Main: 24 failed, 324 passed, 2 skipped.
+No new failure IDs; native checks/benchmark artifacts underlying those failures remain unverified.
+
+.venv/bin/python -m pytest tests/test_api_security.py tests/test_github_history.py tests/test_github_workspace.py tests/test_project_map_product.py tests/test_copilot.py -q
+35 passed, 1 warning in 5.30s
+Includes all 15 new security tests (slow bodies, authenticated/anonymous budgets, injection and concurrency included).
+
+node tests/ui/security-browser.cjs
+PASS shared token retry, page-memory-only token, reload clears token, XSS rendered as text
+
+node tests/ui/github_workspace.test.cjs
+PASS review races, evidence routing, saved coverage, sync selection, review tabs, counts, import disclosure
+
+work/security-tools/bin/pip-audit --cache-dir work/audit-cache -r work/installed-requirements.txt --no-deps --disable-pip --vulnerability-service pypi -f json -o work/dependency-audit-after.json
+70 local distributions inventoried: 69 third-party distributions had no known vulnerabilities after pytest 9.0.3; local extrude has no PyPI entry and was skipped by the advisory service.
+
+Secret scanning:
+Offline detect-secrets 1.5.0, current files including untracked deliverables and generated fixtures;
+all 609 reachable history blobs across all fetched branch refs; 119 history candidates reviewed as hashes/identifiers.
+Current final-tree candidates: evidence/ETag/Git/specification/prompt hashes. No confirmed leaked credential.
+No credential values printed in report or diff. Binary/LFS/unreachable object contents excluded.
+
+Sensitive file requests: /.env, /.git/config, /pyproject.toml, /data/project-map.sqlite -> 404.
+Admin/debug/docs paths: /admin, /debug, /metrics, /docs, /redoc, /openapi.json -> 404.
+Real local HTTP: 200 + CSP, nosniff, DENY, no-referrer. Forwarded HTTPS: HSTS and no-store.
+Live Render HTTP -> environment proxy 403; HTTPS -> CONNECT 403. Live service not verified or changed.
+
+git diff --check
+Exit 0.
+
+Container release verification:
+env -u DOCKER_HOST -u DOCKER_CONTEXT -u DOCKER_TLS -u DOCKER_TLS_VERIFY -u DOCKER_CERT_PATH docker --host=unix:///var/run/docker.sock build --secret id=proxy_ca,src=/etc/ssl/certs/ca-certificates.crt -t extrude-security-review:release .
+Build succeeded. Base pinned by digest; apt OS updates applied; runtime pip removed.
+
+docker --host=unix:///var/run/docker.sock run --rm --network none --entrypoint python -i extrude-security-review:release < work/docker-http-smoke.py
+PASS final container UID 10001, writable data, no pip/httpx, debug off; real HTTP: absent token 401, valid token 200, hosted local feature 403, .env 404, HTTP 308
+Installed security module SHA256 equals the working tree source (recorded in container-http-smoke.txt).
+
+DOCKER_HOST=unix:///var/run/docker.sock work/trivy image --image-src docker --cache-dir work/trivy-cache --db-repository ghcr.io/aquasecurity/trivy-db:2 --scanners vuln --format json --output work/container-release-audit.json extrude-security-review:release
+Trivy 0.76.2: 96 HIGH, 107 MEDIUM, 129 LOW, 25 UNKNOWN package/advisory records, no listed fixed versions; 27 unique HIGH CVEs, no CRITICAL records. Full list: container-vulnerabilities.json.
+Base image scan before build also found fixed zlib issues and vendored pip-library findings; OS update and pip removal eliminated those from the final scan. Do not interpret the remaining list as fixed.
