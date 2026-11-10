@@ -1,0 +1,11 @@
+HTTP/1.1 503 Service Unavailable
+date: Tue, 10 Nov 2026 16:09:15 GMT
+server: uvicorn
+content-length: 78
+content-type: application/json
+x-content-type-options: nosniff
+x-frame-options: DENY
+referrer-policy: no-referrer
+content-security-policy: default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; object-src 'none'; base-uri 'none'; frame-ancestors 'none'; form-action 'self'
+strict-transport-security: max-age=31536000
+cache-control: no-store

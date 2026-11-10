@@ -33,14 +33,14 @@ class RepositoryRequest(BaseModel):
 
 
 class AuditRequest(BaseModel):
-    revision: str
-    base: str | None = None
+    revision: str = Field(pattern=r"^[0-9a-f]{40}$")
+    base: str | None = Field(default=None, pattern=r"^[0-9a-f]{40}$")
     retry: bool = False
 
 
 class CadInspectionRequest(BaseModel):
     model_config = ConfigDict(extra="forbid")
-    revision: str
+    revision: str = Field(pattern=r"^[0-9a-f]{40}$")
     path: str = Field(min_length=1, max_length=1024)
     include_preview: bool = False
 
@@ -106,7 +106,7 @@ def preview(repo_id: str, revision: str, path: str = Query(min_length=1, max_len
 
 @router.get("/{repo_id}/pcb")
 def pcb(repo_id: str, revision: str, path: str = Query(min_length=1, max_length=4096),
-        base: str | None = None, previous_path: str | None = Query(None, max_length=4096),
+        base: str | None = Query(default=None, pattern=r"^[0-9a-f]{40}$"), previous_path: str | None = Query(None, max_length=4096),
         offset: int = Query(0, ge=0), limit: int = Query(100, ge=1, le=200)) -> dict:
     with _errors():
         return pcb_review.review(repo_id, revision, path, base, previous_path, offset, limit)
@@ -135,14 +135,14 @@ def save_settings(repo_id: str, body: workspace_settings.Settings) -> workspace_
 
 @router.get("/{repo_id}/artifact")
 def artifact(repo_id: str, revision: str, path: str = Query(min_length=1, max_length=1024),
-             base: str | None = None, previous_path: str | None = None) -> dict:
+             base: str | None = Query(default=None, pattern=r"^[0-9a-f]{40}$"), previous_path: str | None = None) -> dict:
     with _errors():
         return workspace_checks.review(repo_id, revision, path, base, previous_path)
 
 
 @router.get("/{repo_id}/schematic")
 def schematic(repo_id: str, revision: str, path: str = Query(min_length=1, max_length=4096),
-              base: str | None = None, previous_path: str | None = Query(None, max_length=4096),
+              base: str | None = Query(default=None, pattern=r"^[0-9a-f]{40}$"), previous_path: str | None = Query(None, max_length=4096),
               offset: int = Query(0, ge=0), limit: int = Query(100, ge=1, le=200)) -> dict:
     with _errors():
         return schematic_review.review(repo_id, revision, path, base, previous_path, offset, limit)

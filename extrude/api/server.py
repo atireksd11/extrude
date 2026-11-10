@@ -4,7 +4,10 @@ import os
 import time
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Request
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import JSONResponse
+from extrude.api.security import SecurityMiddleware, hosted
 from fastapi.responses import FileResponse, PlainTextResponse
 from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel, Field
@@ -28,13 +31,20 @@ from extrude.project_map import (
 from extrude.runtime import data_dir
 
 _ROOT = Path(__file__).resolve().parents[2]
-if os.environ.get("EXTRUDE_LOAD_ENV") != "0":
+if not hosted() and os.environ.get("EXTRUDE_LOAD_ENV") != "0":
     load_env(_ROOT / ".env")
 _openscad = Path(r"C:\Program Files\OpenSCAD\openscad.exe")
 if not os.environ.get("OPENSCAD_PATH", "").strip() and _openscad.is_file():
     os.environ["OPENSCAD_PATH"] = str(_openscad)
 
-app = FastAPI()
+app = FastAPI(debug=False, docs_url=None, redoc_url=None, openapi_url=None)
+app.add_middleware(SecurityMiddleware)
+
+
+@app.exception_handler(RequestValidationError)
+async def invalid_request(request: Request, exc: RequestValidationError):
+    return JSONResponse({"detail": "Invalid request."}, status_code=422)
+
 app.include_router(github_router)
 _STATIC = Path(__file__).resolve().parent / "static"
 _PAGE = _STATIC / "index.html"
@@ -58,9 +68,9 @@ def github_page() -> FileResponse:
 
 
 class ProjectRequest(BaseModel):
-    name: str
-    path: str
-    onshape_url: str | None = None
+    name: str = Field(min_length=1, max_length=200)
+    path: str = Field(min_length=1, max_length=1024)
+    onshape_url: str | None = Field(default=None, max_length=2048)
 
 
 @app.get("/v1/projects")
@@ -85,11 +95,11 @@ def project_demo() -> dict:
 
 
 class PinRuleRequest(BaseModel):
-    firmware_file: str
-    firmware_symbol: str
-    netlist_file: str
-    schematic_net: str
-    mcu_ref: str
+    firmware_file: str = Field(min_length=1, max_length=1024)
+    firmware_symbol: str = Field(min_length=1, max_length=1024)
+    netlist_file: str = Field(min_length=1, max_length=1024)
+    schematic_net: str = Field(min_length=1, max_length=1024)
+    mcu_ref: str = Field(min_length=1, max_length=1024)
 
 
 @app.post("/v1/projects/{project_id}/pin-rules")
@@ -113,9 +123,9 @@ def project_pin_rule_delete(project_id: int, rule_id: int) -> dict:
 
 
 class FindingReviewRequest(BaseModel):
-    outcome: str = "reviewed"
-    note: str = ""
-    target_file: str | None = None
+    outcome: str = Field(default="reviewed", max_length=32)
+    note: str = Field(default="", max_length=4000)
+    target_file: str | None = Field(default=None, max_length=1024)
 
 
 @app.post("/v1/projects/{project_id}/findings/{finding_id}/review")
@@ -173,15 +183,19 @@ def project_handoff_download(project_id: int) -> PlainTextResponse:
 @app.get("/artifacts/{run_id}/{path:path}")
 def artifact(run_id: str, path: str) -> FileResponse:
     root = (data_dir() / "generated").resolve()
-    target = (root / run_id / path).resolve()
-    if not target.is_relative_to(root) or not target.is_file():
+    run_root = (root / run_id).resolve()
+    if not run_root.is_relative_to(root) or run_root == root or "/" in run_id or "\\" in run_id:
         raise HTTPException(status_code=404, detail="artifact not found")
-    return FileResponse(target)
+    target = (run_root / path).resolve()
+    if not target.is_relative_to(run_root) or not target.is_file():
+        raise HTTPException(status_code=404, detail="artifact not found")
+    return FileResponse(target, headers={"Content-Disposition": "attachment",
+                                        "Content-Security-Policy": "sandbox; default-src 'none'"})
 
 
 class DesignRequest(BaseModel):
-    prompt: str
-    mode: str = "interactive"
+    prompt: str = Field(min_length=1, max_length=16000)
+    mode: str = Field(default="interactive", pattern="^interactive$")
 
 
 class DesignResponse(BaseModel):

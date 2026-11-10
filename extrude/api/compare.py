@@ -6,7 +6,8 @@ import time
 import uuid
 from pathlib import Path
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
+from extrude.parse.sniff import validate_paste_filename
 
 from eval.arm_benchmark.score import strip_fences
 from extrude.checks import preflight
@@ -81,11 +82,13 @@ class CompareResponse(BaseModel):
 
 
 class CompareRequest(BaseModel):
-    text: str | None = None
-    artifact: str | None = None
-    filename: str | None = None
-    filament: str = "PETG"
+    text: str | None = Field(default=None, max_length=16000)
+    artifact: str | None = Field(default=None, max_length=512000)
+    filename: str | None = Field(default=None, max_length=255)
+    filament: str = Field(default="PETG", max_length=100)
     offline: bool = False
+
+    _valid_filename = field_validator("filename")(validate_paste_filename)
 
 
 def run_compare(body: CompareRequest) -> CompareResponse:

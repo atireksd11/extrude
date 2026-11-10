@@ -1,0 +1,3611 @@
+{
+  "image_id": "sha256:bf0164ea6de2e90404802ef7f7197e7e278b7ddf98dc8e9a16f406006dc9702f",
+  "counts": {
+    "LOW": 129,
+    "HIGH": 96,
+    "MEDIUM": 107,
+    "UNKNOWN": 25
+  },
+  "unique_high_critical_ids": [
+    "CVE-2025-69720",
+    "CVE-2026-112315",
+    "CVE-2026-112316",
+    "CVE-2026-112317",
+    "CVE-2026-112318",
+    "CVE-2026-112319",
+    "CVE-2026-112320",
+    "CVE-2026-112321",
+    "CVE-2026-112322",
+    "CVE-2026-112323",
+    "CVE-2026-113351",
+    "CVE-2026-115506",
+    "CVE-2026-117610",
+    "CVE-2026-118370",
+    "CVE-2026-119079",
+    "CVE-2026-119373",
+    "CVE-2026-119374",
+    "CVE-2026-119379",
+    "CVE-2026-12064",
+    "CVE-2026-16742",
+    "CVE-2026-54369",
+    "CVE-2026-76642",
+    "CVE-2026-78408",
+    "CVE-2026-78409",
+    "CVE-2026-78410",
+    "CVE-2026-8458",
+    "CVE-2026-9538"
+  ],
+  "fixable_findings": 0,
+  "findings": [
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2011-3374",
+      "package": "apt",
+      "installed": "3.0.4",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2011-3374"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "TEMP-0841856-B18BAF",
+      "package": "bash",
+      "installed": "5.2.37-2+b10",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://security-tracker.debian.org/tracker/TEMP-0841856-B18BAF"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-76642",
+      "package": "bsdutils",
+      "installed": "1:2.41.5-0+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-76642"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-78408",
+      "package": "bsdutils",
+      "installed": "1:2.41.5-0+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-78408"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-78409",
+      "package": "bsdutils",
+      "installed": "1:2.41.5-0+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-78409"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-78410",
+      "package": "bsdutils",
+      "installed": "1:2.41.5-0+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-78410"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-3184",
+      "package": "bsdutils",
+      "installed": "1:2.41.5-0+deb13u1",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-3184"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2022-0563",
+      "package": "bsdutils",
+      "installed": "1:2.41.5-0+deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2022-0563"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2017-18018",
+      "package": "coreutils",
+      "installed": "9.7-3",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2017-18018"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2025-5278",
+      "package": "coreutils",
+      "installed": "9.7-3",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2025-5278"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-56391",
+      "package": "coreutils",
+      "installed": "9.7-3",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-56391"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-56392",
+      "package": "coreutils",
+      "installed": "9.7-3",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-56392"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-102473",
+      "package": "dash",
+      "installed": "0.5.12-12",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-102473"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-102474",
+      "package": "dash",
+      "installed": "0.5.12-12",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-102474"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-53910",
+      "package": "diffutils",
+      "installed": "1:3.10-4",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-53910"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-102010",
+      "package": "gcc-14-base",
+      "installed": "14.2.0-19",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-102010"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-114690",
+      "package": "gcc-14-base",
+      "installed": "14.2.0-19",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-114690"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-114691",
+      "package": "gcc-14-base",
+      "installed": "14.2.0-19",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-114691"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-115455",
+      "package": "gcc-14-base",
+      "installed": "14.2.0-19",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-115455"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-95619",
+      "package": "gcc-14-base",
+      "installed": "14.2.0-19",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-95619"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-115456",
+      "package": "gcc-14-base",
+      "installed": "14.2.0-19",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-115456"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2018-1000021",
+      "package": "git",
+      "installed": "1:2.47.3-0+deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2018-1000021"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2022-24975",
+      "package": "git",
+      "installed": "1:2.47.3-0+deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2022-24975"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2024-52005",
+      "package": "git",
+      "installed": "1:2.47.3-0+deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2024-52005"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2018-1000021",
+      "package": "git-man",
+      "installed": "1:2.47.3-0+deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2018-1000021"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2022-24975",
+      "package": "git-man",
+      "installed": "1:2.47.3-0+deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2022-24975"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2024-52005",
+      "package": "git-man",
+      "installed": "1:2.47.3-0+deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2024-52005"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-54369",
+      "package": "libacl1",
+      "installed": "2.3.2-2+b1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-54369"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-54370",
+      "package": "libacl1",
+      "installed": "2.3.2-2+b1",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-54370"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2011-3374",
+      "package": "libapt-pkg7.0",
+      "installed": "3.0.4",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2011-3374"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-54371",
+      "package": "libattr1",
+      "installed": "1:2.5.2-3",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-54371"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-76642",
+      "package": "libblkid1",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-76642"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-78408",
+      "package": "libblkid1",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-78408"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-78409",
+      "package": "libblkid1",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-78409"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-78410",
+      "package": "libblkid1",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-78410"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-3184",
+      "package": "libblkid1",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-3184"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2022-0563",
+      "package": "libblkid1",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2022-0563"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-42250",
+      "package": "libbz2-1.0",
+      "installed": "1.0.8-6",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-42250"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-18374",
+      "package": "libc-bin",
+      "installed": "2.41-12+deb13u4",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-18374"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-19499",
+      "package": "libc-bin",
+      "installed": "2.41-12+deb13u4",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-19499"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-19542",
+      "package": "libc-bin",
+      "installed": "2.41-12+deb13u4",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-19542"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-5435",
+      "package": "libc-bin",
+      "installed": "2.41-12+deb13u4",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-5435"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-6238",
+      "package": "libc-bin",
+      "installed": "2.41-12+deb13u4",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-6238"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-6368",
+      "package": "libc-bin",
+      "installed": "2.41-12+deb13u4",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-6368"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-6791",
+      "package": "libc-bin",
+      "installed": "2.41-12+deb13u4",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-6791"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-77117",
+      "package": "libc-bin",
+      "installed": "2.41-12+deb13u4",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-77117"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-80489",
+      "package": "libc-bin",
+      "installed": "2.41-12+deb13u4",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-80489"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-84243",
+      "package": "libc-bin",
+      "installed": "2.41-12+deb13u4",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-84243"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-8674",
+      "package": "libc-bin",
+      "installed": "2.41-12+deb13u4",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-8674"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-86805",
+      "package": "libc-bin",
+      "installed": "2.41-12+deb13u4",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-86805"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-89092",
+      "package": "libc-bin",
+      "installed": "2.41-12+deb13u4",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-89092"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-95818",
+      "package": "libc-bin",
+      "installed": "2.41-12+deb13u4",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-95818"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2010-4756",
+      "package": "libc-bin",
+      "installed": "2.41-12+deb13u4",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2010-4756"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2018-20796",
+      "package": "libc-bin",
+      "installed": "2.41-12+deb13u4",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2018-20796"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2019-1010022",
+      "package": "libc-bin",
+      "installed": "2.41-12+deb13u4",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2019-1010022"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2019-1010023",
+      "package": "libc-bin",
+      "installed": "2.41-12+deb13u4",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2019-1010023"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2019-1010024",
+      "package": "libc-bin",
+      "installed": "2.41-12+deb13u4",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2019-1010024"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2019-1010025",
+      "package": "libc-bin",
+      "installed": "2.41-12+deb13u4",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2019-1010025"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2019-9192",
+      "package": "libc-bin",
+      "installed": "2.41-12+deb13u4",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2019-9192"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-97399",
+      "package": "libc-bin",
+      "installed": "2.41-12+deb13u4",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-97399"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-18374",
+      "package": "libc6",
+      "installed": "2.41-12+deb13u4",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-18374"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-19499",
+      "package": "libc6",
+      "installed": "2.41-12+deb13u4",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-19499"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-19542",
+      "package": "libc6",
+      "installed": "2.41-12+deb13u4",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-19542"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-5435",
+      "package": "libc6",
+      "installed": "2.41-12+deb13u4",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-5435"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-6238",
+      "package": "libc6",
+      "installed": "2.41-12+deb13u4",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-6238"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-6368",
+      "package": "libc6",
+      "installed": "2.41-12+deb13u4",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-6368"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-6791",
+      "package": "libc6",
+      "installed": "2.41-12+deb13u4",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-6791"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-77117",
+      "package": "libc6",
+      "installed": "2.41-12+deb13u4",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-77117"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-80489",
+      "package": "libc6",
+      "installed": "2.41-12+deb13u4",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-80489"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-84243",
+      "package": "libc6",
+      "installed": "2.41-12+deb13u4",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-84243"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-8674",
+      "package": "libc6",
+      "installed": "2.41-12+deb13u4",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-8674"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-86805",
+      "package": "libc6",
+      "installed": "2.41-12+deb13u4",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-86805"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-89092",
+      "package": "libc6",
+      "installed": "2.41-12+deb13u4",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-89092"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-95818",
+      "package": "libc6",
+      "installed": "2.41-12+deb13u4",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-95818"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2010-4756",
+      "package": "libc6",
+      "installed": "2.41-12+deb13u4",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2010-4756"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2018-20796",
+      "package": "libc6",
+      "installed": "2.41-12+deb13u4",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2018-20796"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2019-1010022",
+      "package": "libc6",
+      "installed": "2.41-12+deb13u4",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2019-1010022"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2019-1010023",
+      "package": "libc6",
+      "installed": "2.41-12+deb13u4",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2019-1010023"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2019-1010024",
+      "package": "libc6",
+      "installed": "2.41-12+deb13u4",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2019-1010024"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2019-1010025",
+      "package": "libc6",
+      "installed": "2.41-12+deb13u4",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2019-1010025"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2019-9192",
+      "package": "libc6",
+      "installed": "2.41-12+deb13u4",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2019-9192"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-97399",
+      "package": "libc6",
+      "installed": "2.41-12+deb13u4",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-97399"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-12064",
+      "package": "libcurl3t64-gnutls",
+      "installed": "8.14.1-2+deb13u7",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-12064"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-8458",
+      "package": "libcurl3t64-gnutls",
+      "installed": "8.14.1-2+deb13u7",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-8458"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-10536",
+      "package": "libcurl3t64-gnutls",
+      "installed": "8.14.1-2+deb13u7",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-10536"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-11856",
+      "package": "libcurl3t64-gnutls",
+      "installed": "8.14.1-2+deb13u7",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-11856"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-19931",
+      "package": "libcurl3t64-gnutls",
+      "installed": "8.14.1-2+deb13u7",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-19931"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-8926",
+      "package": "libcurl3t64-gnutls",
+      "installed": "8.14.1-2+deb13u7",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-8926"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-8932",
+      "package": "libcurl3t64-gnutls",
+      "installed": "8.14.1-2+deb13u7",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-8932"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-9079",
+      "package": "libcurl3t64-gnutls",
+      "installed": "8.14.1-2+deb13u7",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-9079"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-9080",
+      "package": "libcurl3t64-gnutls",
+      "installed": "8.14.1-2+deb13u7",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-9080"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-92388",
+      "package": "libcurl3t64-gnutls",
+      "installed": "8.14.1-2+deb13u7",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-92388"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-9545",
+      "package": "libcurl3t64-gnutls",
+      "installed": "8.14.1-2+deb13u7",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-9545"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2025-10966",
+      "package": "libcurl3t64-gnutls",
+      "installed": "8.14.1-2+deb13u7",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2025-10966"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2025-14017",
+      "package": "libcurl3t64-gnutls",
+      "installed": "8.14.1-2+deb13u7",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2025-14017"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2025-15079",
+      "package": "libcurl3t64-gnutls",
+      "installed": "8.14.1-2+deb13u7",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2025-15079"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2025-15224",
+      "package": "libcurl3t64-gnutls",
+      "installed": "8.14.1-2+deb13u7",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2025-15224"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-107928",
+      "package": "libcurl3t64-gnutls",
+      "installed": "8.14.1-2+deb13u7",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-107928"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-107929",
+      "package": "libcurl3t64-gnutls",
+      "installed": "8.14.1-2+deb13u7",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-107929"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-13608",
+      "package": "libcurl3t64-gnutls",
+      "installed": "8.14.1-2+deb13u7",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-13608"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-18924",
+      "package": "libcurl3t64-gnutls",
+      "installed": "8.14.1-2+deb13u7",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-18924"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-80229",
+      "package": "libcurl3t64-gnutls",
+      "installed": "8.14.1-2+deb13u7",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-80229"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-80230",
+      "package": "libcurl3t64-gnutls",
+      "installed": "8.14.1-2+deb13u7",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-80230"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-80255",
+      "package": "libcurl3t64-gnutls",
+      "installed": "8.14.1-2+deb13u7",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-80255"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-82208",
+      "package": "libcurl3t64-gnutls",
+      "installed": "8.14.1-2+deb13u7",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-82208"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-82209",
+      "package": "libcurl3t64-gnutls",
+      "installed": "8.14.1-2+deb13u7",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-82209"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-86409",
+      "package": "libcurl3t64-gnutls",
+      "installed": "8.14.1-2+deb13u7",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-86409"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-86410",
+      "package": "libcurl3t64-gnutls",
+      "installed": "8.14.1-2+deb13u7",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-86410"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-86414",
+      "package": "libcurl3t64-gnutls",
+      "installed": "8.14.1-2+deb13u7",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-86414"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-87862",
+      "package": "libcurl3t64-gnutls",
+      "installed": "8.14.1-2+deb13u7",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-87862"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-87863",
+      "package": "libcurl3t64-gnutls",
+      "installed": "8.14.1-2+deb13u7",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-87863"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-87864",
+      "package": "libcurl3t64-gnutls",
+      "installed": "8.14.1-2+deb13u7",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-87864"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-87865",
+      "package": "libcurl3t64-gnutls",
+      "installed": "8.14.1-2+deb13u7",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-87865"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-87866",
+      "package": "libcurl3t64-gnutls",
+      "installed": "8.14.1-2+deb13u7",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-87866"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-92386",
+      "package": "libcurl3t64-gnutls",
+      "installed": "8.14.1-2+deb13u7",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-92386"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-92387",
+      "package": "libcurl3t64-gnutls",
+      "installed": "8.14.1-2+deb13u7",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-92387"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-92389",
+      "package": "libcurl3t64-gnutls",
+      "installed": "8.14.1-2+deb13u7",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-92389"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-92390",
+      "package": "libcurl3t64-gnutls",
+      "installed": "8.14.1-2+deb13u7",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-92390"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-92391",
+      "package": "libcurl3t64-gnutls",
+      "installed": "8.14.1-2+deb13u7",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-92391"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-94266",
+      "package": "libcurl3t64-gnutls",
+      "installed": "8.14.1-2+deb13u7",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-94266"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-9547",
+      "package": "libcurl3t64-gnutls",
+      "installed": "8.14.1-2+deb13u7",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-9547"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-113351",
+      "package": "libexpat1",
+      "installed": "2.9.0-1~deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-113351"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-115506",
+      "package": "libexpat1",
+      "installed": "2.9.0-1~deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-115506"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-117610",
+      "package": "libexpat1",
+      "installed": "2.9.0-1~deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-117610"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-118370",
+      "package": "libexpat1",
+      "installed": "2.9.0-1~deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-118370"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2025-66382",
+      "package": "libexpat1",
+      "installed": "2.9.0-1~deb13u1",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "fix_deferred",
+      "source": "https://avd.aquasec.com/nvd/cve-2025-66382"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-124317",
+      "package": "libexpat1",
+      "installed": "2.9.0-1~deb13u1",
+      "severity": "UNKNOWN",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-124317"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-102010",
+      "package": "libgcc-s1",
+      "installed": "14.2.0-19",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-102010"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-114690",
+      "package": "libgcc-s1",
+      "installed": "14.2.0-19",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-114690"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-114691",
+      "package": "libgcc-s1",
+      "installed": "14.2.0-19",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-114691"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-115455",
+      "package": "libgcc-s1",
+      "installed": "14.2.0-19",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-115455"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-95619",
+      "package": "libgcc-s1",
+      "installed": "14.2.0-19",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-95619"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-115456",
+      "package": "libgcc-s1",
+      "installed": "14.2.0-19",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-115456"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2011-3389",
+      "package": "libgnutls30t64",
+      "installed": "3.8.9-3+deb13u4",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2011-3389"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-67693",
+      "package": "libgnutls30t64",
+      "installed": "3.8.9-3+deb13u4",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-67693"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-88647",
+      "package": "libgnutls30t64",
+      "installed": "3.8.9-3+deb13u4",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-88647"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-88648",
+      "package": "libgnutls30t64",
+      "installed": "3.8.9-3+deb13u4",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-88648"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-95184",
+      "package": "libgnutls30t64",
+      "installed": "3.8.9-3+deb13u4",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-95184"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-95210",
+      "package": "libgnutls30t64",
+      "installed": "3.8.9-3+deb13u4",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-95210"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-112315",
+      "package": "libgssapi-krb5-2",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-112315"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-112316",
+      "package": "libgssapi-krb5-2",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-112316"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-112317",
+      "package": "libgssapi-krb5-2",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-112317"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-112318",
+      "package": "libgssapi-krb5-2",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-112318"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-112319",
+      "package": "libgssapi-krb5-2",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-112319"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-112320",
+      "package": "libgssapi-krb5-2",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-112320"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-112321",
+      "package": "libgssapi-krb5-2",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-112321"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-112322",
+      "package": "libgssapi-krb5-2",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-112322"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-112323",
+      "package": "libgssapi-krb5-2",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-112323"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-119079",
+      "package": "libgssapi-krb5-2",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-119079"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-107708",
+      "package": "libgssapi-krb5-2",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-107708"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-107778",
+      "package": "libgssapi-krb5-2",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-107778"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-112314",
+      "package": "libgssapi-krb5-2",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-112314"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2018-5709",
+      "package": "libgssapi-krb5-2",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2018-5709"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2024-26458",
+      "package": "libgssapi-krb5-2",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2024-26458"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2024-26461",
+      "package": "libgssapi-krb5-2",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2024-26461"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-11850",
+      "package": "libgssapi-krb5-2",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-11850"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-107364",
+      "package": "libgssapi-krb5-2",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "UNKNOWN",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-107364"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-107884",
+      "package": "libgssapi-krb5-2",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "UNKNOWN",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-107884"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-111423",
+      "package": "libgssapi-krb5-2",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "UNKNOWN",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-111423"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-118380",
+      "package": "libgssapi-krb5-2",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "UNKNOWN",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-118380"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-71199",
+      "package": "libgssapi-krb5-2",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "UNKNOWN",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-71199"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-71200",
+      "package": "libgssapi-krb5-2",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "UNKNOWN",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-71200"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-112315",
+      "package": "libk5crypto3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-112315"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-112316",
+      "package": "libk5crypto3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-112316"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-112317",
+      "package": "libk5crypto3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-112317"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-112318",
+      "package": "libk5crypto3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-112318"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-112319",
+      "package": "libk5crypto3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-112319"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-112320",
+      "package": "libk5crypto3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-112320"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-112321",
+      "package": "libk5crypto3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-112321"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-112322",
+      "package": "libk5crypto3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-112322"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-112323",
+      "package": "libk5crypto3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-112323"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-119079",
+      "package": "libk5crypto3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-119079"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-107708",
+      "package": "libk5crypto3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-107708"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-107778",
+      "package": "libk5crypto3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-107778"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-112314",
+      "package": "libk5crypto3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-112314"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2018-5709",
+      "package": "libk5crypto3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2018-5709"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2024-26458",
+      "package": "libk5crypto3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2024-26458"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2024-26461",
+      "package": "libk5crypto3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2024-26461"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-11850",
+      "package": "libk5crypto3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-11850"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-107364",
+      "package": "libk5crypto3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "UNKNOWN",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-107364"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-107884",
+      "package": "libk5crypto3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "UNKNOWN",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-107884"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-111423",
+      "package": "libk5crypto3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "UNKNOWN",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-111423"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-118380",
+      "package": "libk5crypto3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "UNKNOWN",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-118380"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-71199",
+      "package": "libk5crypto3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "UNKNOWN",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-71199"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-71200",
+      "package": "libk5crypto3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "UNKNOWN",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-71200"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-112315",
+      "package": "libkrb5-3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-112315"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-112316",
+      "package": "libkrb5-3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-112316"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-112317",
+      "package": "libkrb5-3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-112317"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-112318",
+      "package": "libkrb5-3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-112318"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-112319",
+      "package": "libkrb5-3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-112319"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-112320",
+      "package": "libkrb5-3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-112320"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-112321",
+      "package": "libkrb5-3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-112321"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-112322",
+      "package": "libkrb5-3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-112322"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-112323",
+      "package": "libkrb5-3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-112323"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-119079",
+      "package": "libkrb5-3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-119079"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-107708",
+      "package": "libkrb5-3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-107708"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-107778",
+      "package": "libkrb5-3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-107778"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-112314",
+      "package": "libkrb5-3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-112314"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2018-5709",
+      "package": "libkrb5-3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2018-5709"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2024-26458",
+      "package": "libkrb5-3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2024-26458"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2024-26461",
+      "package": "libkrb5-3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2024-26461"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-11850",
+      "package": "libkrb5-3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-11850"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-107364",
+      "package": "libkrb5-3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "UNKNOWN",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-107364"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-107884",
+      "package": "libkrb5-3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "UNKNOWN",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-107884"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-111423",
+      "package": "libkrb5-3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "UNKNOWN",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-111423"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-118380",
+      "package": "libkrb5-3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "UNKNOWN",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-118380"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-71199",
+      "package": "libkrb5-3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "UNKNOWN",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-71199"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-71200",
+      "package": "libkrb5-3",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "UNKNOWN",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-71200"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-112315",
+      "package": "libkrb5support0",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-112315"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-112316",
+      "package": "libkrb5support0",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-112316"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-112317",
+      "package": "libkrb5support0",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-112317"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-112318",
+      "package": "libkrb5support0",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-112318"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-112319",
+      "package": "libkrb5support0",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-112319"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-112320",
+      "package": "libkrb5support0",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-112320"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-112321",
+      "package": "libkrb5support0",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-112321"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-112322",
+      "package": "libkrb5support0",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-112322"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-112323",
+      "package": "libkrb5support0",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-112323"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-119079",
+      "package": "libkrb5support0",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-119079"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-107708",
+      "package": "libkrb5support0",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-107708"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-107778",
+      "package": "libkrb5support0",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-107778"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-112314",
+      "package": "libkrb5support0",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-112314"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2018-5709",
+      "package": "libkrb5support0",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2018-5709"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2024-26458",
+      "package": "libkrb5support0",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2024-26458"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2024-26461",
+      "package": "libkrb5support0",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2024-26461"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-11850",
+      "package": "libkrb5support0",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-11850"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-107364",
+      "package": "libkrb5support0",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "UNKNOWN",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-107364"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-107884",
+      "package": "libkrb5support0",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "UNKNOWN",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-107884"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-111423",
+      "package": "libkrb5support0",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "UNKNOWN",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-111423"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-118380",
+      "package": "libkrb5support0",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "UNKNOWN",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-118380"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-71199",
+      "package": "libkrb5support0",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "UNKNOWN",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-71199"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-71200",
+      "package": "libkrb5support0",
+      "installed": "1.21.3-5+deb13u1",
+      "severity": "UNKNOWN",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-71200"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-76642",
+      "package": "liblastlog2-2",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-76642"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-78408",
+      "package": "liblastlog2-2",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-78408"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-78409",
+      "package": "liblastlog2-2",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-78409"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-78410",
+      "package": "liblastlog2-2",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-78410"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-3184",
+      "package": "liblastlog2-2",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-3184"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2022-0563",
+      "package": "liblastlog2-2",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2022-0563"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2015-3276",
+      "package": "libldap2",
+      "installed": "2.6.10+dfsg-1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2015-3276"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2017-14159",
+      "package": "libldap2",
+      "installed": "2.6.10+dfsg-1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2017-14159"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2017-17740",
+      "package": "libldap2",
+      "installed": "2.6.10+dfsg-1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2017-17740"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2020-15719",
+      "package": "libldap2",
+      "installed": "2.6.10+dfsg-1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2020-15719"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-22185",
+      "package": "libldap2",
+      "installed": "2.6.10+dfsg-1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-22185"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-76642",
+      "package": "libmount1",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-76642"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-78408",
+      "package": "libmount1",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-78408"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-78409",
+      "package": "libmount1",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-78409"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-78410",
+      "package": "libmount1",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-78410"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-3184",
+      "package": "libmount1",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-3184"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2022-0563",
+      "package": "libmount1",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2022-0563"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2025-69720",
+      "package": "libncursesw6",
+      "installed": "6.5+20250216-2",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2025-69720"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2025-6141",
+      "package": "libncursesw6",
+      "installed": "6.5+20250216-2",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2025-6141"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-58055",
+      "package": "libnghttp2-14",
+      "installed": "1.64.0-1.1+deb13u1",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-58055"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-13757",
+      "package": "libp11-kit0",
+      "installed": "0.25.5-3",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-13757"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-18938",
+      "package": "libp11-kit0",
+      "installed": "0.25.5-3",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-18938"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-54411",
+      "package": "libpam-modules",
+      "installed": "1.7.0-5",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-54411"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-54411",
+      "package": "libpam-modules-bin",
+      "installed": "1.7.0-5",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-54411"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-54411",
+      "package": "libpam-runtime",
+      "installed": "1.7.0-5",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-54411"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-54411",
+      "package": "libpam0g",
+      "installed": "1.7.0-5",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-54411"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-9538",
+      "package": "libperl5.40",
+      "installed": "5.40.1-6+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "fix_deferred",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-9538"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-15534",
+      "package": "libperl5.40",
+      "installed": "5.40.1-6+deb13u1",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "fix_deferred",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-15534"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-82560",
+      "package": "libperl5.40",
+      "installed": "5.40.1-6+deb13u1",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-82560"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2011-4116",
+      "package": "libperl5.40",
+      "installed": "5.40.1-6+deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2011-4116"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-107161",
+      "package": "libsasl2-2",
+      "installed": "2.1.28+dfsg1-9",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-107161"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-107161",
+      "package": "libsasl2-modules-db",
+      "installed": "2.1.28+dfsg1-9",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-107161"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-76642",
+      "package": "libsmartcols1",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-76642"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-78408",
+      "package": "libsmartcols1",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-78408"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-78409",
+      "package": "libsmartcols1",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-78409"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-78410",
+      "package": "libsmartcols1",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-78410"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-3184",
+      "package": "libsmartcols1",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-3184"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2022-0563",
+      "package": "libsmartcols1",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2022-0563"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-119373",
+      "package": "libsqlite3-0",
+      "installed": "3.46.1-7+deb13u2",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-119373"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-119374",
+      "package": "libsqlite3-0",
+      "installed": "3.46.1-7+deb13u2",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-119374"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-119379",
+      "package": "libsqlite3-0",
+      "installed": "3.46.1-7+deb13u2",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-119379"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-119371",
+      "package": "libsqlite3-0",
+      "installed": "3.46.1-7+deb13u2",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-119371"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-119372",
+      "package": "libsqlite3-0",
+      "installed": "3.46.1-7+deb13u2",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-119372"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-119375",
+      "package": "libsqlite3-0",
+      "installed": "3.46.1-7+deb13u2",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-119375"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-119376",
+      "package": "libsqlite3-0",
+      "installed": "3.46.1-7+deb13u2",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-119376"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-119378",
+      "package": "libsqlite3-0",
+      "installed": "3.46.1-7+deb13u2",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-119378"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-119591",
+      "package": "libsqlite3-0",
+      "installed": "3.46.1-7+deb13u2",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-119591"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-50812",
+      "package": "libsqlite3-0",
+      "installed": "3.46.1-7+deb13u2",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-50812"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-50813",
+      "package": "libsqlite3-0",
+      "installed": "3.46.1-7+deb13u2",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-50813"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2021-45346",
+      "package": "libsqlite3-0",
+      "installed": "3.46.1-7+deb13u2",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2021-45346"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2025-70873",
+      "package": "libsqlite3-0",
+      "installed": "3.46.1-7+deb13u2",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2025-70873"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-119377",
+      "package": "libsqlite3-0",
+      "installed": "3.46.1-7+deb13u2",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-119377"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-102010",
+      "package": "libstdc++6",
+      "installed": "14.2.0-19",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-102010"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-114690",
+      "package": "libstdc++6",
+      "installed": "14.2.0-19",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-114690"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-114691",
+      "package": "libstdc++6",
+      "installed": "14.2.0-19",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-114691"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-115455",
+      "package": "libstdc++6",
+      "installed": "14.2.0-19",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-115455"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-95619",
+      "package": "libstdc++6",
+      "installed": "14.2.0-19",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-95619"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-115456",
+      "package": "libstdc++6",
+      "installed": "14.2.0-19",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-115456"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-16742",
+      "package": "libsystemd0",
+      "installed": "257.13-1~deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-16742"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-15059",
+      "package": "libsystemd0",
+      "installed": "257.13-1~deb13u1",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-15059"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2013-4392",
+      "package": "libsystemd0",
+      "installed": "257.13-1~deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2013-4392"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2023-31437",
+      "package": "libsystemd0",
+      "installed": "257.13-1~deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2023-31437"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2023-31438",
+      "package": "libsystemd0",
+      "installed": "257.13-1~deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2023-31438"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2023-31439",
+      "package": "libsystemd0",
+      "installed": "257.13-1~deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2023-31439"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-40228",
+      "package": "libsystemd0",
+      "installed": "257.13-1~deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-40228"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2025-69720",
+      "package": "libtinfo6",
+      "installed": "6.5+20250216-2",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2025-69720"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2025-6141",
+      "package": "libtinfo6",
+      "installed": "6.5+20250216-2",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2025-6141"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-16742",
+      "package": "libudev1",
+      "installed": "257.13-1~deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-16742"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-15059",
+      "package": "libudev1",
+      "installed": "257.13-1~deb13u1",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-15059"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2013-4392",
+      "package": "libudev1",
+      "installed": "257.13-1~deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2013-4392"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2023-31437",
+      "package": "libudev1",
+      "installed": "257.13-1~deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2023-31437"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2023-31438",
+      "package": "libudev1",
+      "installed": "257.13-1~deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2023-31438"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2023-31439",
+      "package": "libudev1",
+      "installed": "257.13-1~deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2023-31439"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-40228",
+      "package": "libudev1",
+      "installed": "257.13-1~deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-40228"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-76642",
+      "package": "libuuid1",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-76642"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-78408",
+      "package": "libuuid1",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-78408"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-78409",
+      "package": "libuuid1",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-78409"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-78410",
+      "package": "libuuid1",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-78410"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-3184",
+      "package": "libuuid1",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-3184"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2022-0563",
+      "package": "libuuid1",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2022-0563"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-76642",
+      "package": "login",
+      "installed": "1:4.16.0-2+really2.41.5-0+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-76642"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-78408",
+      "package": "login",
+      "installed": "1:4.16.0-2+really2.41.5-0+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-78408"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-78409",
+      "package": "login",
+      "installed": "1:4.16.0-2+really2.41.5-0+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-78409"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-78410",
+      "package": "login",
+      "installed": "1:4.16.0-2+really2.41.5-0+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-78410"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-3184",
+      "package": "login",
+      "installed": "1:4.16.0-2+really2.41.5-0+deb13u1",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-3184"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2022-0563",
+      "package": "login",
+      "installed": "1:4.16.0-2+really2.41.5-0+deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2022-0563"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2007-5686",
+      "package": "login.defs",
+      "installed": "1:4.17.4-2",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2007-5686"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2024-56433",
+      "package": "login.defs",
+      "installed": "1:4.17.4-2",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2024-56433"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "TEMP-0628843-DBAD28",
+      "package": "login.defs",
+      "installed": "1:4.17.4-2",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://security-tracker.debian.org/tracker/TEMP-0628843-DBAD28"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-76642",
+      "package": "mount",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-76642"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-78408",
+      "package": "mount",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-78408"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-78409",
+      "package": "mount",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-78409"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-78410",
+      "package": "mount",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-78410"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-3184",
+      "package": "mount",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-3184"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2022-0563",
+      "package": "mount",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2022-0563"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2025-69720",
+      "package": "ncurses-base",
+      "installed": "6.5+20250216-2",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2025-69720"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2025-6141",
+      "package": "ncurses-base",
+      "installed": "6.5+20250216-2",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2025-6141"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2025-69720",
+      "package": "ncurses-bin",
+      "installed": "6.5+20250216-2",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2025-69720"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2025-6141",
+      "package": "ncurses-bin",
+      "installed": "6.5+20250216-2",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2025-6141"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2007-5686",
+      "package": "passwd",
+      "installed": "1:4.17.4-2",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2007-5686"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2024-56433",
+      "package": "passwd",
+      "installed": "1:4.17.4-2",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2024-56433"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "TEMP-0628843-DBAD28",
+      "package": "passwd",
+      "installed": "1:4.17.4-2",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://security-tracker.debian.org/tracker/TEMP-0628843-DBAD28"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-9538",
+      "package": "perl",
+      "installed": "5.40.1-6+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "fix_deferred",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-9538"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-15534",
+      "package": "perl",
+      "installed": "5.40.1-6+deb13u1",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "fix_deferred",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-15534"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-82560",
+      "package": "perl",
+      "installed": "5.40.1-6+deb13u1",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-82560"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2011-4116",
+      "package": "perl",
+      "installed": "5.40.1-6+deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2011-4116"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-9538",
+      "package": "perl-base",
+      "installed": "5.40.1-6+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "fix_deferred",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-9538"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-15534",
+      "package": "perl-base",
+      "installed": "5.40.1-6+deb13u1",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "fix_deferred",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-15534"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-82560",
+      "package": "perl-base",
+      "installed": "5.40.1-6+deb13u1",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-82560"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2011-4116",
+      "package": "perl-base",
+      "installed": "5.40.1-6+deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2011-4116"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-9538",
+      "package": "perl-modules-5.40",
+      "installed": "5.40.1-6+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "fix_deferred",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-9538"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-15534",
+      "package": "perl-modules-5.40",
+      "installed": "5.40.1-6+deb13u1",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "fix_deferred",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-15534"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-82560",
+      "package": "perl-modules-5.40",
+      "installed": "5.40.1-6+deb13u1",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-82560"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2011-4116",
+      "package": "perl-modules-5.40",
+      "installed": "5.40.1-6+deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2011-4116"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "TEMP-0517018-A83CE6",
+      "package": "sysvinit-utils",
+      "installed": "3.14-4",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://security-tracker.debian.org/tracker/TEMP-0517018-A83CE6"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-18477",
+      "package": "tar",
+      "installed": "1.35+dfsg-3.1",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-18477"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-18508",
+      "package": "tar",
+      "installed": "1.35+dfsg-3.1",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-18508"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-5704",
+      "package": "tar",
+      "installed": "1.35+dfsg-3.1",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-5704"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2005-2541",
+      "package": "tar",
+      "installed": "1.35+dfsg-3.1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2005-2541"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "TEMP-0290435-0B57B5",
+      "package": "tar",
+      "installed": "1.35+dfsg-3.1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://security-tracker.debian.org/tracker/TEMP-0290435-0B57B5"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-76642",
+      "package": "util-linux",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-76642"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-78408",
+      "package": "util-linux",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-78408"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-78409",
+      "package": "util-linux",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-78409"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-78410",
+      "package": "util-linux",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "HIGH",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-78410"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2026-3184",
+      "package": "util-linux",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "MEDIUM",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2026-3184"
+    },
+    {
+      "target": "extrude-security-review:release (debian 13.7)",
+      "id": "CVE-2022-0563",
+      "package": "util-linux",
+      "installed": "2.41.5-0+deb13u1",
+      "severity": "LOW",
+      "fixed_version": null,
+      "status": "affected",
+      "source": "https://avd.aquasec.com/nvd/cve-2022-0563"
+    }
+  ]
+}

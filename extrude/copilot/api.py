@@ -4,7 +4,8 @@ import hashlib
 import json
 import time
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, field_validator
+from extrude.parse.sniff import validate_paste_filename
 
 from extrude.copilot.budget import begin_request, clear_inflight, under_cap
 from extrude.intake.domain import ambiguous_question
@@ -23,13 +24,15 @@ from extrude.parse.openscad import parse_openscad
 
 
 class CopilotRequest(BaseModel):
-    text: str | None = None
-    artifact: str | None = None
-    filename: str | None = None
-    printer: str = "generic"
-    filament: str = "PLA"
+    text: str | None = Field(default=None, max_length=16000)
+    artifact: str | None = Field(default=None, max_length=512000)
+    filename: str | None = Field(default=None, max_length=255)
+    printer: str = Field(default="generic", max_length=100)
+    filament: str = Field(default="PLA", max_length=100)
     offline: bool = False
     repair: bool = False
+
+    _valid_filename = field_validator("filename")(validate_paste_filename)
 
 
 class CopilotResponse(BaseModel):

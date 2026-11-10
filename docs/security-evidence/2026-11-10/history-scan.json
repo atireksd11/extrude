@@ -1,0 +1,970 @@
+{
+  "blobs": 609,
+  "findings": [
+    {
+      "file": "docs/audit-evidence/2026-11-09/design-final.json",
+      "blob": "b6ac5ffccc59368d0e97bbc2762b5370cfcf4d9d",
+      "commit": "cc4bdd310852294521da14ab861dbac52d8c4ad0",
+      "line": 4,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/audit-evidence/2026-11-09/design-final.json",
+      "blob": "b6ac5ffccc59368d0e97bbc2762b5370cfcf4d9d",
+      "commit": "cc4bdd310852294521da14ab861dbac52d8c4ad0",
+      "line": 137,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/audit-evidence/2026-11-09/design-final.json",
+      "blob": "b6ac5ffccc59368d0e97bbc2762b5370cfcf4d9d",
+      "commit": "cc4bdd310852294521da14ab861dbac52d8c4ad0",
+      "line": 219,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/audit-evidence/2026-11-09/design-final.json",
+      "blob": "b6ac5ffccc59368d0e97bbc2762b5370cfcf4d9d",
+      "commit": "cc4bdd310852294521da14ab861dbac52d8c4ad0",
+      "line": 257,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/audit-evidence/2026-11-09/design-final.json",
+      "blob": "b6ac5ffccc59368d0e97bbc2762b5370cfcf4d9d",
+      "commit": "cc4bdd310852294521da14ab861dbac52d8c4ad0",
+      "line": 295,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/audit-evidence/2026-11-09/design-final.json",
+      "blob": "b6ac5ffccc59368d0e97bbc2762b5370cfcf4d9d",
+      "commit": "cc4bdd310852294521da14ab861dbac52d8c4ad0",
+      "line": 391,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/audit-evidence/2026-11-09/design-final.json",
+      "blob": "b6ac5ffccc59368d0e97bbc2762b5370cfcf4d9d",
+      "commit": "cc4bdd310852294521da14ab861dbac52d8c4ad0",
+      "line": 429,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/audit-evidence/2026-11-09/design-final.json",
+      "blob": "b6ac5ffccc59368d0e97bbc2762b5370cfcf4d9d",
+      "commit": "cc4bdd310852294521da14ab861dbac52d8c4ad0",
+      "line": 504,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/audit-evidence/2026-11-09/index.json",
+      "blob": "b51428a3ba3d15211e4674a160527fc0398f57a5",
+      "commit": "cc4bdd310852294521da14ab861dbac52d8c4ad0",
+      "line": 4,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/audit-evidence/2026-11-09/index.json",
+      "blob": "b51428a3ba3d15211e4674a160527fc0398f57a5",
+      "commit": "cc4bdd310852294521da14ab861dbac52d8c4ad0",
+      "line": 9,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/audit-evidence/2026-11-09/index.json",
+      "blob": "b51428a3ba3d15211e4674a160527fc0398f57a5",
+      "commit": "cc4bdd310852294521da14ab861dbac52d8c4ad0",
+      "line": 14,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/audit-evidence/2026-11-09/index.json",
+      "blob": "b51428a3ba3d15211e4674a160527fc0398f57a5",
+      "commit": "cc4bdd310852294521da14ab861dbac52d8c4ad0",
+      "line": 19,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/audit-evidence/2026-11-09/index.json",
+      "blob": "b51428a3ba3d15211e4674a160527fc0398f57a5",
+      "commit": "cc4bdd310852294521da14ab861dbac52d8c4ad0",
+      "line": 24,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/audit-evidence/2026-11-09/index.json",
+      "blob": "b51428a3ba3d15211e4674a160527fc0398f57a5",
+      "commit": "cc4bdd310852294521da14ab861dbac52d8c4ad0",
+      "line": 29,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/audit-evidence/2026-11-09/index.json",
+      "blob": "b51428a3ba3d15211e4674a160527fc0398f57a5",
+      "commit": "cc4bdd310852294521da14ab861dbac52d8c4ad0",
+      "line": 34,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/audit-evidence/2026-11-09/index.json",
+      "blob": "b51428a3ba3d15211e4674a160527fc0398f57a5",
+      "commit": "cc4bdd310852294521da14ab861dbac52d8c4ad0",
+      "line": 39,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "eval/proxy_tasks/buck/task.json",
+      "blob": "6ddb69fbd1e17bc50463194abf64d92a4f2e592d",
+      "commit": "f5821e6496511e67ceba775975e9ea272ceab562",
+      "line": 24,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "eval/proxy_tasks/divider/task.json",
+      "blob": "e49fc57b42a7daf2098cb83dd973d1717e8e3737",
+      "commit": "f5821e6496511e67ceba775975e9ea272ceab562",
+      "line": 20,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "eval/proxy_tasks/holdup/task.json",
+      "blob": "35235105200749b7e097cb347a88e13bc9c12d32",
+      "commit": "f5821e6496511e67ceba775975e9ea272ceab562",
+      "line": 22,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "eval/proxy_tasks/indicator/task.json",
+      "blob": "b309cda8d33bfed6dbf7dbddb8f47189b19a2934",
+      "commit": "f5821e6496511e67ceba775975e9ea272ceab562",
+      "line": 22,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "eval/proxy_tasks/ldo/task.json",
+      "blob": "96a2dbba76b3528bbe287b975d7e2318887959d0",
+      "commit": "f5821e6496511e67ceba775975e9ea272ceab562",
+      "line": 22,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "eval/proxy_tasks/pullup/task.json",
+      "blob": "6b045914a8635a38590e0498f80e941de31383fb",
+      "commit": "f5821e6496511e67ceba775975e9ea272ceab562",
+      "line": 22,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "eval/proxy_tasks/series/task.json",
+      "blob": "047a19c983f5bbd488cae698669053117ecf0409",
+      "commit": "f5821e6496511e67ceba775975e9ea272ceab562",
+      "line": 18,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 8,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 23,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 25,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 30,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 32,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 37,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 39,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 44,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 46,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 82,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 98,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 100,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 105,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 107,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 112,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 114,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 119,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 121,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 126,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 128,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 133,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 135,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 140,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 142,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 147,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 149,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 154,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 156,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 161,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 163,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 168,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 170,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 185,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 187,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 192,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 194,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 199,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 201,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 206,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 208,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 252,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 267,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 269,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 274,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 276,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 312,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 601,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 616,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 618,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 623,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 625,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 640,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 642,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 647,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 649,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 2717,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 2798,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 2813,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 2815,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 2851,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 2869,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 2871,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 2886,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 2888,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 2903,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 2905,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 2910,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 2912,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 2917,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 2919,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 2934,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 2936,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 2941,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 2943,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 2948,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 2950,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 2965,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 2967,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 2972,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "docs/benchmarks/design-rules-results-2026-11-08.json",
+      "blob": "6a573aabe564a50564831a9f6e8d13b03009e91a",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 2974,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "eval/design_rules_benchmark.py",
+      "blob": "edbd751df3d6adbd8f0314301692cf48947786e8",
+      "commit": "d4c7d7ec3284bb203c3dfcab02f64eba2b2b2dca",
+      "line": 20,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "eval/live_test/repos.json",
+      "blob": "e94f166ee2d367c58ce7df513bc665e27aabc2ff",
+      "commit": "a143891ea649617ba6f59edbcca1f8df37a90960",
+      "line": 4,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "eval/live_test/repos.json",
+      "blob": "e94f166ee2d367c58ce7df513bc665e27aabc2ff",
+      "commit": "a143891ea649617ba6f59edbcca1f8df37a90960",
+      "line": 8,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "eval/live_test/repos.json",
+      "blob": "e94f166ee2d367c58ce7df513bc665e27aabc2ff",
+      "commit": "a143891ea649617ba6f59edbcca1f8df37a90960",
+      "line": 12,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "eval/live_test/repos.json",
+      "blob": "e94f166ee2d367c58ce7df513bc665e27aabc2ff",
+      "commit": "a143891ea649617ba6f59edbcca1f8df37a90960",
+      "line": 16,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "eval/live_test/repos.json",
+      "blob": "e94f166ee2d367c58ce7df513bc665e27aabc2ff",
+      "commit": "a143891ea649617ba6f59edbcca1f8df37a90960",
+      "line": 20,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "eval/live_test/repos.json",
+      "blob": "e94f166ee2d367c58ce7df513bc665e27aabc2ff",
+      "commit": "a143891ea649617ba6f59edbcca1f8df37a90960",
+      "line": 24,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "eval/live_test/repos.json",
+      "blob": "e94f166ee2d367c58ce7df513bc665e27aabc2ff",
+      "commit": "a143891ea649617ba6f59edbcca1f8df37a90960",
+      "line": 28,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "eval/proxy_tasks/buck/task.json",
+      "blob": "13de83ab5c79b96036b6f858acfa97e01eeee136",
+      "commit": "f5821e6496511e67ceba775975e9ea272ceab562",
+      "line": 24,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "eval/proxy_tasks/holdup/task.json",
+      "blob": "4ed8d118de5301d4370d67559f4910efb56d319f",
+      "commit": "f5821e6496511e67ceba775975e9ea272ceab562",
+      "line": 22,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "eval/proxy_tasks/ldo/task.json",
+      "blob": "652116d4d56842b8a1e2b1e291302d0a8ff6caef",
+      "commit": "f5821e6496511e67ceba775975e9ea272ceab562",
+      "line": 22,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "eval/proxy_tasks/led/task.json",
+      "blob": "a8ecec2b89b5ae91a843ee39f0187e7c14724f5b",
+      "commit": "f5821e6496511e67ceba775975e9ea272ceab562",
+      "line": 18,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "eval/proxy_tasks/buck/task.json",
+      "blob": "62f22fe3e32d66289db42792fd09bd26aff0466c",
+      "commit": "13d442a36edb1267664db48533d6d848a56fe689",
+      "line": 24,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "eval/proxy_tasks/holdup/task.json",
+      "blob": "c6bdebdc360728b2141073127aca5f40f4401f8d",
+      "commit": "13d442a36edb1267664db48533d6d848a56fe689",
+      "line": 22,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "eval/proxy_tasks/ldo/task.json",
+      "blob": "f5a033c143beabac519441b9b1182ea3e6feedea",
+      "commit": "13d442a36edb1267664db48533d6d848a56fe689",
+      "line": 22,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    },
+    {
+      "file": "eval/proxy_tasks/led/task.json",
+      "blob": "d2c69f0ee97ff38f15fc5731fc559f564f539fb9",
+      "commit": "13d442a36edb1267664db48533d6d848a56fe689",
+      "line": 18,
+      "type": "Hex High Entropy String",
+      "disposition": "false positive: specification hash, Git commit, or evidence identifier"
+    }
+  ],
+  "scanner": "detect-secrets 1.5.0, offline heuristics; binary files skipped",
+  "branches": [
+    "refs/remotes/origin/codex/audit-review",
+    "refs/remotes/origin/codex/evidence-audit-tools",
+    "refs/remotes/origin/codex/evidence-design-rules",
+    "refs/remotes/origin/codex/extrude-operating-system",
+    "refs/remotes/origin/codex/extrude-v1-operating-guide",
+    "refs/remotes/origin/docs/readme-diff-check",
+    "refs/remotes/origin/draft/temporary-public-container",
+    "refs/remotes/origin/fix/audit-trust-native-checks",
+    "refs/remotes/origin/main"
+  ],
+  "shallow": false
+}
