@@ -32,7 +32,7 @@ def references(value: str) -> tuple[str, ...] | None:
 def _csv_facts(data: bytes, delimiter=",") -> dict:
     if len(data) > MAX_BOM_BYTES:
         raise ValueError("BOM exceeds the 1 MiB analysis limit.")
-    stream = StringIO(data.decode("utf-8-sig"), newline="")
+    stream = StringIO(data.decode("utf-8-sig", errors="replace"), newline="")
     reader = csv.DictReader(stream, delimiter=delimiter, strict=True)
     columns = reader.fieldnames
     if not columns or len(columns) > MAX_COLUMNS or len(columns) != len(set(columns)) or any(not name or len(name) > 100 for name in columns):

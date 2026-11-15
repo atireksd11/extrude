@@ -95,7 +95,7 @@ def _safe_table(data: bytes, path: str, files: set[str]) -> None:
     from extrude.parse.kicad_pcb import _PARSE_LOCK, _string_field, _rows
     try:
         with _PARSE_LOCK:
-            table = parse_string(data.decode("utf-8-sig"))
+            table = parse_string(data.decode("utf-8-sig", errors="replace"))
         for lib in _rows(table, "lib"):
             if _string_field(lib, "type") not in {"KiCad", "Legacy"}:
                 raise SnapshotError("External library plugin is unsupported.")
@@ -148,7 +148,7 @@ def materialize(repo_id: str, sha: str):
                 if PurePosixPath(path).name in TABLES:
                     _safe_table(data, path, files)
                 if path.endswith(".kicad_pro"):
-                    json.loads(data.decode("utf-8-sig"))
+                    json.loads(data.decode("utf-8-sig", errors="replace"))
                 target.parent.mkdir(parents=True, exist_ok=True)
                 target.write_bytes(data)
                 snapshot.files.add(path)

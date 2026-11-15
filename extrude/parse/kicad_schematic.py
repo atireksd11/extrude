@@ -34,7 +34,7 @@ def parse_schematic(data: bytes) -> Schematic:
         raise SchematicParseError("Schematic exceeds the 8 MiB analysis limit.")
     try:
         with _PARSE_LOCK:
-            root = parse_string(data.decode("utf-8-sig"))
+            root = parse_string(data.decode("utf-8-sig", errors="replace"))
         if root.name != "kicad_sch":
             raise ValueError()
         fmt = _field(root, "version")
@@ -60,7 +60,7 @@ def parse_schematic(data: bytes) -> Schematic:
                 raise ValueError()
             sheets.append((uid, filename))
         return Schematic(fmt[0], tuple(symbols), tuple(sheets))
-    except (ParseError, ValueError, TypeError, IndexError, RecursionError) as exc:
+    except (ParseError, ValueError, TypeError, IndexError, OverflowError, RecursionError) as exc:
         raise SchematicParseError("Could not read native KiCad schematic fields.") from exc
 
 
