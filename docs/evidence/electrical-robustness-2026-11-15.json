@@ -96,27 +96,51 @@
     },
     {
       "label": "crkbd",
-      "electrical_outcome": "blocked",
-      "reason": "Exact owner/repository + pinned SHA and Nov 15 findings unavailable; no substituted HEAD or baseline used."
+      "source": "foostan/crkbd",
+      "sha": "1747b2623b018a7b5acc6d1f7e316debad96a727",
+      "base": "e79413032d6f9330e49daf55904cf98e044d0686",
+      "electrical_outcome": "ran",
+      "whole_layer_handler": [],
+      "electrical_findings": 469,
+      "total_findings": 469,
+      "input_degradation": []
     },
     {
       "label": "esp32-poe",
-      "electrical_outcome": "blocked",
-      "reason": "Exact owner/repository + pinned SHA and Nov 15 findings unavailable; no substituted HEAD or baseline used."
+      "source": "OLIMEX/ESP32-POE",
+      "sha": "deb38a377d50eadb04ddc7118a17a5ae58b1ee53",
+      "base": "a9ccb127e4eff6bf58b2e366adc8dca24b42d9e7",
+      "electrical_outcome": "ran",
+      "whole_layer_handler": [],
+      "electrical_findings": 19,
+      "total_findings": 19,
+      "input_degradation": []
     },
     {
       "label": "dev-kit-clone",
-      "electrical_outcome": "blocked",
-      "reason": "Exact owner/repository + pinned SHA and Nov 15 findings unavailable; no substituted HEAD or baseline used."
+      "source": "BrijModi/ESP32-Dev-Kit-Clone",
+      "sha": "ab7d6491243f16dd0895d63786f04da362e704fb",
+      "base": "450925bff4c8bf19286b07161e380fdc0605ad99",
+      "electrical_outcome": "ran",
+      "whole_layer_handler": [],
+      "electrical_findings": 1,
+      "total_findings": 1,
+      "input_degradation": []
     },
     {
       "label": "esp32-hat",
-      "electrical_outcome": "blocked",
-      "reason": "Exact owner/repository + pinned SHA and Nov 15 findings unavailable; no substituted HEAD or baseline used."
+      "source": "Rufilla/ESP32_HAT",
+      "sha": "b02f0acafc18509c680914fab8fbd77329ffb6d9",
+      "base": "fc350ccad8c98bb4546be56dcdc388805259c1ee",
+      "electrical_outcome": "ran",
+      "whole_layer_handler": [],
+      "electrical_findings": 1,
+      "total_findings": 1,
+      "input_degradation": []
     }
   ],
   "ac3": "unmet: retained 8 MiB cap excludes Lily58 Pro_V2",
-  "ac6": "blocked: original Nov 15 findings and four pinned revisions missing",
+  "ac6": "failed vs supplied Nov 15 PR #10 expectation; all four byte-identical to PR #11 baseline; 10 genuine hits retained; PR #11 already adds 438 assembly findings and omits 2 ESP32 HAT pull-up findings",
   "final_tests": {
     "targeted": "132 passed, 3 failed",
     "atlas": "141 passed, 3 failed, 284 deselected",
@@ -124,5 +148,216 @@
     "ui": "PASS",
     "diff_check": "PASS",
     "new_failures": []
+  },
+  "ac6_method": {
+    "production_commit": "a7ae97e85bc1992da4e9d2ccf7ef464c0449208b",
+    "pr11_baseline_commit": "b04aad503f7e11c1ecf48a8be2f8a87451857234",
+    "reconstructed_nov15_pr10_commit": "20d66bbd27750c5b437b4a0b009a2133f4533d74",
+    "provenance": "The external harness and original raw Nov 15 JSON remain inaccessible. Re-ran production workspace audit from archived PR #10 and PR #11 source against identical pinned inputs; reconstructed PR #10 counts and rule families match all four supplied Nov 15 expectations.",
+    "entry_points": [
+      "workspace_audit._descriptor(repo_id, pinned_head, supplied_base)",
+      "workspace_audit._collect(audit)"
+    ],
+    "canonicalization": "Filter electrical.* findings; sort the (rule_id, summary) list preserving duplicates; json.dumps(ensure_ascii=False, separators=(comma, colon)) + newline; UTF-8 bytes. Compare bytes and SHA-256.",
+    "crkbd_base_note": "Pinned HEAD is a merge commit; supplied e79413032d6f9330e49daf55904cf98e044d0686 is its second parent and was used explicitly.",
+    "layer_outcomes": "ran on all 7 pinned repos; no whole-layer last-resort coverage",
+    "new_finding_differences_vs_pr11": false
+  },
+  "ac6_comparisons": {
+    "crkbd": {
+      "source": "foostan/crkbd",
+      "sha": "1747b2623b018a7b5acc6d1f7e316debad96a727",
+      "base": "e79413032d6f9330e49daf55904cf98e044d0686",
+      "electrical_outcome": "ran",
+      "expected_nov15_count": 35,
+      "expected_nov15_by_rule": {
+        "electrical.usb": 4,
+        "electrical.protection": 4,
+        "electrical.clock": 4,
+        "electrical.pullup": 8,
+        "electrical.models": 15
+      },
+      "reconstructed_pr10_matches_supplied_counts": true,
+      "actual_count": 469,
+      "actual_by_rule": {
+        "electrical.assembly": 434,
+        "electrical.clock": 4,
+        "electrical.models": 15,
+        "electrical.protection": 4,
+        "electrical.pullup": 8,
+        "electrical.usb": 4
+      },
+      "byte_identical_to_reconstructed_nov15_pr10": false,
+      "byte_identical_to_pr11": true,
+      "sha256": {
+        "pr10": "fa52f238c5ab757abd335ae5f75e333913d2daf7a8749d22590cded20635371e",
+        "pr11": "129bb373ff3ca5f8ade2bcee4c3b1aa8a364e71fd326d30eec72959c15cc165f",
+        "pr12": "129bb373ff3ca5f8ade2bcee4c3b1aa8a364e71fd326d30eec72959c15cc165f"
+      },
+      "all_nov15_findings_retained": true,
+      "added_vs_nov15_by_rule": {
+        "electrical.assembly": 434
+      },
+      "missing_vs_nov15_by_rule": {},
+      "added_examples": [
+        {
+          "rule_id": "electrical.assembly",
+          "summary": "C10: has a PCB footprint but no symbol in the paired schematic \u2014 its connectivity and BOM intent are unrepresented. Reconcile the board and schematic.",
+          "multiplicity": 2
+        },
+        {
+          "rule_id": "electrical.assembly",
+          "summary": "C11: has a PCB footprint but no symbol in the paired schematic \u2014 its connectivity and BOM intent are unrepresented. Reconcile the board and schematic.",
+          "multiplicity": 2
+        },
+        {
+          "rule_id": "electrical.assembly",
+          "summary": "C12: has a PCB footprint but no symbol in the paired schematic \u2014 its connectivity and BOM intent are unrepresented. Reconcile the board and schematic.",
+          "multiplicity": 2
+        }
+      ],
+      "missing_examples": [],
+      "genuine_findings_retained": []
+    },
+    "esp32-poe": {
+      "source": "OLIMEX/ESP32-POE",
+      "sha": "deb38a377d50eadb04ddc7118a17a5ae58b1ee53",
+      "base": "a9ccb127e4eff6bf58b2e366adc8dca24b42d9e7",
+      "electrical_outcome": "ran",
+      "expected_nov15_count": 15,
+      "expected_nov15_by_rule": {
+        "electrical.protection": 3,
+        "electrical.capacitor": 6,
+        "electrical.pullup": 6
+      },
+      "reconstructed_pr10_matches_supplied_counts": true,
+      "actual_count": 19,
+      "actual_by_rule": {
+        "electrical.assembly": 4,
+        "electrical.capacitor": 6,
+        "electrical.protection": 3,
+        "electrical.pullup": 6
+      },
+      "byte_identical_to_reconstructed_nov15_pr10": false,
+      "byte_identical_to_pr11": true,
+      "sha256": {
+        "pr10": "d5079e4eb4d93bf06f2c6357ea979906bf3de6d17b2bde242ca5573093cd2770",
+        "pr11": "f6a30ffd67b3c5891c8b8b4e5cdd3485c1bc9487403fd62a5722677d8a47701c",
+        "pr12": "f6a30ffd67b3c5891c8b8b4e5cdd3485c1bc9487403fd62a5722677d8a47701c"
+      },
+      "all_nov15_findings_retained": true,
+      "added_vs_nov15_by_rule": {
+        "electrical.assembly": 4
+      },
+      "missing_vs_nov15_by_rule": {},
+      "added_examples": [
+        {
+          "rule_id": "electrical.assembly",
+          "summary": "C29: has a PCB footprint but no symbol in the paired schematic \u2014 its connectivity and BOM intent are unrepresented. Reconcile the board and schematic.",
+          "multiplicity": 3
+        },
+        {
+          "rule_id": "electrical.assembly",
+          "summary": "R23: has a PCB footprint but no symbol in the paired schematic \u2014 its connectivity and BOM intent are unrepresented. Reconcile the board and schematic.",
+          "multiplicity": 1
+        }
+      ],
+      "missing_examples": [],
+      "genuine_findings_retained": [
+        {
+          "rule_id": "electrical.capacitor",
+          "summary": "C1: 22uF/6.3V/20%/X5R/C0603 sees 5V (79.4% of 6.3V rating), above the 70% derating limit. Select a higher voltage rating.",
+          "multiplicity": 3
+        },
+        {
+          "rule_id": "electrical.capacitor",
+          "summary": "C7: 22uF/6.3V/20%/X5R/C0603 sees 5V (79.4% of 6.3V rating), above the 70% derating limit. Select a higher voltage rating.",
+          "multiplicity": 3
+        },
+        {
+          "rule_id": "electrical.protection",
+          "summary": "USB-UART1: D+/D- have no identifiable external ESD protection in this schematic. Add a suitable low-capacitance ESD array or document integrated protection.",
+          "multiplicity": 3
+        }
+      ],
+      "genuine_findings_retained_count": 9
+    },
+    "dev-kit-clone": {
+      "source": "BrijModi/ESP32-Dev-Kit-Clone",
+      "sha": "ab7d6491243f16dd0895d63786f04da362e704fb",
+      "base": "450925bff4c8bf19286b07161e380fdc0605ad99",
+      "electrical_outcome": "ran",
+      "expected_nov15_count": 1,
+      "expected_nov15_by_rule": {
+        "electrical.protection": 1
+      },
+      "reconstructed_pr10_matches_supplied_counts": true,
+      "actual_count": 1,
+      "actual_by_rule": {
+        "electrical.protection": 1
+      },
+      "byte_identical_to_reconstructed_nov15_pr10": true,
+      "byte_identical_to_pr11": true,
+      "sha256": {
+        "pr10": "8bc9b50d03418fe73ae65d3016761ec98bc68aaf1a50015b090e0c4ceef52c71",
+        "pr11": "8bc9b50d03418fe73ae65d3016761ec98bc68aaf1a50015b090e0c4ceef52c71",
+        "pr12": "8bc9b50d03418fe73ae65d3016761ec98bc68aaf1a50015b090e0c4ceef52c71"
+      },
+      "all_nov15_findings_retained": true,
+      "added_vs_nov15_by_rule": {},
+      "missing_vs_nov15_by_rule": {},
+      "added_examples": [],
+      "missing_examples": [],
+      "genuine_findings_retained": [
+        {
+          "rule_id": "electrical.protection",
+          "summary": "J1: D+/D- have no identifiable external ESD protection in this schematic. Add a suitable low-capacitance ESD array or document integrated protection.",
+          "multiplicity": 1
+        }
+      ],
+      "genuine_findings_retained_count": 1
+    },
+    "esp32-hat": {
+      "source": "Rufilla/ESP32_HAT",
+      "sha": "b02f0acafc18509c680914fab8fbd77329ffb6d9",
+      "base": "fc350ccad8c98bb4546be56dcdc388805259c1ee",
+      "electrical_outcome": "ran",
+      "expected_nov15_count": 3,
+      "expected_nov15_by_rule": {
+        "electrical.clock": 1,
+        "electrical.pullup": 2
+      },
+      "reconstructed_pr10_matches_supplied_counts": true,
+      "actual_count": 1,
+      "actual_by_rule": {
+        "electrical.clock": 1
+      },
+      "byte_identical_to_reconstructed_nov15_pr10": false,
+      "byte_identical_to_pr11": true,
+      "sha256": {
+        "pr10": "3c449eb935a8f1444f7c0197592b765d7e00b554dda2730111035db80eb66682",
+        "pr11": "ff8e314200ecf2e986cf275f2e338f7450ccdfe07309d1ffb707f5f0b1a3c793",
+        "pr12": "ff8e314200ecf2e986cf275f2e338f7450ccdfe07309d1ffb707f5f0b1a3c793"
+      },
+      "all_nov15_findings_retained": false,
+      "added_vs_nov15_by_rule": {},
+      "missing_vs_nov15_by_rule": {
+        "electrical.pullup": 2
+      },
+      "added_examples": [],
+      "missing_examples": [
+        {
+          "rule_id": "electrical.pullup",
+          "summary": "J5: SCL/GPIO3 (SCL/GPIO3) has no external pull-up to a known supply. I2C/DDC open-drain signaling requires pull-ups; fit them or document pull-ups on the connected module.",
+          "multiplicity": 1
+        },
+        {
+          "rule_id": "electrical.pullup",
+          "summary": "J5: SDA/GPIO2 (SDA/GPIO2) has no external pull-up to a known supply. I2C/DDC open-drain signaling requires pull-ups; fit them or document pull-ups on the connected module.",
+          "multiplicity": 1
+        }
+      ],
+      "genuine_findings_retained": []
+    }
   }
 }

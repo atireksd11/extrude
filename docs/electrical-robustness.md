@@ -57,9 +57,9 @@ at 8 MiB. The 256-file / 64 MiB limits and other domain/graph caps are retained.
 
 The external `hidden_files/deep-test-3-2026-11-15/run_extrude.py` harness and
 `files/deep-test-3-ground-truth-2026-11-15.md` are absent from this workspace and
-repository. A targeted connected-source search did not locate those artifacts.
+repository. The four comparison pins and expected Nov 15 counts/rule families were supplied explicitly.
 Use the permitted equivalent: pre-seeded bare mirrors, revision = pinned HEAD,
-base = its first parent, then the production `workspace_audit._descriptor()` and
+base = the supplied parent (first parent for the original three), then the production `workspace_audit._descriptor()` and
 `workspace_audit._collect()` entry points. No other layers were stubbed in these
 runs. A separate direct `electrical_reasoning.collect()` run confirms the same
 layer outcomes. No repository source or firmware was executed.
@@ -69,10 +69,10 @@ layer outcomes. No repository source or firmware was executed.
 | ErenErenel/Webcam-Design | `3b5b1e54f0711e720bdcf7477e6e2bbe46252c03` | ran |
 | greatscottgadgets/hackrf | `3a63b29953a3b763f428821e02110def9fb1cade` | ran |
 | kata0510/Lily58 | `58c649797c185b7b32b9928d4546665153cfacfd` | ran |
-| crkbd | Exact pin unavailable | blocked |
-| esp32-poe | Exact pin unavailable | blocked |
-| dev-kit-clone | Exact pin unavailable | blocked |
-| esp32-hat | Exact pin unavailable | blocked |
+| foostan/crkbd | `1747b2623b018a7b5acc6d1f7e316debad96a727` | ran |
+| OLIMEX/ESP32-POE | `deb38a377d50eadb04ddc7118a17a5ae58b1ee53` | ran |
+| BrijModi/ESP32-Dev-Kit-Clone | `ab7d6491243f16dd0895d63786f04da362e704fb` | ran |
+| Rufilla/ESP32_HAT | `b02f0acafc18509c680914fab8fbd77329ffb6d9` | ran |
 
 Webcam reports replacement coverage for `conf_board.h` and `conf_clock.h`;
 hackrf reports it for `firmware/common/rad1o/ubuntu18.c`. Lily58 reports
@@ -80,11 +80,70 @@ hackrf reports it for `firmware/common/rad1o/ubuntu18.c`. Lily58 reports
 remaining inputs. **AC3 is unmet under the authorized fallback.** Independent
 roots are retained; synthetic tests separately prove root isolation.
 
-The four other exact owner/repository + SHA pairs and original Nov 15 findings
-were requested. No current HEADs were substituted. **AC6 is blocked**, including
-byte-identical comparisons and preservation of the nine OLIMEX findings and one
-Dev-Kit-Clone hit; those claims cannot be made without the original inputs.
-This draft does not claim 7/7 verification or completed M1 acceptance.
+All seven layers ran without entering the whole-layer last-resort handler. The
+four additional audits use the explicitly supplied bases:
+
+| Repository | Audit base |
+| --- | --- |
+| crkbd | `e79413032d6f9330e49daf55904cf98e044d0686` |
+| esp32-poe | `a9ccb127e4eff6bf58b2e366adc8dca24b42d9e7` |
+| dev-kit-clone | `450925bff4c8bf19286b07161e380fdc0605ad99` |
+| esp32-hat | `fc350ccad8c98bb4546be56dcdc388805259c1ee` |
+
+The crkbd HEAD is a merge commit. The supplied base is its **second parent**;
+that exact base was used, rather than the first parent `63366fb7...`.
+
+## AC6 comparison: fails against Nov 15; identical to PR #11
+
+The user supplied the missing pins and Nov 15 counts/rule families. Original raw
+Nov 15 JSON remains outside this environment, so reconstruct the full exact
+summary strings by running the same production audit from archived PR #10 source
+at `20d66bbd27750c5b437b4a0b009a2133f4533d74`. Its electrical counts and rule
+families match all four supplied expectations exactly: **35 / 15 / 1 / 3**.
+Also run unmodified PR #11 source at
+`b04aad503f7e11c1ecf48a8be2f8a87451857234` and this draft at
+`a7ae97e85bc1992da4e9d2ccf7ef464c0449208b` against the identical pinned inputs and
+supplied bases. Archived trees use the same dependency environment; each run
+imports from its own source tree, with independent application-state folders.
+
+For each electrical layer, filter `electrical.*` findings, sort the
+`(rule_id, summary)` list **preserving duplicates**, serialize as compact UTF-8
+JSON with `ensure_ascii=False` and a trailing newline, and compare the resulting
+bytes. The evidence JSON records SHA-256 hashes for all three source revisions,
+exact rule-family counts, delta counts, examples, and the retained genuine hits.
+Coverage and unrelated/native diff findings are excluded from this layer-specific
+comparison. No normalization of references, values, or summary text is applied.
+
+| Repository | Nov 15 / reconstructed PR #10 | PR #11 | PR #12 | Identical to Nov 15? | Identical to PR #11? |
+| --- | ---: | ---: | ---: | --- | --- |
+| crkbd | 35 | 469 | 469 | no | yes |
+| esp32-poe | 15 | 19 | 19 | no | yes |
+| dev-kit-clone | 1 | 1 | 1 | yes | yes |
+| esp32-hat | 3 | 1 | 1 | no | yes |
+
+Differences already present on PR #11:
+
+- **crkbd:** 434 added `electrical.assembly` findings. All original 35 findings
+  remain byte-identical, including USB ×4, protection ×4, clock ×4, pull-up ×8,
+  and model ×15 findings.
+- **ESP32-POE:** four added `electrical.assembly` findings: C29 PCB-only ×3 and
+  R23 PCB-only ×1. All original 15 remain byte-identical.
+- **Dev-Kit-Clone:** the original single J1 protection finding is byte-identical;
+  no additions or removals.
+- **ESP32 HAT:** the two `electrical.pullup` findings are absent on PR #11 and
+  PR #12. The original Y1 clock finding remains byte-identical.
+
+The **nine genuine OLIMEX findings are retained exactly**: USB-UART1 protection
+×3, C1 capacitor derating ×3, and C7 capacitor derating ×3. The **one genuine
+Dev-Kit-Clone J1 protection finding is retained exactly**. Full strings and
+multiplicities are recorded in the evidence JSON.
+
+**AC6 fails as written against the supplied Nov 15 PR #10 expectation.** It is
+not blocked by missing pins anymore. PR #12 adds no finding differences relative
+to its required PR #11 base: all four canonical finding files are byte-identical
+to PR #11. This evidence update does not change production rules or chase the
+pre-existing flags. M1's layer-outcome target is now verified on all seven repos;
+AC3 remains unmet under the authorized memory-gated fallback.
 
 Machine-readable measurements, pins, outcomes, and input degradation are in
 [evidence/electrical-robustness-2026-11-15.json](evidence/electrical-robustness-2026-11-15.json).
