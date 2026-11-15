@@ -147,3 +147,8 @@ worktree of base `ce5826d089c3a5c8bf679b0545b24a1f7c2e6dc0` and failed there too
 existing native coverage adapter. This draft leaves that separate native adapter
 unchanged. The electrical evaluator does not invoke it. Formatting and
 `git diff --check` also succeed.
+
+## November 15 trust fixes
+
+See [the four trust-blocker fixes and pinned reruns](trust-blockers.md) for the
+revision-7 parity, protocol, copy-summary and undriven-bus rules.

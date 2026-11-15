@@ -1,0 +1,2169 @@
+{
+  "id": "eef1c3f3dfdb80025ef92f79841994b2e3bd775567ca900799cc1ec3ed55edb7",
+  "repo_id": "local-trust-check",
+  "base_sha": "e0751c92cdb498a6cf31f22fc47734bbc530117f",
+  "head_sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+  "schema_version": 4,
+  "rule_version": 7,
+  "tool_versions": {
+    "kicad-tools": "0.27.0",
+    "kicad-cli": "9.0.2",
+    "trimesh": "5.2.0",
+    "pcb-inspector": "deferred",
+    "git": "git version 2.52.0",
+    "cadquery": "2.8.0",
+    "cadquery-ocp": "7.9.3.1.1"
+  },
+  "config_hash": "75c98a3528b23c7c93ce96a363c8161984de8b9fc524740e3e74cdaabc48bca9",
+  "project_settings": {
+    "version": 1,
+    "cad_pairs": [],
+    "pin_assignments": [],
+    "boms": []
+  },
+  "state": "partial",
+  "detail": null,
+  "findings": [
+    {
+      "rule_id": "pcb.board_copy_added",
+      "domain": "pcb",
+      "status": "observed",
+      "severity": "info",
+      "summary": "Backup copy of the board added: 107 footprints, no new hardware in the footprint inventory. Matches hardware/astracompanion/astracompanion.kicad_pcb at e0751c92; tracks, zones and stackup are not compared.",
+      "lifecycle": null,
+      "before": null,
+      "after": null,
+      "evidence": [
+        {
+          "id": "d714a99ad2cc103cc3619e79",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+          "locator": "complete supported footprint/pad inventory"
+        },
+        {
+          "id": "7c0cf2654f9a22193550f338",
+          "repo_id": "local-trust-check",
+          "sha": "e0751c92cdb498a6cf31f22fc47734bbc530117f",
+          "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+          "locator": "complete supported footprint/pad inventory"
+        }
+      ],
+      "related": []
+    },
+    {
+      "rule_id": "pcb.footprint_removed",
+      "domain": "pcb",
+      "status": "observed",
+      "severity": "info",
+      "summary": "UE1: footprint removed",
+      "lifecycle": null,
+      "before": {
+        "x_mm": 120.0,
+        "y_mm": 106.795,
+        "rotation_deg": 0.0,
+        "layer": "F.Cu",
+        "library": "Connector_PinSocket_2.54mm:PinSocket_1x22_P2.54mm_Vertical"
+      },
+      "after": null,
+      "evidence": [
+        {
+          "id": "a199a53c45209458c8bac2db",
+          "repo_id": "local-trust-check",
+          "sha": "e0751c92cdb498a6cf31f22fc47734bbc530117f",
+          "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+          "locator": "UE1"
+        },
+        {
+          "id": "a515dca4296c9becfd806434",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+          "locator": "UE1"
+        }
+      ],
+      "related": [
+        {
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_sch",
+          "basis": "same_name"
+        },
+        {
+          "sha": "e0751c92cdb498a6cf31f22fc47734bbc530117f",
+          "path": "cad/astra-companion-chassis-assembly.step",
+          "basis": "possible"
+        },
+        {
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "cad/astra-companion-chassis-assembly.step",
+          "basis": "possible"
+        }
+      ]
+    },
+    {
+      "rule_id": "pcb.footprint_removed",
+      "domain": "pcb",
+      "status": "observed",
+      "severity": "info",
+      "summary": "C34: footprint removed",
+      "lifecycle": null,
+      "before": {
+        "x_mm": 139.0,
+        "y_mm": 110.0,
+        "rotation_deg": 0.0,
+        "layer": "F.Cu",
+        "library": "Capacitor_SMD:C_0805_2012Metric"
+      },
+      "after": null,
+      "evidence": [
+        {
+          "id": "8d65aca91f47b8e282598da5",
+          "repo_id": "local-trust-check",
+          "sha": "e0751c92cdb498a6cf31f22fc47734bbc530117f",
+          "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+          "locator": "C34"
+        },
+        {
+          "id": "9a7897675d639a73353cae9b",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+          "locator": "C34"
+        }
+      ],
+      "related": [
+        {
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_sch",
+          "basis": "same_name"
+        },
+        {
+          "sha": "e0751c92cdb498a6cf31f22fc47734bbc530117f",
+          "path": "cad/astra-companion-chassis-assembly.step",
+          "basis": "possible"
+        },
+        {
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "cad/astra-companion-chassis-assembly.step",
+          "basis": "possible"
+        }
+      ]
+    },
+    {
+      "rule_id": "pcb.footprint_removed",
+      "domain": "pcb",
+      "status": "observed",
+      "severity": "info",
+      "summary": "C33: footprint removed",
+      "lifecycle": null,
+      "before": {
+        "x_mm": 139.0,
+        "y_mm": 105.0,
+        "rotation_deg": 0.0,
+        "layer": "F.Cu",
+        "library": "Capacitor_SMD:C_0805_2012Metric"
+      },
+      "after": null,
+      "evidence": [
+        {
+          "id": "1d595a1400e113eb748d8582",
+          "repo_id": "local-trust-check",
+          "sha": "e0751c92cdb498a6cf31f22fc47734bbc530117f",
+          "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+          "locator": "C33"
+        },
+        {
+          "id": "6150817617dcf5748158f6b2",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+          "locator": "C33"
+        }
+      ],
+      "related": [
+        {
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_sch",
+          "basis": "same_name"
+        },
+        {
+          "sha": "e0751c92cdb498a6cf31f22fc47734bbc530117f",
+          "path": "cad/astra-companion-chassis-assembly.step",
+          "basis": "possible"
+        },
+        {
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "cad/astra-companion-chassis-assembly.step",
+          "basis": "possible"
+        }
+      ]
+    },
+    {
+      "rule_id": "pcb.footprint_removed",
+      "domain": "pcb",
+      "status": "observed",
+      "severity": "info",
+      "summary": "SW3: footprint removed",
+      "lifecycle": null,
+      "before": {
+        "x_mm": 160.0,
+        "y_mm": 117.0,
+        "rotation_deg": 0.0,
+        "layer": "F.Cu",
+        "library": "Button_Switch_SMD:SW_SPST_PTS645Sx43SMTR92"
+      },
+      "after": null,
+      "evidence": [
+        {
+          "id": "e8eb24dbfd02d16db2a71f06",
+          "repo_id": "local-trust-check",
+          "sha": "e0751c92cdb498a6cf31f22fc47734bbc530117f",
+          "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+          "locator": "SW3"
+        },
+        {
+          "id": "12c0ba40282e9c05a9b409a0",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+          "locator": "SW3"
+        }
+      ],
+      "related": [
+        {
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_sch",
+          "basis": "same_name"
+        },
+        {
+          "sha": "e0751c92cdb498a6cf31f22fc47734bbc530117f",
+          "path": "cad/astra-companion-chassis-assembly.step",
+          "basis": "possible"
+        },
+        {
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "cad/astra-companion-chassis-assembly.step",
+          "basis": "possible"
+        }
+      ]
+    },
+    {
+      "rule_id": "pcb.footprint_removed",
+      "domain": "pcb",
+      "status": "observed",
+      "severity": "info",
+      "summary": "R38: footprint removed",
+      "lifecycle": null,
+      "before": {
+        "x_mm": 133.0,
+        "y_mm": 110.0,
+        "rotation_deg": 180.0,
+        "layer": "F.Cu",
+        "library": "Package_TO_SOT_SMD:SOT-23-6"
+      },
+      "after": null,
+      "evidence": [
+        {
+          "id": "9744eff31adc1e6b258ab564",
+          "repo_id": "local-trust-check",
+          "sha": "e0751c92cdb498a6cf31f22fc47734bbc530117f",
+          "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+          "locator": "R38"
+        },
+        {
+          "id": "cccc8f0092988ed2686eaf7a",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+          "locator": "R38"
+        }
+      ],
+      "related": [
+        {
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_sch",
+          "basis": "same_name"
+        },
+        {
+          "sha": "e0751c92cdb498a6cf31f22fc47734bbc530117f",
+          "path": "cad/astra-companion-chassis-assembly.step",
+          "basis": "possible"
+        },
+        {
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "cad/astra-companion-chassis-assembly.step",
+          "basis": "possible"
+        }
+      ]
+    },
+    {
+      "rule_id": "pcb.footprint_removed",
+      "domain": "pcb",
+      "status": "observed",
+      "severity": "info",
+      "summary": "U13: footprint removed",
+      "lifecycle": null,
+      "before": {
+        "x_mm": 146.0,
+        "y_mm": 105.0,
+        "rotation_deg": 0.0,
+        "layer": "F.Cu",
+        "library": "Package_TO_SOT_SMD:SOT-23-6"
+      },
+      "after": null,
+      "evidence": [
+        {
+          "id": "e71baa23318ad2ad5d3fd422",
+          "repo_id": "local-trust-check",
+          "sha": "e0751c92cdb498a6cf31f22fc47734bbc530117f",
+          "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+          "locator": "U13"
+        },
+        {
+          "id": "5e26570f6081fbf6fbcbc5dc",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+          "locator": "U13"
+        }
+      ],
+      "related": [
+        {
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_sch",
+          "basis": "same_name"
+        },
+        {
+          "sha": "e0751c92cdb498a6cf31f22fc47734bbc530117f",
+          "path": "cad/astra-companion-chassis-assembly.step",
+          "basis": "possible"
+        },
+        {
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "cad/astra-companion-chassis-assembly.step",
+          "basis": "possible"
+        }
+      ]
+    },
+    {
+      "rule_id": "pcb.footprint_removed",
+      "domain": "pcb",
+      "status": "observed",
+      "severity": "info",
+      "summary": "R37: footprint removed",
+      "lifecycle": null,
+      "before": {
+        "x_mm": 133.0,
+        "y_mm": 105.0,
+        "rotation_deg": 180.0,
+        "layer": "F.Cu",
+        "library": "Package_TO_SOT_SMD:SOT-23-6"
+      },
+      "after": null,
+      "evidence": [
+        {
+          "id": "fe74d15d8790aca2e884b40b",
+          "repo_id": "local-trust-check",
+          "sha": "e0751c92cdb498a6cf31f22fc47734bbc530117f",
+          "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+          "locator": "R37"
+        },
+        {
+          "id": "fd20d67407375bab5b1ca361",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+          "locator": "R37"
+        }
+      ],
+      "related": [
+        {
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_sch",
+          "basis": "same_name"
+        },
+        {
+          "sha": "e0751c92cdb498a6cf31f22fc47734bbc530117f",
+          "path": "cad/astra-companion-chassis-assembly.step",
+          "basis": "possible"
+        },
+        {
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "cad/astra-companion-chassis-assembly.step",
+          "basis": "possible"
+        }
+      ]
+    },
+    {
+      "rule_id": "pcb.footprint_removed",
+      "domain": "pcb",
+      "status": "observed",
+      "severity": "info",
+      "summary": "C32: footprint removed",
+      "lifecycle": null,
+      "before": {
+        "x_mm": 139.0,
+        "y_mm": 100.0,
+        "rotation_deg": 180.0,
+        "layer": "F.Cu",
+        "library": "Capacitor_SMD:C_0805_2012Metric"
+      },
+      "after": null,
+      "evidence": [
+        {
+          "id": "ff9cee9cbdf78db57a13d168",
+          "repo_id": "local-trust-check",
+          "sha": "e0751c92cdb498a6cf31f22fc47734bbc530117f",
+          "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+          "locator": "C32"
+        },
+        {
+          "id": "d340c7285f8cbc42b77ad198",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+          "locator": "C32"
+        }
+      ],
+      "related": [
+        {
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_sch",
+          "basis": "same_name"
+        },
+        {
+          "sha": "e0751c92cdb498a6cf31f22fc47734bbc530117f",
+          "path": "cad/astra-companion-chassis-assembly.step",
+          "basis": "possible"
+        },
+        {
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "cad/astra-companion-chassis-assembly.step",
+          "basis": "possible"
+        }
+      ]
+    },
+    {
+      "rule_id": "pcb.footprint_removed",
+      "domain": "pcb",
+      "status": "observed",
+      "severity": "info",
+      "summary": "SW1: footprint removed",
+      "lifecycle": null,
+      "before": {
+        "x_mm": 160.0,
+        "y_mm": 109.0,
+        "rotation_deg": 180.0,
+        "layer": "F.Cu",
+        "library": "Button_Switch_SMD:SW_SPST_PTS645Sx43SMTR92"
+      },
+      "after": null,
+      "evidence": [
+        {
+          "id": "6718bafb9078561b71544e1f",
+          "repo_id": "local-trust-check",
+          "sha": "e0751c92cdb498a6cf31f22fc47734bbc530117f",
+          "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+          "locator": "SW1"
+        },
+        {
+          "id": "452b8fd02538e49211ea7ee9",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+          "locator": "SW1"
+        }
+      ],
+      "related": [
+        {
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_sch",
+          "basis": "same_name"
+        },
+        {
+          "sha": "e0751c92cdb498a6cf31f22fc47734bbc530117f",
+          "path": "cad/astra-companion-chassis-assembly.step",
+          "basis": "possible"
+        },
+        {
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "cad/astra-companion-chassis-assembly.step",
+          "basis": "possible"
+        }
+      ]
+    },
+    {
+      "rule_id": "pcb.footprint_removed",
+      "domain": "pcb",
+      "status": "observed",
+      "severity": "info",
+      "summary": "R36: footprint removed",
+      "lifecycle": null,
+      "before": {
+        "x_mm": 133.0,
+        "y_mm": 100.0,
+        "rotation_deg": 180.0,
+        "layer": "F.Cu",
+        "library": "Package_TO_SOT_SMD:SOT-23-6"
+      },
+      "after": null,
+      "evidence": [
+        {
+          "id": "1a673af6e8462b27419b3f37",
+          "repo_id": "local-trust-check",
+          "sha": "e0751c92cdb498a6cf31f22fc47734bbc530117f",
+          "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+          "locator": "R36"
+        },
+        {
+          "id": "57d2e254f9fea9316866c7d2",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+          "locator": "R36"
+        }
+      ],
+      "related": [
+        {
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_sch",
+          "basis": "same_name"
+        },
+        {
+          "sha": "e0751c92cdb498a6cf31f22fc47734bbc530117f",
+          "path": "cad/astra-companion-chassis-assembly.step",
+          "basis": "possible"
+        },
+        {
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "cad/astra-companion-chassis-assembly.step",
+          "basis": "possible"
+        }
+      ]
+    },
+    {
+      "rule_id": "pcb.footprint_removed",
+      "domain": "pcb",
+      "status": "observed",
+      "severity": "info",
+      "summary": "SW6: footprint removed",
+      "lifecycle": null,
+      "before": {
+        "x_mm": 160.0,
+        "y_mm": 101.0,
+        "rotation_deg": 0.0,
+        "layer": "F.Cu",
+        "library": "Button_Switch_SMD:SW_SPST_PTS645Sx43SMTR92"
+      },
+      "after": null,
+      "evidence": [
+        {
+          "id": "c86a4a957ff8fd366b2d2a07",
+          "repo_id": "local-trust-check",
+          "sha": "e0751c92cdb498a6cf31f22fc47734bbc530117f",
+          "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+          "locator": "SW6"
+        },
+        {
+          "id": "839e25165fc4bf1442a1d792",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+          "locator": "SW6"
+        }
+      ],
+      "related": [
+        {
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_sch",
+          "basis": "same_name"
+        },
+        {
+          "sha": "e0751c92cdb498a6cf31f22fc47734bbc530117f",
+          "path": "cad/astra-companion-chassis-assembly.step",
+          "basis": "possible"
+        },
+        {
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "cad/astra-companion-chassis-assembly.step",
+          "basis": "possible"
+        }
+      ]
+    },
+    {
+      "rule_id": "electrical.assembly",
+      "domain": "schematic",
+      "status": "verified",
+      "severity": "warning",
+      "summary": "UE1: is in the schematic and marked for BOM inclusion but has no footprint on the paired board — Conn_01x22_Pin cannot be assembled, so its circuit function is absent. Restore the footprint or reconcile the schematic and assembly intent.",
+      "lifecycle": "present_at_head",
+      "before": null,
+      "after": null,
+      "evidence": [
+        {
+          "id": "037c46eb040f09bdc521a092",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_sch",
+          "locator": "UE1 (Conn_01x22_Pin) "
+        },
+        {
+          "id": "b531096ca6881201402baf6e",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+          "locator": "footprint inventory: reference absent"
+        }
+      ],
+      "related": []
+    },
+    {
+      "rule_id": "electrical.assembly",
+      "domain": "schematic",
+      "status": "verified",
+      "severity": "warning",
+      "summary": "R36: is in the schematic and marked for BOM inclusion but has no footprint on the paired board — 10k cannot be assembled, so its circuit function is absent. Restore the footprint or reconcile the schematic and assembly intent.",
+      "lifecycle": "present_at_head",
+      "before": null,
+      "after": null,
+      "evidence": [
+        {
+          "id": "45f8b65d81201017471fb517",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_sch",
+          "locator": "R36 (10k) "
+        },
+        {
+          "id": "b531096ca6881201402baf6e",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+          "locator": "footprint inventory: reference absent"
+        }
+      ],
+      "related": []
+    },
+    {
+      "rule_id": "electrical.assembly",
+      "domain": "schematic",
+      "status": "verified",
+      "severity": "warning",
+      "summary": "SW1: is in the schematic and marked for BOM inclusion but has no footprint on the paired board — PTS645 cannot be assembled, so its circuit function is absent. Restore the footprint or reconcile the schematic and assembly intent.",
+      "lifecycle": "present_at_head",
+      "before": null,
+      "after": null,
+      "evidence": [
+        {
+          "id": "05e9cef5224b3b4bd355b456",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_sch",
+          "locator": "SW1 (PTS645) "
+        },
+        {
+          "id": "b531096ca6881201402baf6e",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+          "locator": "footprint inventory: reference absent"
+        }
+      ],
+      "related": []
+    },
+    {
+      "rule_id": "electrical.assembly",
+      "domain": "schematic",
+      "status": "verified",
+      "severity": "warning",
+      "summary": "C32: is in the schematic and marked for BOM inclusion but has no footprint on the paired board — 0.1uF cannot be assembled, so its circuit function is absent. Restore the footprint or reconcile the schematic and assembly intent.",
+      "lifecycle": "present_at_head",
+      "before": null,
+      "after": null,
+      "evidence": [
+        {
+          "id": "f07e870b5af4e4b6a5d13499",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_sch",
+          "locator": "C32 (0.1uF) "
+        },
+        {
+          "id": "b531096ca6881201402baf6e",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+          "locator": "footprint inventory: reference absent"
+        }
+      ],
+      "related": []
+    },
+    {
+      "rule_id": "electrical.assembly",
+      "domain": "schematic",
+      "status": "verified",
+      "severity": "warning",
+      "summary": "U13: is in the schematic and marked for BOM inclusion but has no footprint on the paired board — USBLC6-4SC6 cannot be assembled, so its circuit function is absent. Restore the footprint or reconcile the schematic and assembly intent.",
+      "lifecycle": "present_at_head",
+      "before": null,
+      "after": null,
+      "evidence": [
+        {
+          "id": "86cb045a620aa8ba1caf4ba5",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_sch",
+          "locator": "U13 (USBLC6-4SC6) "
+        },
+        {
+          "id": "b531096ca6881201402baf6e",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+          "locator": "footprint inventory: reference absent"
+        }
+      ],
+      "related": []
+    },
+    {
+      "rule_id": "electrical.assembly",
+      "domain": "schematic",
+      "status": "verified",
+      "severity": "warning",
+      "summary": "SW6: is in the schematic and marked for BOM inclusion but has no footprint on the paired board — PTS645 cannot be assembled, so its circuit function is absent. Restore the footprint or reconcile the schematic and assembly intent.",
+      "lifecycle": "present_at_head",
+      "before": null,
+      "after": null,
+      "evidence": [
+        {
+          "id": "480c402913a07358fcc76d55",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_sch",
+          "locator": "SW6 (PTS645) "
+        },
+        {
+          "id": "b531096ca6881201402baf6e",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+          "locator": "footprint inventory: reference absent"
+        }
+      ],
+      "related": []
+    },
+    {
+      "rule_id": "electrical.assembly",
+      "domain": "schematic",
+      "status": "verified",
+      "severity": "warning",
+      "summary": "R38: is in the schematic and marked for BOM inclusion but has no footprint on the paired board — 10k cannot be assembled, so its circuit function is absent. Restore the footprint or reconcile the schematic and assembly intent.",
+      "lifecycle": "present_at_head",
+      "before": null,
+      "after": null,
+      "evidence": [
+        {
+          "id": "4df4f918dadaba5a336fdfb4",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_sch",
+          "locator": "R38 (10k) "
+        },
+        {
+          "id": "b531096ca6881201402baf6e",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+          "locator": "footprint inventory: reference absent"
+        }
+      ],
+      "related": []
+    },
+    {
+      "rule_id": "electrical.assembly",
+      "domain": "schematic",
+      "status": "verified",
+      "severity": "warning",
+      "summary": "R37: is in the schematic and marked for BOM inclusion but has no footprint on the paired board — 10k cannot be assembled, so its circuit function is absent. Restore the footprint or reconcile the schematic and assembly intent.",
+      "lifecycle": "present_at_head",
+      "before": null,
+      "after": null,
+      "evidence": [
+        {
+          "id": "2b7296e1bb9416155d532b32",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_sch",
+          "locator": "R37 (10k) "
+        },
+        {
+          "id": "b531096ca6881201402baf6e",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+          "locator": "footprint inventory: reference absent"
+        }
+      ],
+      "related": []
+    },
+    {
+      "rule_id": "electrical.assembly",
+      "domain": "schematic",
+      "status": "verified",
+      "severity": "warning",
+      "summary": "C33: is in the schematic and marked for BOM inclusion but has no footprint on the paired board — 0.1uF cannot be assembled, so its circuit function is absent. Restore the footprint or reconcile the schematic and assembly intent.",
+      "lifecycle": "present_at_head",
+      "before": null,
+      "after": null,
+      "evidence": [
+        {
+          "id": "0a85588a13efcb5a5bb1c001",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_sch",
+          "locator": "C33 (0.1uF) "
+        },
+        {
+          "id": "b531096ca6881201402baf6e",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+          "locator": "footprint inventory: reference absent"
+        }
+      ],
+      "related": []
+    },
+    {
+      "rule_id": "electrical.assembly",
+      "domain": "schematic",
+      "status": "verified",
+      "severity": "warning",
+      "summary": "C34: is in the schematic and marked for BOM inclusion but has no footprint on the paired board — 0.1uF cannot be assembled, so its circuit function is absent. Restore the footprint or reconcile the schematic and assembly intent.",
+      "lifecycle": "present_at_head",
+      "before": null,
+      "after": null,
+      "evidence": [
+        {
+          "id": "081063557f557d774b670a2c",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_sch",
+          "locator": "C34 (0.1uF) "
+        },
+        {
+          "id": "b531096ca6881201402baf6e",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+          "locator": "footprint inventory: reference absent"
+        }
+      ],
+      "related": []
+    },
+    {
+      "rule_id": "electrical.assembly",
+      "domain": "schematic",
+      "status": "verified",
+      "severity": "warning",
+      "summary": "SW3: is in the schematic and marked for BOM inclusion but has no footprint on the paired board — PTS645 cannot be assembled, so its circuit function is absent. Restore the footprint or reconcile the schematic and assembly intent.",
+      "lifecycle": "present_at_head",
+      "before": null,
+      "after": null,
+      "evidence": [
+        {
+          "id": "72546e6e571664e456f77b83",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_sch",
+          "locator": "SW3 (PTS645) "
+        },
+        {
+          "id": "b531096ca6881201402baf6e",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+          "locator": "footprint inventory: reference absent"
+        }
+      ],
+      "related": []
+    },
+    {
+      "rule_id": "electrical.assembly",
+      "domain": "schematic",
+      "status": "verified",
+      "severity": "warning",
+      "summary": "REF**: has a PCB footprint but no symbol in the paired schematic — its connectivity and BOM intent are unrepresented. Reconcile the board and schematic.",
+      "lifecycle": "present_at_head",
+      "before": null,
+      "after": null,
+      "evidence": [
+        {
+          "id": "2e2c1752ddbaac24ac7c1a93",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+          "locator": "REF** () "
+        }
+      ],
+      "related": []
+    },
+    {
+      "rule_id": "electrical.protection",
+      "domain": "schematic",
+      "status": "suggestion",
+      "severity": "warning",
+      "summary": "J4: D+/D- have no identifiable external ESD protection in this schematic. Add a suitable low-capacitance ESD array or document integrated protection.",
+      "lifecycle": "present_at_head",
+      "before": null,
+      "after": null,
+      "evidence": [
+        {
+          "id": "370dd442ea28bbe6c1423def",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_sch",
+          "locator": "J4 (USB_C_Receptacle_USB2.0) pin A6 D+, pin A7 D-, pin B6 D+, pin B7 D-"
+        }
+      ],
+      "related": []
+    },
+    {
+      "rule_id": "electrical.undriven",
+      "domain": "schematic",
+      "status": "verified",
+      "severity": "warning",
+      "summary": "J6: net SPI_MOSI has only input loads and no driver/master: J6 pin 3 CMD, DS2 pin 4 SDA, DS1 pin 4 SDA. These inputs have no signal source. Connect a driver/master or document the external source.",
+      "lifecycle": "present_at_head",
+      "before": null,
+      "after": null,
+      "evidence": [
+        {
+          "id": "f6ec238b41ea21af7358040f",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_sch",
+          "locator": "J6 (Micro_SD_Card) pin 3 CMD, pin 4 SDA, pin 4 SDA"
+        },
+        {
+          "id": "88ff2bb2013d13248d4154d1",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_sch",
+          "locator": "J6 pin 3 CMD"
+        },
+        {
+          "id": "8ec5c93078878e12d23e762a",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_sch",
+          "locator": "DS2 pin 4 SDA"
+        },
+        {
+          "id": "587d8d323cd881f35b62cfd2",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_sch",
+          "locator": "DS1 pin 4 SDA"
+        }
+      ],
+      "related": []
+    },
+    {
+      "rule_id": "electrical.undriven",
+      "domain": "schematic",
+      "status": "verified",
+      "severity": "warning",
+      "summary": "J6: net SPI_CLK has only input loads and no driver/master: J6 pin 5 CLK, DS2 pin 3 SCL, DS1 pin 3 SCL. These inputs have no signal source. Connect a driver/master or document the external source.",
+      "lifecycle": "present_at_head",
+      "before": null,
+      "after": null,
+      "evidence": [
+        {
+          "id": "738f7c73ac95f301b77023a7",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_sch",
+          "locator": "J6 (Micro_SD_Card) pin 5 CLK, pin 3 SCL, pin 3 SCL"
+        },
+        {
+          "id": "689419e3070111b090efa911",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_sch",
+          "locator": "J6 pin 5 CLK"
+        },
+        {
+          "id": "462776404802adbcd79e7909",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_sch",
+          "locator": "DS2 pin 3 SCL"
+        },
+        {
+          "id": "09988e4b73fc855896894462",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_sch",
+          "locator": "DS1 pin 3 SCL"
+        }
+      ],
+      "related": []
+    },
+    {
+      "rule_id": "electrical.undriven",
+      "domain": "schematic",
+      "status": "verified",
+      "severity": "warning",
+      "summary": "DS2: net TFT_DC has only input loads and no driver/master: DS2 pin 5 DC, DS1 pin 5 DC. These inputs have no signal source. Connect a driver/master or document the external source.",
+      "lifecycle": "present_at_head",
+      "before": null,
+      "after": null,
+      "evidence": [
+        {
+          "id": "ef69a4b93cafe420102e9696",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_sch",
+          "locator": "DS2 (1.28\" 240x240 LCD) pin 5 DC, pin 5 DC"
+        },
+        {
+          "id": "43c07d01194aa9d5f657e078",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_sch",
+          "locator": "DS2 pin 5 DC"
+        },
+        {
+          "id": "6d437065a85a82e1710c1b7c",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_sch",
+          "locator": "DS1 pin 5 DC"
+        }
+      ],
+      "related": []
+    },
+    {
+      "rule_id": "electrical.undriven",
+      "domain": "schematic",
+      "status": "verified",
+      "severity": "warning",
+      "summary": "DS2: net TFT2_CS has only input loads and no driver/master: DS2 pin 6 CS. These inputs have no signal source. Connect a driver/master or document the external source.",
+      "lifecycle": "present_at_head",
+      "before": null,
+      "after": null,
+      "evidence": [
+        {
+          "id": "574390f16677cdc1fa933ad3",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_sch",
+          "locator": "DS2 (1.28\" 240x240 LCD) pin 6 CS"
+        },
+        {
+          "id": "a5c135294563a64b7aa3901c",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_sch",
+          "locator": "DS2 pin 6 CS"
+        }
+      ],
+      "related": []
+    },
+    {
+      "rule_id": "electrical.undriven",
+      "domain": "schematic",
+      "status": "verified",
+      "severity": "warning",
+      "summary": "DS1: net TFT1_CS has only input loads and no driver/master: DS1 pin 6 CS. These inputs have no signal source. Connect a driver/master or document the external source.",
+      "lifecycle": "present_at_head",
+      "before": null,
+      "after": null,
+      "evidence": [
+        {
+          "id": "e46321827bffbed3895cb0a8",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_sch",
+          "locator": "DS1 (1.28\" 240x240 LCD) pin 6 CS"
+        },
+        {
+          "id": "bdaea5b6377258ee76917372",
+          "repo_id": "local-trust-check",
+          "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+          "path": "hardware/astracompanion/astracompanion.kicad_sch",
+          "locator": "DS1 pin 6 CS"
+        }
+      ],
+      "related": []
+    }
+  ],
+  "coverage": [
+    {
+      "path": "",
+      "domain": "project",
+      "check": "Git changes",
+      "tool": "git",
+      "outcome": "ran",
+      "detail": "20 changed paths."
+    },
+    {
+      "path": "cad/README.md",
+      "domain": "docs",
+      "check": "File analysis",
+      "tool": "Atlas",
+      "outcome": "unsupported",
+      "detail": "Git change available. This file has no audit adapter yet."
+    },
+    {
+      "path": "cad/eyes/README.md",
+      "domain": "docs",
+      "check": "File analysis",
+      "tool": "Atlas",
+      "outcome": "unsupported",
+      "detail": "Git change available. This file has no audit adapter yet."
+    },
+    {
+      "path": "cad/eyes/bezels/.gitkeep",
+      "domain": "other",
+      "check": "File analysis",
+      "tool": "Atlas",
+      "outcome": "unsupported",
+      "detail": "Git change available. This file has no audit adapter yet."
+    },
+    {
+      "path": "cad/eyes/pupil-art/.gitkeep",
+      "domain": "other",
+      "check": "File analysis",
+      "tool": "Atlas",
+      "outcome": "unsupported",
+      "detail": "Git change available. This file has no audit adapter yet."
+    },
+    {
+      "path": "cad/eyes/screen-mounts/.gitkeep",
+      "domain": "other",
+      "check": "File analysis",
+      "tool": "Atlas",
+      "outcome": "unsupported",
+      "detail": "Git change available. This file has no audit adapter yet."
+    },
+    {
+      "path": "docs/CAD.md",
+      "domain": "docs",
+      "check": "File analysis",
+      "tool": "Atlas",
+      "outcome": "unsupported",
+      "detail": "Git change available. This file has no audit adapter yet."
+    },
+    {
+      "path": "docs/README.md",
+      "domain": "docs",
+      "check": "File analysis",
+      "tool": "Atlas",
+      "outcome": "unsupported",
+      "detail": "Git change available. This file has no audit adapter yet."
+    },
+    {
+      "path": "docs/WEEK4_EYES.md",
+      "domain": "docs",
+      "check": "File analysis",
+      "tool": "Atlas",
+      "outcome": "unsupported",
+      "detail": "Git change available. This file has no audit adapter yet."
+    },
+    {
+      "path": "docs/images/eyes/.gitkeep",
+      "domain": "other",
+      "check": "File analysis",
+      "tool": "Atlas",
+      "outcome": "unsupported",
+      "detail": "Git change available. This file has no audit adapter yet."
+    },
+    {
+      "path": "firmware/README.md",
+      "domain": "docs",
+      "check": "File analysis",
+      "tool": "Atlas",
+      "outcome": "unsupported",
+      "detail": "Git change available. This file has no audit adapter yet."
+    },
+    {
+      "path": "firmware/platformio.ini",
+      "domain": "firmware",
+      "check": "File analysis",
+      "tool": "Atlas",
+      "outcome": "unsupported",
+      "detail": "Git change available. This file has no audit adapter yet."
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "pcb",
+      "check": "PCB placement and pad nets",
+      "tool": "kicad-tools",
+      "outcome": "ran",
+      "detail": "Duplicate footprint inventory summarized once; tracks, zones and stackup not compared."
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pro",
+      "domain": "pcb",
+      "check": "File analysis",
+      "tool": "Atlas",
+      "outcome": "unsupported",
+      "detail": "Git change available. This file has no audit adapter yet."
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "pcb",
+      "check": "PCB placement and pad nets",
+      "tool": "kicad-tools",
+      "outcome": "ran",
+      "detail": "11 changes in the supported fields."
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "pcb",
+      "check": "Native PCB DRC",
+      "tool": "kicad-cli",
+      "outcome": "failed",
+      "detail": "e0751c92: KiCad DRC failed (exit 3). Inspect the saved input and tool version."
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "pcb",
+      "check": "Schematic/PCB parity",
+      "tool": "kicad-cli",
+      "outcome": "failed",
+      "detail": "e0751c92: KiCad DRC failed (exit 3). Inspect the saved input and tool version."
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_sch",
+      "domain": "schematic",
+      "check": "Native schematic ERC",
+      "tool": "kicad-cli",
+      "outcome": "failed",
+      "detail": "e0751c92: KiCad ERC failed (exit 3). Inspect the saved input and tool version."
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "pcb",
+      "check": "Native PCB DRC",
+      "tool": "kicad-cli",
+      "outcome": "failed",
+      "detail": "0c8afb27: KiCad DRC failed (exit 3). Inspect the saved input and tool version."
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "pcb",
+      "check": "Schematic/PCB parity",
+      "tool": "kicad-cli",
+      "outcome": "unavailable",
+      "detail": "0c8afb27: No unambiguous root schematic with the same directory and basename; parity was not checked."
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "pcb",
+      "check": "Native PCB DRC",
+      "tool": "kicad-cli",
+      "outcome": "failed",
+      "detail": "0c8afb27: KiCad DRC failed (exit 3). Inspect the saved input and tool version."
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "pcb",
+      "check": "Schematic/PCB parity",
+      "tool": "kicad-cli",
+      "outcome": "failed",
+      "detail": "0c8afb27: KiCad DRC failed (exit 3). Inspect the saved input and tool version."
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_sch",
+      "domain": "schematic",
+      "check": "Native schematic ERC",
+      "tool": "kicad-cli",
+      "outcome": "failed",
+      "detail": "0c8afb27: KiCad ERC failed (exit 3). Inspect the saved input and tool version."
+    },
+    {
+      "path": "",
+      "domain": "pcb",
+      "check": "Optional PCB heuristics",
+      "tool": "pcb-inspector",
+      "outcome": "unavailable",
+      "detail": "Optional heuristics deferred; native DRC/ERC and parity are reported separately."
+    },
+    {
+      "path": "firmware/include/eye_config.h",
+      "domain": "firmware",
+      "check": "Artifact facts",
+      "tool": "Atlas",
+      "outcome": "ran",
+      "detail": "Read saved versions.  "
+    },
+    {
+      "path": "firmware/include/eye_types.h",
+      "domain": "firmware",
+      "check": "Artifact facts",
+      "tool": "Atlas",
+      "outcome": "ran",
+      "detail": "Read saved versions.  "
+    },
+    {
+      "path": "firmware/include/eyes.h",
+      "domain": "firmware",
+      "check": "Artifact facts",
+      "tool": "Atlas",
+      "outcome": "ran",
+      "detail": "Read saved versions.  "
+    },
+    {
+      "path": "firmware/src/eyes.cpp",
+      "domain": "firmware",
+      "check": "Artifact facts",
+      "tool": "Atlas",
+      "outcome": "ran",
+      "detail": "Read saved versions.  "
+    },
+    {
+      "path": "firmware/src/main.cpp",
+      "domain": "firmware",
+      "check": "Artifact facts",
+      "tool": "Atlas",
+      "outcome": "ran",
+      "detail": "Read saved versions.  "
+    },
+    {
+      "path": "firmware/src/ui.cpp",
+      "domain": "firmware",
+      "check": "Artifact facts",
+      "tool": "Atlas",
+      "outcome": "ran",
+      "detail": "Read saved versions.  "
+    },
+    {
+      "path": "",
+      "domain": "cad",
+      "check": "Project mapping",
+      "tool": "Atlas",
+      "outcome": "unavailable",
+      "detail": "Configure cad checks to establish units, scope and confirmed file relationships."
+    },
+    {
+      "path": "",
+      "domain": "firmware",
+      "check": "Project mapping",
+      "tool": "Atlas",
+      "outcome": "unavailable",
+      "detail": "Configure firmware checks to establish units, scope and confirmed file relationships."
+    },
+    {
+      "path": "",
+      "domain": "bom",
+      "check": "Project mapping",
+      "tool": "Atlas",
+      "outcome": "unavailable",
+      "detail": "Assembly validation requires a BOM-to-schematic mapping. Shopping-list cell changes are reviewed without one."
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical assembly",
+      "tool": "offline net graph",
+      "outcome": "ran",
+      "detail": "Compared paired schematic and PCB component inventories."
+    },
+    {
+      "path": "",
+      "domain": "schematic",
+      "check": "Electrical graph",
+      "tool": "offline net graph",
+      "outcome": "ran",
+      "detail": "Analyzed 246 placed symbols and 124 nets from embedded geometry; no kicad-cli used."
+    },
+    {
+      "path": "",
+      "domain": "schematic",
+      "check": "Electrical usb",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+    },
+    {
+      "path": "",
+      "domain": "schematic",
+      "check": "Electrical divider",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+    },
+    {
+      "path": "",
+      "domain": "schematic",
+      "check": "Electrical capacitor",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+    },
+    {
+      "path": "",
+      "domain": "schematic",
+      "check": "Electrical clock",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+    },
+    {
+      "path": "",
+      "domain": "schematic",
+      "check": "Electrical switch",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+    },
+    {
+      "path": "",
+      "domain": "schematic",
+      "check": "Electrical pullup",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+    },
+    {
+      "path": "",
+      "domain": "schematic",
+      "check": "Electrical protection",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+    },
+    {
+      "path": "",
+      "domain": "schematic",
+      "check": "Electrical polarity",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+    },
+    {
+      "path": "",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+    },
+    {
+      "path": "",
+      "domain": "schematic",
+      "check": "Electrical undriven",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: full operating limits, module internals and design intent are not inferred. Findings cover only supported explicit topology and metadata."
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0805_2012Metric.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x03_P2.54mm_Vertical.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Capacitor_THT.3dshapes/CP_Radial_D10.0mm_P5.00mm.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0805_2012Metric.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Connector_JST.3dshapes/JST_SH_BM04B-SRSS-TB_1x04-1MP_P1.00mm_Vertical.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x07_P2.54mm_Vertical.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Package_TO_SOT_SMD.3dshapes/SOT-23.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0603_1608Metric.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Connector_JST.3dshapes/JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x22_P2.54mm_Vertical.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/LED_SMD.3dshapes/LED_WS2812B_PLCC4_5.0x5.0mm_P3.2mm.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Button_Switch_THT.3dshapes/SW_PUSH_6mm.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/TerminalBlock_MetzConnect.3dshapes/TerminalBlock_MetzConnect_Type055_RT01502HDWU_1x02_P5.00mm_Horizontal.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Package_SO.3dshapes/SOIC-16_3.9x9.9mm_P1.27mm.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Sensor_Distance.3dshapes/ST_VL53L1x.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Button_Switch_THT.3dshapes/SW_Slide_SPDT_Straight_CK_OS102011MS2Q.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Connector_Card.3dshapes/microSD_HC_Molex_104031-0811.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Capacitor_THT.3dshapes/CP_Radial_D6.3mm_P2.50mm.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Button_Switch_SMD.3dshapes/SW_SPST_PTS645Sx43SMTR92.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x05_P2.54mm_Vertical.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_1206_3216Metric.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/CP_Elec_6.3x5.4.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Package_TO_SOT_SMD.3dshapes/SOT-23-6.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Connector.3dshapes/FanPinHeader_1x03_P2.54mm_Vertical.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Diode_THT.3dshapes/D_DO-41_SOD81_P10.16mm_Horizontal.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Package_DFN_QFN.3dshapes/QFN-24-1EP_4x4mm_P0.5mm_EP2.7x2.6mm.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Capacitor_THT.3dshapes/C_Disc_D5.0mm_W2.5mm_P5.00mm.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/TerminalBlock_Phoenix.3dshapes/TerminalBlock_Phoenix_PT-1,5-2-5.0-H_1x02_P5.00mm_Horizontal.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Connector_USB.3dshapes/USB_C_Receptacle_HRO_TYPE-C-31-M-12.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_1206_3216Metric.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Package_DFN_QFN.3dshapes/TQFN-16-1EP_3x3mm_P0.5mm_EP1.6x1.6mm.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Connector.3dshapes/FanPinHeader_1x04_P2.54mm_Vertical.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Resistor_THT.3dshapes/R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/LED_SMD.3dshapes/LED_0805_2012Metric.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x01_P2.54mm_Vertical.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Package_SO.3dshapes/TSSOP-16-1EP_4.4x5mm_Pitch0.65mm_EP3.4x5mm.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Package_DFN_QFN.3dshapes/DFN-8-1EP_2x2mm_P0.5mm_EP0.6x1.2mm.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x06_P2.54mm_Vertical.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Package_TO_SOT_SMD.3dshapes/SOT-23-5.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Battery.3dshapes/BatteryHolder_Keystone_3000_1x12mm.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_0805_2012Metric.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x03_P2.54mm_Vertical.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Capacitor_THT.3dshapes/CP_Radial_D10.0mm_P5.00mm.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0805_2012Metric.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Connector_JST.3dshapes/JST_SH_BM04B-SRSS-TB_1x04-1MP_P1.00mm_Vertical.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x07_P2.54mm_Vertical.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Package_TO_SOT_SMD.3dshapes/SOT-23.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_0603_1608Metric.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Connector_JST.3dshapes/JST_PH_B2B-PH-K_1x02_P2.00mm_Vertical.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/LED_SMD.3dshapes/LED_WS2812B_PLCC4_5.0x5.0mm_P3.2mm.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Button_Switch_THT.3dshapes/SW_PUSH_6mm.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/TerminalBlock_MetzConnect.3dshapes/TerminalBlock_MetzConnect_Type055_RT01502HDWU_1x02_P5.00mm_Horizontal.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Package_SO.3dshapes/SOIC-16_3.9x9.9mm_P1.27mm.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Sensor_Distance.3dshapes/ST_VL53L1x.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Button_Switch_THT.3dshapes/SW_Slide_SPDT_Straight_CK_OS102011MS2Q.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Connector_Card.3dshapes/microSD_HC_Molex_104031-0811.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Capacitor_THT.3dshapes/CP_Radial_D6.3mm_P2.50mm.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x05_P2.54mm_Vertical.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Resistor_SMD.3dshapes/R_1206_3216Metric.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/CP_Elec_6.3x5.4.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Connector_PinSocket_2.54mm.3dshapes/PinSocket_1x22_P2.54mm_Vertical.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Connector.3dshapes/FanPinHeader_1x03_P2.54mm_Vertical.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Diode_THT.3dshapes/D_DO-41_SOD81_P10.16mm_Horizontal.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Package_DFN_QFN.3dshapes/QFN-24-1EP_4x4mm_P0.5mm_EP2.7x2.6mm.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Capacitor_THT.3dshapes/C_Disc_D5.0mm_W2.5mm_P5.00mm.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/TerminalBlock_Phoenix.3dshapes/TerminalBlock_Phoenix_PT-1,5-2-5.0-H_1x02_P5.00mm_Horizontal.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Connector_USB.3dshapes/USB_C_Receptacle_HRO_TYPE-C-31-M-12.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Capacitor_SMD.3dshapes/C_1206_3216Metric.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Package_TO_SOT_SMD.3dshapes/SOT-23-6.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Package_DFN_QFN.3dshapes/TQFN-16-1EP_3x3mm_P0.5mm_EP1.6x1.6mm.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Connector.3dshapes/FanPinHeader_1x04_P2.54mm_Vertical.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Resistor_THT.3dshapes/R_Axial_DIN0207_L6.3mm_D2.5mm_P7.62mm_Horizontal.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/LED_SMD.3dshapes/LED_0805_2012Metric.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x01_P2.54mm_Vertical.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Package_SO.3dshapes/TSSOP-16-1EP_4.4x5mm_Pitch0.65mm_EP3.4x5mm.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Package_DFN_QFN.3dshapes/DFN-8-1EP_2x2mm_P0.5mm_EP0.6x1.2mm.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Connector_PinHeader_2.54mm.3dshapes/PinHeader_1x06_P2.54mm_Vertical.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Package_TO_SOT_SMD.3dshapes/SOT-23-5.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "schematic",
+      "check": "Electrical models",
+      "tool": "offline net graph",
+      "outcome": "unavailable",
+      "detail": "Not checked: external library model ${KICAD10_3DMODEL_DIR}/Battery.3dshapes/BatteryHolder_Keystone_3000_1x12mm.step"
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "project",
+      "check": "Cross-file relationships",
+      "tool": "Atlas",
+      "outcome": "unavailable",
+      "detail": "e0751c92: KiCad could not export a bounded netlist for this schematic."
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+      "domain": "project",
+      "check": "Cross-file relationships",
+      "tool": "Atlas",
+      "outcome": "unavailable",
+      "detail": "0c8afb27: No basename-paired schematic; no component match assumed."
+    },
+    {
+      "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+      "domain": "project",
+      "check": "Cross-file relationships",
+      "tool": "Atlas",
+      "outcome": "unavailable",
+      "detail": "0c8afb27: KiCad could not export a bounded netlist for this schematic."
+    }
+  ],
+  "relationships": [
+    {
+      "id": "4a466d22352eb00157cef079",
+      "kind": "board_enclosure",
+      "status": "possible",
+      "source": {
+        "id": "73ca1cdb92df1cf2694f0b76",
+        "repo_id": "local-trust-check",
+        "sha": "e0751c92cdb498a6cf31f22fc47734bbc530117f",
+        "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+        "locator": "Sole basename-paired KiCad project"
+      },
+      "target": {
+        "id": "408bb9556ab95477284c0ec2",
+        "repo_id": "local-trust-check",
+        "sha": "e0751c92cdb498a6cf31f22fc47734bbc530117f",
+        "path": "cad/astra-companion-chassis-assembly.step",
+        "locator": "Sole CAD asset; association needs confirmation"
+      },
+      "summary": "Possible project CAD connection: one CAD asset and one paired KiCad project. Confirm the association; mechanical effects are unverified.",
+      "metadata": {
+        "requires_confirmation": true,
+        "basis": "unique CAD asset and matched KiCad project"
+      }
+    },
+    {
+      "id": "b619292edb0f5fd8ad3c6c28",
+      "kind": "board_enclosure",
+      "status": "possible",
+      "source": {
+        "id": "1a10718b0aa370bfee10377b",
+        "repo_id": "local-trust-check",
+        "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+        "path": "hardware/astracompanion/astracompanion.kicad_pcb",
+        "locator": "Sole basename-paired KiCad project"
+      },
+      "target": {
+        "id": "16d6ca5cd360ef99d977d450",
+        "repo_id": "local-trust-check",
+        "sha": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+        "path": "cad/astra-companion-chassis-assembly.step",
+        "locator": "Sole CAD asset; association needs confirmation"
+      },
+      "summary": "Possible project CAD connection: one CAD asset and one paired KiCad project. Confirm the association; mechanical effects are unverified.",
+      "metadata": {
+        "requires_confirmation": true,
+        "basis": "unique CAD asset and matched KiCad project"
+      }
+    }
+  ]
+}

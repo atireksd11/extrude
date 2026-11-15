@@ -185,6 +185,31 @@ class Collector:
                        evidence=sources, related=[dict(sha=sha, path=rule.netlist_file, basis="configured")])
             return {rule.firmware_symbol: row}, "Compared a declared firmware-to-net/pad mapping; no code executed."
         self.paired(rule.firmware_file, "firmware", "Firmware/netlist pin mapping", evaluate)
+        # A configured reference establishes which assembly firmware expects;
+        # source text alone cannot safely identify component designators.
+        if rule.netlist_file.endswith(".kicad_sch"):
+            board_path = str(PurePosixPath(rule.netlist_file).with_suffix(".kicad_pcb"))
+            try:
+                constants = facts(self.repo, self.head, rule.firmware_file)["constants"]
+                if rule.firmware_symbol not in constants:
+                    raise ValueError("Configured firmware symbol is absent.")
+                from extrude.parse.kicad_pcb import parse_board, MAX_BOARD_BYTES
+                raw = git.regular_blob(self.repo, self.head, board_path, max_bytes=MAX_BOARD_BYTES)
+                if raw is None:
+                    raise ValueError("Paired board is absent.")
+                refs = {p.reference for p in parse_board(raw).footprints}
+                if rule.mcu_ref not in refs and not any(
+                    f["rule_id"] == "firmware.component_missing" and f["summary"].startswith(rule.mcu_ref + ":")
+                    for f in self.findings
+                ):
+                    self.finding("firmware.component_missing", "firmware",
+                                 f"{rule.mcu_ref}: firmware expects this component via configured {rule.firmware_symbol}, but it has no footprint on the paired board — the firmware-controlled function cannot be implemented. Restore the component or reconcile the firmware mapping.",
+                                 status="verified", severity="warning", lifecycle="present_at_head",
+                                 evidence_items=[evidence(self.repo, self.head, rule.firmware_file, rule.firmware_symbol),
+                                                 evidence(self.repo, self.head, board_path, rule.mcu_ref + " absent from footprint inventory")])
+                self.cover(board_path, "firmware", "Firmware component parity", "ran", "Compared configured firmware component with paired PCB inventory.")
+            except (ValueError, git.BlobUnavailable, KeyError) as exc:
+                self.cover(board_path, "firmware", "Firmware component parity", "unavailable", str(exc))
 
     def bom(self, mapping):
         parsed = {}

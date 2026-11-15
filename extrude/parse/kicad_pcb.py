@@ -24,6 +24,7 @@ class Footprint:
     rotation: float
     layer: str
     pads: dict[str, tuple[str | None, ...]]
+    properties: tuple[tuple[str, str], ...] = ()
 
 
 @dataclass(frozen=True)
@@ -111,6 +112,10 @@ def _footprint(node: SExp, nets: dict[int, str]) -> Footprint:
         _atom(library), (x, y), rotation % 360, layer,
         {number: tuple(sorted(values, key=lambda value: (value is not None, value or "")))
          for number, values in pads.items()},
+        tuple(sorted((_atom(row.values[0]), _atom(row.values[1]))
+                     for row in _rows(node, "property") if len(row.values) >= 2))
+        + tuple(("Value", _atom(row.values[1])) for row in _rows(node, "fp_text")
+                if len(row.values) >= 2 and row.values[0] == "value"),
     )
 
 

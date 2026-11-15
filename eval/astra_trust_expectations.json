@@ -1,0 +1,31 @@
+{
+  "repository": "atireksd11/astra-companion",
+  "original_audit": "aadbbd68b22a718427d9cd3ff2402d0f40353e0789ca7b828ae5965f9e1a9cc3",
+  "base": "e0751c92cdb498a6cf31f22fc47734bbc530117f",
+  "head": "0c8afb27b14d1b6190441f2ab683fe8058f7e7f0",
+  "missing_parts": [
+    "SW1",
+    "SW3",
+    "SW6",
+    "R36",
+    "R37",
+    "R38",
+    "C32",
+    "C33",
+    "C34",
+    "U13",
+    "UE1"
+  ],
+  "no_pullup": [
+    "DS2"
+  ],
+  "backup": "hardware/astracompanion/astracompanion copy.kicad_pcb",
+  "footprints": 107,
+  "undriven_nets": [
+    "SPI_CLK",
+    "SPI_MOSI",
+    "TFT_DC",
+    "TFT1_CS",
+    "TFT2_CS"
+  ]
+}

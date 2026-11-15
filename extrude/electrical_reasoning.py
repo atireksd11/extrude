@@ -22,6 +22,7 @@ FAMILIES = (
     "protection",
     "polarity",
     "models",
+    "undriven",
 )
 
 
@@ -58,7 +59,7 @@ def output_voltage(description):
     return None
 
 
-def _analyze_design(files, paths=None):
+def _analyze_design(files, paths=None, inventory_complete=True):
     """Pure entry point used by production and pinned-repository evaluation."""
     paths = set(paths or files)
     g = build(files)
@@ -135,9 +136,9 @@ def _analyze_design(files, paths=None):
         from extrude.parse.kicad_pcb import parse_board
 
         try:
-            board_references = {
-                p.reference for p in parse_board(files[board_path]).footprints
-            }
+            board_footprints = parse_board(files[board_path]).footprints
+            board_references = {p.reference for p in board_footprints}
+            electrical_board_refs = {p.reference for p in board_footprints if p.pads}
         except ValueError:
             coverage.append(
                 (
@@ -146,6 +147,22 @@ def _analyze_design(files, paths=None):
                     "Not checked: PCB footprint inventory could not be parsed.",
                 )
             )
+    if board_references is not None:
+        physical = [p for p in g.parts if not p.reference.startswith("#")
+                    and p.properties.get("_on_board", "True") == "True"]
+        for part in physical:
+            if part.fitted and part.reference not in board_references:
+                emit("assembly", part,
+                     f"is in the schematic{' and marked for BOM inclusion' if part.in_bom else ''} but has no footprint on the paired board — {part.value or 'this component'} cannot be assembled, so its circuit function is absent. Restore the footprint or reconcile the schematic and assembly intent.",
+                     other=[(board_path, "footprint inventory: reference absent")])
+        # Missing library definitions must not become false PCB-only accusations.
+        if not g.issues and inventory_complete:
+            schematic_refs = {p.reference for p in g.parts}
+            from extrude.electrical_graph import Part
+            for ref in sorted(electrical_board_refs - schematic_refs - {None, ""}):
+                emit("assembly", Part(ref, "", "", "", board_path, {}, True, True),
+                     "has a PCB footprint but no symbol in the paired schematic — its connectivity and BOM intent are unrepresented. Reconcile the board and schematic.")
+        coverage.append((board_path, "assembly", "Compared paired schematic and PCB component inventories."))
     byref = {(p.path, p.reference): p for p in g.parts}
     resistors = [
         p
@@ -156,6 +173,8 @@ def _analyze_design(files, paths=None):
         and resistance(p.value) is not None
         and resistance(p.value) > 0
     ]
+
+    resistor_keys = {(p.path, p.reference) for p in resistors}
 
     def opposite(part, net):
         return next((p.net for p in part.pins if p.net != net), None)
@@ -385,8 +404,12 @@ def _analyze_design(files, paths=None):
                 )
         for p in pins:
             signal = "/".join([p.name, *names(p.net)])
-            if re.search(
-                r"(?i)(\bSDA\b|\bSCL\b|DDC[_/ -]*(SDA|SCL|DATA|CLK|CLOCK))", signal
+            net_names = "/".join(names(p.net))
+            spi = re.search(r"(?i)(?:SPI|(?:^|[_/ -])(?:SCK|MOSI|MISO)(?:$|[_/ -]))", net_names)
+            protocol = re.search(r"(?i)(I2C|SMBUS|DDC|(?:^|[_/ -])SDA(?:$|[_/ -])|(?:^|[_/ -])SCL(?:$|[_/ -]))", net_names)
+            open_drain = any(q.kind == "open_collector" for q in peers(p))
+            if (protocol or open_drain) and not spi and re.search(
+                r"(?i)(SDA|SCL|DATA|CLK|CLOCK)", signal
             ) and not pullup(p.net):
                 # Only one report per physical net.
                 key = ("pullup", p.net)
@@ -573,6 +596,47 @@ def _analyze_design(files, paths=None):
                         [p],
                         [(hi.path, hi.reference), (lo.path, lo.reference)],
                     )
+    # Trace series resistors; pull resistors to supplies establish bias, not a
+    # protocol master. Passive connector pins and bidirectional pins are unknown
+    # possible external sources, so report uncertainty rather than an absence.
+    if g.issues or not inventory_complete:
+        coverage.append(("", "undriven", "Not checked: incomplete schematic graph cannot establish absence of a driver."))
+    for net, connected in ([] if g.issues or not inventory_complete else g.nets.items()):
+        label = "/".join(names(net))
+        loads = [p for p in connected if p.kind == "input"]
+        bus_signal = re.search(r"(?i)(SPI|MOSI|MISO|(?:^|[_/ -])(?:SCK|SCLK|CS|DC)(?:$|[_/ -]))", label)
+        if not loads or (len(loads) < 2 and not bus_signal) or ground(net) or supply(net):
+            continue
+        reached, pending, terminals = set(), [net], []
+        biased = False
+        while pending and len(reached) < 256:
+            current = pending.pop()
+            if current in reached:
+                continue
+            reached.add(current)
+            for pin in g.nets.get(current, []):
+                owner = byref[(pin.path, pin.reference)]
+                if (pin.path, pin.reference) in resistor_keys:
+                    other = opposite(owner, current)
+                    if other is not None:
+                        if ground(other) or supply(other):
+                            biased = True
+                        else:
+                            pending.append(other)
+                else:
+                    terminals.append(pin)
+        if biased and not bus_signal:
+            continue  # Static enable/strap/divider levels can be resistor driven.
+        if pending or not terminals or any(p.kind != "input" for p in terminals):
+            continue
+        # Standalone multi-input nets and named bus control inputs are supported;
+        # isolated generic inputs need design intent (NC/optional pins).
+        part = byref[(loads[0].path, loads[0].reference)]
+        emit("undriven", part,
+             f"net {label or '(unnamed)'} has only input loads and no driver/master: "
+             + ", ".join(f"{p.reference} pin {p.number} {p.name}" for p in terminals)
+             + ". These inputs have no signal source. Connect a driver/master or document the external source.",
+             loads, [(p.path, f"{p.reference} pin {p.number} {p.name}") for p in terminals])
     # BOM absence is only asserted for a recognized, explicit reference column.
     for path, data in files.items():
         if not re.search(r"(?i)bom[^/]*\.(csv|tsv)$", path):
@@ -610,6 +674,12 @@ def _analyze_design(files, paths=None):
                 (path, "assembly", "Not checked: BOM assembly scope is ambiguous.")
             )
             continue
+        if board_references is not None:
+            from extrude.electrical_graph import Part
+            for ref in sorted(refs - assembly_refs - board_references):
+                emit("assembly", Part(ref, "", "", "", path, {}, True, True),
+                     "is listed in the scoped BOM but has no footprint on the paired board — the listed component cannot be assembled. Reconcile the BOM and PCB.",
+                     other=[(board_path, "footprint inventory: reference absent")])
         for part in g.parts:
             if (
                 not part.reference.startswith("#")
@@ -670,6 +740,10 @@ def _analyze_design(files, paths=None):
     for path, issue in g.issues:
         coverage.append((path, "graph", issue))
     for family in FAMILIES:
+        if not g.parts and family != "models":
+            continue
+        if family == "assembly" and board_references is not None:
+            continue
         coverage.append(
             (
                 "",
@@ -766,7 +840,8 @@ def analyze(files, paths=None):
         paired_board = root.removesuffix(".kicad_sch") + ".kicad_pcb"
         if paired_board in files:
             inputs[paired_board] = files[paired_board]
-        f, c = _analyze_design(inputs, paths)
+        complete = not repeated and all(child in sheets for p in selected for child in children[p])
+        f, c = _analyze_design(inputs, paths, inventory_complete=complete)
         findings.extend(f)
         coverage.extend(c)
     # Even a PCB-only repo can have resolvable model references.
