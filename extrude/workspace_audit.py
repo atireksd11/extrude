@@ -20,7 +20,7 @@ from extrude import kicad_snapshot
 from extrude import workspace_settings, workspace_checks, workspace_cad
 
 SCHEMA_VERSION = 4
-RULE_VERSION = 6
+RULE_VERSION = 7
 _POOL = ThreadPoolExecutor(max_workers=2, thread_name_prefix="atlas-audit")
 _LOCK = threading.RLock()
 _ACTIVE: dict[tuple[Path, str], str] = {}
@@ -293,6 +293,17 @@ def _schematic(audit: Audit, path: str, old_path: str) -> None:
 
 
 def _board(audit: Audit, path: str, old_path: str) -> None:
+    duplicate = pcb_review.duplicate_added_board(audit.repo_id, audit.head_sha, audit.base_sha, path)
+    if duplicate:
+        audit.findings.append(Finding(
+            rule_id="pcb.board_copy_added", domain="pcb", status="observed", severity="info",
+            summary=f"Backup copy of the board added: {duplicate['count']} footprints, no new hardware in the footprint inventory. Matches {duplicate['path']} at {duplicate['sha'][:8]}; tracks, zones and stackup are not compared.",
+            evidence=[Evidence(id=_key([audit.repo_id, sha, name, "footprint inventory"])[:24],
+                               repo_id=audit.repo_id, sha=sha, path=name, locator="complete supported footprint/pad inventory")
+                      for sha, name in [(audit.head_sha, path), (duplicate['sha'], duplicate['path'])]]))
+        audit.coverage.append(Coverage(path=path, domain="pcb", check="PCB placement and pad nets",
+                                       tool="kicad-tools", outcome="ran", detail="Duplicate footprint inventory summarized once; tracks, zones and stackup not compared."))
+        return
     data = pcb_review.review(audit.repo_id, audit.head_sha, path, audit.base_sha, old_path,
                              limit=_MAX_BOARD_FINDINGS)
     coverage = Coverage(path=path, domain="pcb", check="PCB placement and pad nets", tool="kicad-tools",

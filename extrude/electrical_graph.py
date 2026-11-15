@@ -98,6 +98,7 @@ def build(files: dict[str, bytes]) -> Graph:
                         path,
                         {
                             **{k: v.value for k, v in sym.properties.items()},
+                            "_on_board": str(sym.on_board),
                             "_symbol_description": lib.properties.get(
                                 "Description", lib.properties.get("ki_description", "")
                             ),
