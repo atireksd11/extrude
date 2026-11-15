@@ -20,7 +20,7 @@ def _mask(text: str) -> str:
 def read_constants(data: bytes, path: str) -> dict[str, dict]:
     if len(data) > MAX_SOURCE_BYTES:
         raise ValueError("Source exceeds the 512 KiB analysis limit.")
-    text = data.decode("utf-8-sig")
+    text = data.decode("utf-8-sig", errors="replace")
     rows: dict[str, list[dict]] = {}
     namespaces = []
     def add(name, value, line, detail=None):
