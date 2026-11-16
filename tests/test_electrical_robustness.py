@@ -82,15 +82,15 @@ def test_snapshot_tolerates_library_and_project_text(saved_repo):
         assert not snapshot.issues
 
 
-@pytest.mark.parametrize("size_mib", [10, 40])
-def test_fallback_oversize_board_is_per_file_and_other_board_still_audits(saved_repo, size_mib):
+@pytest.mark.parametrize("size_mib", [40])
+def test_oversize_board_is_per_file_and_other_board_still_audits(saved_repo, size_mib):
     padded = board(["U82"]) + b" " * (size_mib * 1024 * 1024)
     sha = saved_repo({**good_design(), "oversize.kicad_pcb": padded})
     findings, coverage = electrical.collect("local", sha)
     assert_good(findings)
-    assert any(row["path"] == "oversize.kicad_pcb" and "8 MiB" in row["detail"]
+    assert any(row["path"] == "oversize.kicad_pcb" and "32 MiB" in row["detail"]
                and "other files still analysed" in row["detail"] for row in coverage)
-    with pytest.raises(kicad_pcb.BoardParseError, match="8 MiB"):
+    with pytest.raises(kicad_pcb.BoardParseError, match="32 MiB"):
         kicad_pcb.parse_board(padded)
 
 
@@ -176,10 +176,11 @@ def test_bad_file_never_reaches_workspace_whole_layer_handler(saved_repo, monkey
     assert any(row.tool == "offline net graph" and row.outcome == "ran" for row in audit.coverage)
 
 
-def test_versioning_and_fallback_limits():
-    assert workspace_audit.RULE_VERSION == 8
+def test_versioning_and_pcb_only_limits():
+    assert workspace_audit.RULE_VERSION == 9
     assert workspace_audit.SCHEMA_VERSION == 4
-    assert kicad_pcb.MAX_BOARD_BYTES == kicad_schematic.MAX_SCHEMATIC_BYTES == kicad_snapshot.MAX_FILE_BYTES == electrical_graph.MAX_BYTES == 8 * 1024 * 1024
+    assert kicad_pcb.MAX_BOARD_BYTES == 32 * 1024 * 1024
+    assert kicad_schematic.MAX_SCHEMATIC_BYTES == kicad_snapshot.MAX_FILE_BYTES == electrical_graph.MAX_BYTES == 8 * 1024 * 1024
     assert kicad_snapshot.MAX_FILES == 256
     assert kicad_snapshot.MAX_BYTES == 64 * 1024 * 1024
     assert workspace_firmware.MAX_SOURCE_BYTES == 512 * 1024

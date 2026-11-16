@@ -899,7 +899,8 @@ def collect(repo, sha):
     total = 0
     for path in candidates:
         try:
-            data = git.regular_blob(repo, sha, path, max_bytes=8 * 1024 * 1024)
+            limit = 32 * 1024 * 1024 if path.endswith(".kicad_pcb") else 8 * 1024 * 1024
+            data = git.regular_blob(repo, sha, path, max_bytes=limit)
             if data is None:
                 raise ValueError("input disappeared from the selected revision")
             if total + len(data) > 64 * 1024 * 1024:
