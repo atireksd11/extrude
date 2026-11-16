@@ -1,5 +1,7 @@
 """Read the KiCad fields used by the Atlas PCB comparison."""
 
+import gc
+import re
 from collections import Counter, defaultdict
 from dataclasses import dataclass
 from math import isfinite
@@ -7,7 +9,10 @@ from threading import Lock
 
 from kicad_tools.sexp import ParseError, SExp, parse_string
 
-MAX_BOARD_BYTES = 8 * 1024 * 1024
+# Lily58 Pro_V2 is 8.9 MB; per-form parsing bounds memory while 32 MiB
+# admits real keyboard-size boards with headroom.
+MAX_BOARD_BYTES = 32 * 1024 * 1024
+MAX_FORM_BYTES = 8 * 1024 * 1024
 _PARSE_LOCK = Lock()
 
 
@@ -119,32 +124,105 @@ def _footprint(node: SExp, nets: dict[int, str]) -> Footprint:
     )
 
 
+def _forms(text: str):
+    """Yield immediate child spans, without building trees for unused geometry."""
+    header = re.match(r"\s*\(\s*kicad_pcb(?=[\s()])", text)
+    if header is None:
+        raise BoardParseError("Expected a native KiCad PCB file.")
+    depth = 1
+    quoted = escaped = False
+    start = None
+    for index in range(header.end(), len(text)):
+        char = text[index]
+        if quoted:
+            if escaped:
+                escaped = False
+            elif char == "\\":
+                escaped = True
+            elif char == '"':
+                quoted = False
+            continue
+        if char == ";":
+            raise BoardParseError("Comments are not supported in KiCad boards.")
+        if depth == 0:
+            if not char.isspace():
+                raise BoardParseError("Unexpected text after the KiCad board.")
+        elif char == "(":
+            if depth == 1:
+                start = index
+            depth += 1
+        elif char == ")":
+            depth -= 1
+            if depth == 1:
+                end = index + 1
+                # Count encoded bytes, including replacement characters, not code points.
+                if end - start > MAX_FORM_BYTES or len(text[start:end].encode("utf-8")) > MAX_FORM_BYTES:
+                    raise BoardParseError("A PCB form exceeds the 8 MiB limit.")
+                name = re.match(r"\(\s*([^\s()]+)", text[start:end])
+                yield name.group(1) if name else "", start, end
+                start = None
+        elif char == '"':
+            if depth == 1:
+                raise BoardParseError("Could not read the KiCad board syntax: unexpected atom.")
+            quoted = True
+        elif depth == 1 and not char.isspace():
+            raise BoardParseError("Could not read the KiCad board syntax: unexpected atom.")
+    if depth != 0 or quoted:
+        raise BoardParseError("Could not read the KiCad board syntax.")
+
+
+def _parse_form(text: str) -> SExp:
+    # Upstream pauses process-wide GC. Restore it even if a parse fails.
+    with _PARSE_LOCK:
+        enabled = gc.isenabled()
+        try:
+            return parse_string(text)
+        finally:
+            if enabled:
+                gc.enable()
+
+
 def parse_board(data: bytes) -> Board:
     if len(data) > MAX_BOARD_BYTES:
-        raise BoardParseError("Board exceeds the 8 MiB comparison limit.")
+        raise BoardParseError("Board exceeds the 32 MiB comparison limit.")
     try:
-        # The upstream parser temporarily pauses process-wide garbage collection.
-        with _PARSE_LOCK:
-            root = parse_string(data.decode("utf-8-sig", errors="replace"))
+        text = data.decode("utf-8-sig", errors="replace")
+        version = None
+        nets = {}
+        footprint_spans = []
+        for name, start, end in _forms(text):
+            if name in {"footprint", "module"}:
+                # Nets can follow footprints: retain offsets, never their trees.
+                footprint_spans.append((start, end))
+                continue
+            if name not in {"version", "net"}:
+                continue
+            row = _parse_form(text[start:end])
+            if name == "version":
+                if version is None:
+                    version = row.values
+            else:
+                values = row.values
+                if len(values) != 2 or not isinstance(values[0], int):
+                    raise BoardParseError("The board contains a malformed net definition.")
+                code, value = values
+                net_name = _atom(value)
+                if code in nets and nets[code] != net_name:
+                    raise BoardParseError("The board contains conflicting net definitions.")
+                nets[code] = net_name
+            del row
+        if version is None or len(version) != 1 or not isinstance(version[0], int):
+            raise BoardParseError("The board is missing its KiCad format version.")
+        footprints = []
+        for start, end in footprint_spans:
+            row = _parse_form(text[start:end])
+            footprints.append(_footprint(row, nets))
+            del row
+        return Board(version[0], tuple(footprints))
+    except BoardParseError:
+        raise
     except (ParseError, ValueError, RecursionError) as exc:
         raise BoardParseError("Could not read the KiCad board syntax.") from exc
-    if root.name != "kicad_pcb":
-        raise BoardParseError("Expected a native KiCad PCB file.")
-    version = _field(root, "version")
-    if len(version) != 1 or not isinstance(version[0], int):
-        raise BoardParseError("The board is missing its KiCad format version.")
-    nets = {}
-    for row in _rows(root, "net"):
-        values = row.values
-        if len(values) != 2 or not isinstance(values[0], int):
-            raise BoardParseError("The board contains a malformed net definition.")
-        code, value = values
-        name = _atom(value)
-        if code in nets and nets[code] != name:
-            raise BoardParseError("The board contains conflicting net definitions.")
-        nets[code] = name
-    footprints = tuple(_footprint(row, nets) for row in root.children if row.name in {"footprint", "module"})
-    return Board(version[0], footprints)
 
 
 def _pairs(before: tuple[Footprint, ...], after: tuple[Footprint, ...]):

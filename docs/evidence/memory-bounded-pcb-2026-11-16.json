@@ -1,0 +1,192 @@
+{
+  "base_commit": "08e1373fba8d75a3f5ffb45bb7a710dee21920df",
+  "rule_version": 9,
+  "schema_version": 4,
+  "lily58": {
+    "source": "kata0510/Lily58",
+    "sha": "58c649797c185b7b32b9928d4546665153cfacfd",
+    "path": "Pro_V2/Pro_V2.kicad_pcb",
+    "bytes": 8892279,
+    "sha256": "7cf6645dbc5ac7684f6a70af6690e9b64eef3b32c9e9be8cf89b57ff6c06a483",
+    "footprints": 312
+  },
+  "baseline_untraced": [
+    {
+      "phase": "decode",
+      "peak_rss_kib": 52148
+    },
+    {
+      "phase": "parse_string",
+      "peak_rss_kib": 309884
+    },
+    {
+      "phase": "Board-build",
+      "peak_rss_kib": 310268
+    }
+  ],
+  "baseline_tracemalloc": [
+    {
+      "phase": "decode",
+      "peak_rss_kib": 52136,
+      "tracemalloc_current_peak_bytes": [
+        26677928,
+        35570536
+      ]
+    },
+    {
+      "phase": "parse_string",
+      "peak_rss_kib": 661760,
+      "tracemalloc_current_peak_bytes": [
+        268957903,
+        268958117
+      ]
+    },
+    {
+      "phase": "Board-build",
+      "peak_rss_kib": 662528,
+      "tracemalloc_current_peak_bytes": [
+        269262567,
+        269264135
+      ]
+    }
+  ],
+  "final_minimal_processes": [
+    {
+      "path": "work/Pro_V2.kicad_pcb",
+      "bytes": 8892279,
+      "footprints": 312,
+      "peak_rss_kib": 57848
+    },
+    {
+      "path": "work/padded-10.kicad_pcb",
+      "bytes": 10485760,
+      "footprints": 3,
+      "peak_rss_kib": 46036
+    },
+    {
+      "path": "work/padded-32.kicad_pcb",
+      "bytes": 33554432,
+      "footprints": 3,
+      "peak_rss_kib": 91124
+    }
+  ],
+  "corpus_pcb_counts": {
+    "webcam": 1,
+    "hackrf": 5,
+    "lily58": 6,
+    "crkbd": 12,
+    "esp32-poe": 16,
+    "dev-kit-clone": 1,
+    "esp32-hat": 1
+  },
+  "corpus_equivalence": "42/42 byte-identical compact sorted-key UTF-8 JSON of Board dataclasses; all pinned native PCBs <=8 MiB, not only changed files",
+  "gc": "real per-form parser tested with GC enabled before every call; forced disabled-GC return and exception both restored by wrapper",
+  "harness_limitation": "Deep Test 3 harness NOT run in this task \u2014 harness and ground-truth files are local-only on the operator machine; the independent verify job runs the harness tonight against this branch and checks AC5/AC8.",
+  "snapshot_limit": "MAX_FILE_BYTES stays 8 MiB: native-tool snapshot materialization does not gate electrical collect direct blob reads.",
+  "local_electrical_collect_comparisons": [
+    {
+      "label": "webcam",
+      "source": "ErenErenel/Webcam-Design",
+      "sha": "3b5b1e54f0711e720bdcf7477e6e2bbe46252c03",
+      "base": "406abc091aca861d63b88cdddc506f5a57f4741f",
+      "baseline_findings": 3,
+      "new_findings": 3,
+      "full_findings_multiset_identical": true,
+      "canonical_sha256": "bd8a2d7ab42b3ea846f8d2eae71933f0786902123046c2cab335fe3e3fd5cea9",
+      "outcome": "ran"
+    },
+    {
+      "label": "hackrf",
+      "source": "greatscottgadgets/hackrf",
+      "sha": "3a63b29953a3b763f428821e02110def9fb1cade",
+      "base": "468c5d93b66032c892c95bbf9ff15ff1b803e84f",
+      "baseline_findings": 3,
+      "new_findings": 3,
+      "full_findings_multiset_identical": true,
+      "canonical_sha256": "eb21ad2c710615e508238d7b197977b053c4c44a4a23161dd3ce3463a8000a76",
+      "outcome": "ran"
+    },
+    {
+      "label": "lily58",
+      "source": "kata0510/Lily58",
+      "sha": "58c649797c185b7b32b9928d4546665153cfacfd",
+      "base": "b6957432f1f4f87677700f3a0ac56e29c2dfcf6e",
+      "baseline_findings": 12,
+      "new_findings": 12,
+      "full_findings_multiset_identical": true,
+      "canonical_sha256": "907c2691662cc8fa364cf992ec7b60afe3666d83f1dfaa7ae8750e5f419c73b0",
+      "outcome": "ran",
+      "pro_v2_coverage": [
+        {
+          "path": "Pro_V2/Pro_V2.kicad_pcb",
+          "domain": "schematic",
+          "check": "Electrical assembly",
+          "tool": "offline net graph",
+          "outcome": "ran",
+          "detail": "Compared paired schematic and PCB component inventories."
+        }
+      ]
+    },
+    {
+      "label": "crkbd",
+      "source": "foostan/crkbd",
+      "sha": "1747b2623b018a7b5acc6d1f7e316debad96a727",
+      "base": "e79413032d6f9330e49daf55904cf98e044d0686",
+      "baseline_findings": 469,
+      "new_findings": 469,
+      "full_findings_multiset_identical": true,
+      "canonical_sha256": "12bf5a1be253e75b5120d956d4cce8ad9a7b1b0acb76c93265aad88e1dba6f54",
+      "outcome": "ran"
+    },
+    {
+      "label": "esp32-poe",
+      "source": "OLIMEX/ESP32-POE",
+      "sha": "deb38a377d50eadb04ddc7118a17a5ae58b1ee53",
+      "base": "a9ccb127e4eff6bf58b2e366adc8dca24b42d9e7",
+      "baseline_findings": 19,
+      "new_findings": 19,
+      "full_findings_multiset_identical": true,
+      "canonical_sha256": "3dd50df966ee6be6b183a4963b8aef860a2e1f1f8d8d95b3374803bdbba8512a",
+      "outcome": "ran"
+    },
+    {
+      "label": "dev-kit-clone",
+      "source": "BrijModi/ESP32-Dev-Kit-Clone",
+      "sha": "ab7d6491243f16dd0895d63786f04da362e704fb",
+      "base": "450925bff4c8bf19286b07161e380fdc0605ad99",
+      "baseline_findings": 1,
+      "new_findings": 1,
+      "full_findings_multiset_identical": true,
+      "canonical_sha256": "c96fdab4d407e8aecd038cf1aef661aa604b1d272cfbcd4fcab2af5f0df80acb",
+      "outcome": "ran"
+    },
+    {
+      "label": "esp32-hat",
+      "source": "Rufilla/ESP32_HAT",
+      "sha": "b02f0acafc18509c680914fab8fbd77329ffb6d9",
+      "base": "fc350ccad8c98bb4546be56dcdc388805259c1ee",
+      "baseline_findings": 1,
+      "new_findings": 1,
+      "full_findings_multiset_identical": true,
+      "canonical_sha256": "656f4d3fdcbc73e14526738bb46a367214ae1d6e9fb79af57150cb914304cdec",
+      "outcome": "ran"
+    }
+  ],
+  "local_comparison_total_findings": 508,
+  "finding_delta": [],
+  "false_flags_note": "Local full electrical finding multisets are unchanged: 508 total, so zero added false flags. Applying the supplied PR #12 classification leaves 497; no independent ground-truth classification was performed. Harness AC5/AC8 remain for independent verify.",
+  "validation": {
+    "baseline_targeted": "132 passed, 3 failed",
+    "baseline_atlas": "141 passed, 3 failed, 284 deselected",
+    "final_targeted_with_corpus": "152 passed, 3 failed",
+    "final_atlas": "160 passed, 3 failed, 1 external-corpus skip, 284 deselected",
+    "external_corpus": "1 passed (42 Boards)",
+    "workspace_ui": "passed",
+    "preexisting_failures": [
+      "tests/test_kicad_audit.py::test_real_native_phase2_gate",
+      "tests/test_kicad_audit.py::test_native_hierarchical_sheet_evidence",
+      "tests/test_kicad_audit.py::test_native_workspace_api_gate"
+    ],
+    "cadquery": "2.8.0 imports; previous environment failure not reproduced"
+  }
+}
