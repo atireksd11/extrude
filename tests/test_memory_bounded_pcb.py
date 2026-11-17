@@ -106,14 +106,13 @@ def test_large_pcb_parses_under_memory_gate(saved_repo, tmp_path, size):
     padded = raw + b' ' * (size - len(raw))
     target = tmp_path / 'large.kicad_pcb'
     target.write_bytes(padded)
-    script = '''import resource, sys
+    script = '''import sys
 from extrude.parse.kicad_pcb import parse_board
 b = parse_board(open(sys.argv[1], 'rb').read())
-print(resource.getrusage(resource.RUSAGE_SELF).ru_maxrss)
+print([l for l in open('/proc/self/status') if l.startswith('VmHWM')][0].split()[1])
 '''
     result = subprocess.check_output([sys.executable, '-c', script, str(target)], text=True)
-    # Linux reports KiB. macOS reports bytes.
-    peak_bytes = int(result) * (1 if sys.platform == 'darwin' else 1024)
+    peak_bytes = int(result) * 1024  # VmHWM is KiB on Linux
     assert peak_bytes < 256_000_000
     sha = saved_repo({**good_design(), **good_design('large'), 'large.kicad_pcb': padded})
     findings, coverage = electrical.collect('local', sha)

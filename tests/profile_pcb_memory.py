@@ -2,6 +2,7 @@
 
 python tests/profile_pcb_memory.py PATH [--whole-tree] [--trace]
 --whole-tree reproduces PR #12's valid-board extraction without its 8 MiB guard.
+ru_maxrss is inherited; run from a lean parent or switch to VmHWM.
 Use an untraced run for the RSS gate; tracemalloc itself increases RSS.
 """
 import resource
