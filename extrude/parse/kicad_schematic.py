@@ -27,6 +27,7 @@ class Schematic:
     version: int
     symbols: tuple[Symbol, ...]
     sheets: tuple[tuple[str, str], ...]  # child sheet UUID, relative filename
+    uuid: str | None = None
 
 
 def parse_schematic(data: bytes) -> Schematic:
@@ -59,7 +60,9 @@ def parse_schematic(data: bytes) -> Schematic:
             if not uid or not isinstance(filename, str) or not filename:
                 raise ValueError()
             sheets.append((uid, filename))
-        return Schematic(fmt[0], tuple(symbols), tuple(sheets))
+        uuid = _field(root, "uuid")
+        return Schematic(fmt[0], tuple(symbols), tuple(sheets),
+                         uuid[0] if uuid and isinstance(uuid[0], str) else None)
     except (ParseError, ValueError, TypeError, IndexError, OverflowError, RecursionError) as exc:
         raise SchematicParseError("Could not read native KiCad schematic fields.") from exc
 
