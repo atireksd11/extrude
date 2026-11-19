@@ -59,7 +59,9 @@ def output_voltage(description):
     return None
 
 
-def _analyze_design(files, paths=None, inventory_complete=True, instance_paths=None):
+def _analyze_design(
+    files, paths=None, inventory_complete=True, instance_paths=None, root_schematics=()
+):
     """Pure entry point used by production and pinned-repository evaluation."""
     paths = set(paths or files)
     g = build(files, instance_paths=instance_paths)
@@ -698,6 +700,19 @@ def _analyze_design(files, paths=None, inventory_complete=True, instance_paths=N
     for path, data in files.items():
         if g.parts or not path.endswith((".kicad_pcb", ".kicad_mod")):
             continue
+        containing_dir = posixpath.dirname(path)
+        project_dirs = sorted({
+            posixpath.dirname(p) for p in paths if p.endswith(".kicad_pro")
+        })
+        candidate_dirs = [
+            *project_dirs,
+            *(posixpath.dirname(root) for root in root_schematics),
+            containing_dir,
+        ]
+        ancestor = containing_dir
+        while ancestor:
+            ancestor = ancestor.rpartition("/")[0]
+            candidate_dirs.append(ancestor)
         text = data.decode("utf-8-sig", errors="replace")
         for model in re.findall(r'\(model\s+"([^"]+\.(?:step|stp))"', text, re.I):
             if "$" in model and not model.startswith("${KIPRJMOD}/"):
@@ -711,9 +726,16 @@ def _analyze_design(files, paths=None, inventory_complete=True, instance_paths=N
                     (path, "models", "Not checked: absolute external model " + model)
                 )
                 continue
-            target = posixpath.normpath(
-                posixpath.join(posixpath.dirname(path), relative)
-            )
+            if model.startswith("${KIPRJMOD}/"):
+                targets = (
+                    posixpath.normpath(posixpath.join(base, relative))
+                    for base in candidate_dirs
+                )
+                target = next(targets)
+                if target in paths or any(candidate in paths for candidate in targets):
+                    continue
+            else:
+                target = posixpath.normpath(posixpath.join(containing_dir, relative))
             if target not in paths:
                 # PCB model blocks carry no ref directly; locate containing footprint.
                 prefix = text[: text.find('(model "' + model)]
@@ -768,6 +790,7 @@ def analyze(files, paths=None):
     from extrude.parse.kicad_schematic import parse_schematic
     from extrude.kicad_snapshot import relative_dependency
 
+    paths = set(paths or files)
     findings = []
     coverage = []
     sheets = {}
@@ -864,19 +887,23 @@ def analyze(files, paths=None):
         complete = not repeated and all(child in sheets for p in selected for _, child in children[p])
         try:
             f, c = _analyze_design(
-                inputs, paths, inventory_complete=complete, instance_paths=instance_paths
+                inputs, paths, inventory_complete=complete, instance_paths=instance_paths,
+                root_schematics=(root,),
             )
         except (ValueError, OSError, RecursionError) as exc:
             coverage.append(_not_checked(root, "graph", exc))
             continue
         findings.extend(f)
         coverage.extend(c)
-    # Even a PCB-only repo can have resolvable model references.
+    # Shared footprints can belong to any root. A paired board has a known root.
+    board_roots = {root.removesuffix(".kicad_sch") + ".kicad_pcb": (root,) for root in roots}
     for path, data in files.items():
         if not path.endswith((".kicad_pcb", ".kicad_mod")):
             continue
         try:
-            f, c = _analyze_design({path: data}, paths)
+            f, c = _analyze_design(
+                {path: data}, paths, root_schematics=board_roots.get(path, roots)
+            )
         except (ValueError, OSError, RecursionError) as exc:
             coverage.append(_not_checked(path, "models", exc))
             continue
