@@ -223,13 +223,61 @@ def test_usb_uart_cc_and_corrected_usb_sink():
     assert summaries({"a.kicad_sch": design(parts, [("GND", 40, 0)])}) == []
 
 
-def test_model_paths_exact_case_and_external_library_unknown():
+def test_model_paths_exact_case():
     pcb = b'(kicad_pcb (footprint "X" (property "Reference" "J90") (model "${KIPRJMOD}/Models/part.STEP")))'
     f, c = analyze({"pcb/a.kicad_pcb": pcb}, ["pcb/Models/part.step"])
     assert len(f) == 1 and "J90" in f[0]["summary"]
     assert not analyze({"pcb/a.kicad_pcb": pcb}, ["pcb/Models/part.STEP"])[0]
-    f, c = analyze({"pcb/a.kicad_pcb": pcb.replace(b"KIPRJMOD", b"KICAD9_3DMODEL_DIR")})
-    assert not f and any("external library model" in d for _, _, d in c)
+
+
+@pytest.mark.parametrize(
+    "model_dir",
+    ["projects/second", "shared", "lib", "lib/footprints/X.pretty", ""],
+    ids=["project", "root-schematic", "ancestor", "containing-file", "repo-root"],
+)
+def test_kiprjmod_model_resolves_from_candidate_base(model_dir):
+    path = "lib/footprints/X.pretty/part.kicad_mod"
+    files = {
+        path: b'(footprint "X" (model "${KIPRJMOD}/models/part.step"))',
+        "shared/root.kicad_sch": design([]),
+    }
+    model_path = "/".join(filter(None, (model_dir, "models/part.step")))
+    inventory = {*files, "projects/first/a.kicad_pro", "projects/second/b.kicad_pro", model_path}
+    findings, _ = analyze(files, inventory)
+    assert not [finding for finding in findings if finding["rule_id"] == "electrical.models"]
+
+
+def test_kiprjmod_typo_keeps_warning_and_reports_first_candidate():
+    path = "lib/footprints/X.pretty/part.kicad_mod"
+    files = {
+        path: b'(footprint "X" (property "Reference" "J90") (model "${KIPRJMOD}/models/prat.step"))',
+        "shared/root.kicad_sch": design([]),
+    }
+    inventory = {*files, "projects/board.kicad_pro", "projects/models/part.step"}
+    findings, _ = analyze(files, inventory)
+    assert len(findings) == 1
+    assert findings[0]["rule_id"] == "electrical.models"
+    assert findings[0]["severity"] == "warning"
+    assert findings[0]["summary"] == (
+        "J90: referenced 3D STEP file ${KIPRJMOD}/models/prat.step does not resolve at "
+        "projects/models/prat.step. Correct the path/case or include the model."
+    )
+
+
+@pytest.mark.parametrize(
+    ("model", "coverage_detail"),
+    [
+        ("${KICAD6_3DMODEL_DIR}/part.step", "external library model"),
+        ("/opt/models/part.step", "absolute external model"),
+        ("C:/models/part.step", "absolute external model"),
+    ],
+)
+def test_external_model_paths_keep_coverage(model, coverage_detail):
+    path = "pcb/a.kicad_pcb"
+    pcb = f'(kicad_pcb (footprint "X" (model "{model}")))'.encode()
+    findings, coverage = analyze({path: pcb})
+    assert not findings
+    assert (path, "models", f"Not checked: {coverage_detail} {model}") in coverage
 
 
 def test_polarity_requires_limits_and_checks_declared_intent():
