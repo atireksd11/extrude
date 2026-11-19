@@ -58,22 +58,26 @@ def test_crkbd_template_refs_resolve_for_both_variants():
     assert assembly(files) == []
 
 
-@pytest.mark.parametrize("revision", ["Rev-G", "Rev-I", "Rev-J"])
+@pytest.mark.parametrize("revision", ["M", "M1", "M2"])
 def test_olimex_shared_sheet_resolves_c29_and_r23(revision):
-    part = design([device("C36", name="~", kind="passive"),
-                   resistor("R36", "1k", (5, 0), (10, 0))])
-    path = f"/{revision}/m2/control"
-    part = annotate(part, "C36", [
-        ("RP2350pc", "/other/m2/control", "C36"),
+    components = [device("C36", name="~", kind="passive")]
+    board_refs = ["C29"]
+    if revision == "M2":
+        components.append(resistor("R36", "1k", (5, 0), (10, 0)))
+        board_refs.append("R23")
+    path = f"/{revision}/placement/control"
+    part = annotate(design(components), "C36", [
+        ("RP2350pc", "/other/placement/control", "C36"),
         (revision, path, "C29"),
     ], dnp=True)
-    part = annotate(part, "R36", [(revision, path, "R23")])
+    if revision == "M2":
+        part = annotate(part, "R36", [(revision, path, "R23")])
     root = design([]).replace(b'(uuid "root")', f'(uuid "{revision}")'.encode())
     assert assembly({
-        "board.kicad_sch": add_sheets(root, sheet("m2", "m2.kicad_sch")),
-        "m2.kicad_sch": add_sheets(design([]), sheet("control", "control.kicad_sch")),
+        "board.kicad_sch": add_sheets(root, sheet("placement", "child.kicad_sch")),
+        "child.kicad_sch": add_sheets(design([]), sheet("control", "control.kicad_sch")),
         "control.kicad_sch": part,
-        "board.kicad_pcb": board(["C29", "R23"]),
+        "board.kicad_pcb": board(board_refs),
     }) == []
 
 
