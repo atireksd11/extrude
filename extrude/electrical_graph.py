@@ -46,7 +46,7 @@ class Graph:
     issues: list = field(default_factory=list)
 
 
-def build(files: dict[str, bytes]) -> Graph:
+def build(files: dict[str, bytes], instance_paths: dict[str, str] | None = None) -> Graph:
     """Build one revision. Inputs must be regular blobs, never followed symlinks."""
     graph = Graph()
     parent, names, points, wires, ports = {}, defaultdict(set), defaultdict(set), [], []
@@ -80,7 +80,9 @@ def build(files: dict[str, bytes]) -> Graph:
                     raise ValueError("Not a native schematic")
                 sch = Schematic(root)
                 symbols = list(sch.symbols)
+                instance_path = (instance_paths or {}).get(path, "")
                 for sym in symbols:
+                    reference = sym.instance_reference(instance_path) or sym.reference
                     lib = sch.get_lib_symbol_resolved(sym.lib_id)
                     if lib is None:
                         graph.issues.append(
@@ -91,7 +93,7 @@ def build(files: dict[str, bytes]) -> Graph:
                         )
                         continue
                     part = Part(
-                        sym.reference,
+                        reference,
                         sym.value,
                         sym.lib_id,
                         sym.footprint,
@@ -114,7 +116,7 @@ def build(files: dict[str, bytes]) -> Graph:
                         key = point(path, (sym.position[0] + dx, sym.position[1] + dy))
                         part.pins.append(
                             Pin(
-                                sym.reference, pin.number, pin.name, pin.type, path, key
+                                reference, pin.number, pin.name, pin.type, path, key
                             )
                         )
                         if sym.lib_id.startswith("power:") and sym.value != "PWR_FLAG":
