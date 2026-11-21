@@ -38,8 +38,105 @@ def test_off_board_symbols_and_padless_graphics_are_not_missing_components():
 
 @pytest.mark.parametrize('net,expected', [('PERIPHERAL_SPI_SCK', False), ('SCK', False), ('I2C_SCL', True), ('UNKNOWN', False)])
 def test_pullups_require_protocol_evidence(net, expected):
-    findings, _ = analyze({'a.kicad_sch': design([device()], [(net, 0, 0)])})
+    findings, _ = analyze({'a.kicad_sch': design([device(), device('U82')], [(net, 0, 0)])})
     assert bool([f for f in findings if f['rule_id'] == 'electrical.pullup']) == expected
+
+
+def bus_suppressions(coverage):
+    return [
+        detail for _, family, detail in coverage
+        if family == "pullup" and "is not an on-board I2C bus" in detail
+    ]
+
+
+@pytest.mark.parametrize("with_pullup", [False, True])
+def test_genuine_i2c_bus_requires_a_pullup(with_pullup):
+    parts = [
+        device("U1", "SDA", "bidirectional"),
+        device("U2", "SDA", "bidirectional"),
+    ]
+    labels = [("I2C_SDA", 0, 0)]
+    if with_pullup:
+        parts.append(resistor("R1", "4.7k", (0, 0), (10, 0)))
+        labels.append(("+3V3", 10, 0))
+    findings, _ = analyze({"bus.kicad_sch": design(parts, labels)})
+    pullups = [f for f in findings if f["rule_id"] == "electrical.pullup"]
+    if with_pullup:
+        assert not pullups
+    else:
+        assert [(f["summary"], f["status"]) for f in pullups] == [
+            (
+                "U1: SDA (SDA/I2C_SDA) has no external pull-up to a known supply. "
+                "I2C/DDC open-drain signaling requires pull-ups; fit them or document "
+                "pull-ups on the connected module.",
+                "suggestion",
+            )
+        ]
+
+
+@pytest.mark.parametrize(
+    "labels, peers",
+    [
+        pytest.param(["RE1A", "SDA"], [device("SW1", "A", "passive")], id="encoder"),
+        pytest.param(
+            ["I2C_SDA"],
+            [("J1", "Generic:Header", "header", [
+                ("1", "SDA", "passive", 0, 0), ("2", "SCL", "passive", 10, 0)
+            ], {})],
+            id="header",
+        ),
+        pytest.param(
+            ["I2C_SDA"],
+            [device("J1", "SDA", "passive"), device("TP1", "SDA", "passive"),
+             device("TP2", "SDA", "passive")],
+            id="connector-and-test-points",
+        ),
+        pytest.param(
+            ["I2C_SDA"],
+            [("U2", "Generic:Mixed", "peripheral", [
+                ("1", "SDA", "passive", 0, 0), ("2", "OUT", "output", 10, 0)
+            ], {})],
+            id="active-pin-on-another-net",
+        ),
+    ],
+)
+def test_passive_peers_do_not_make_an_i2c_bus(labels, peers):
+    parts = [device("U1", "SDA", "bidirectional"), *peers]
+    findings, coverage = analyze({
+        "bus.kicad_sch": design(parts, [(label, 0, 0) for label in labels])
+    })
+    assert not [f for f in findings if f["rule_id"] == "electrical.pullup"]
+    assert bus_suppressions(coverage) == [
+        f"Not checked: {'/'.join(labels)} is not an on-board I2C bus "
+        "(1 active device(s): U1); pull-ups, if needed, live on the connected module."
+    ]
+
+
+@pytest.mark.parametrize(
+    "net, pin_name",
+    [("I2S0_RX_SDA", "SDA"), ("I2C", "I2S0_RX_SDA"), ("I2C", "MOSI_DATA")],
+)
+def test_pullups_exclude_spi_and_i2s_signal_names(net, pin_name):
+    parts = [device("U1", pin_name, "bidirectional"), device("U2", "IO", "bidirectional")]
+    findings, coverage = analyze({"bus.kicad_sch": design(parts, [(net, 0, 0)])})
+    assert not [f for f in findings if f["rule_id"] == "electrical.pullup"]
+    assert not bus_suppressions(coverage)
+
+
+@pytest.mark.parametrize("peer_kind", ["passive", "bidirectional"])
+def test_open_collector_trigger_requires_two_active_devices(peer_kind):
+    parts = [device("U1", "DATA", "open_collector"), device("U2", "DATA", peer_kind)]
+    findings, coverage = analyze({"bus.kicad_sch": design(parts, [("LINK_DATA", 0, 0)])})
+    pullups = [f for f in findings if f["rule_id"] == "electrical.pullup"]
+    if peer_kind == "passive":
+        assert not pullups
+        assert bus_suppressions(coverage) == [
+            "Not checked: LINK_DATA is not an on-board I2C bus (1 active device(s): U1); "
+            "pull-ups, if needed, live on the connected module."
+        ]
+    else:
+        assert len(pullups) == 1
+        assert pullups[0]["status"] == "suggestion"
 
 
 @pytest.mark.parametrize('driver', ['output', 'bidirectional', 'passive', None])
