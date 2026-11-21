@@ -162,9 +162,20 @@ def _analyze_design(
         if not g.issues and inventory_complete:
             schematic_refs = {p.reference for p in g.parts}
             from extrude.electrical_graph import Part
+            skipped_refs = []
             for ref in sorted(electrical_board_refs - schematic_refs - {None, ""}):
+                if "**" in ref:
+                    skipped_refs.append(ref)
+                    continue
                 emit("assembly", Part(ref, "", "", "", board_path, {}, True, True),
                      "has a PCB footprint but no symbol in the paired schematic — its connectivity and BOM intent are unrepresented. Reconcile the board and schematic.")
+            if skipped_refs:
+                coverage.append((
+                    board_path,
+                    "assembly",
+                    f"Skipped {len(skipped_refs)} placeholder footprint(s) ({', '.join(skipped_refs)}): "
+                    "un-annotated, no schematic symbol expected.",
+                ))
         coverage.append((board_path, "assembly", "Compared paired schematic and PCB component inventories."))
     byref = {(p.path, p.reference): p for p in g.parts}
     resistors = [
