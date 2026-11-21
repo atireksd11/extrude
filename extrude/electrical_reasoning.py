@@ -719,15 +719,29 @@ def _analyze_design(
                     f"is omitted from {path} reference column {col}. Add its fitted part or explicitly mark the assembly exclusion.",
                     other=[(path, col)],
                 )
-    # Resolve only project-relative paths. Standard-library variables need the
-    # installation/library manifest; absence from this repo is not a missing file.
-    for path, data in files.items():
-        if g.parts or not path.endswith((".kicad_pcb", ".kicad_mod")):
-            continue
-        containing_dir = posixpath.dirname(path)
+    # The inventory contains files, so infer library directories from their parents.
+    model_files = {
+        path: data
+        for path, data in files.items()
+        if not g.parts and path.endswith((".kicad_pcb", ".kicad_mod"))
+    }
+    if model_files:
         project_dirs = sorted({
-            posixpath.dirname(p) for p in paths if p.endswith(".kicad_pro")
+            posixpath.dirname(path) for path in paths if path.endswith(".kicad_pro")
         })
+        library_roots = set()
+        paths_by_lowercase = {}
+        for path in sorted(paths):
+            paths_by_lowercase.setdefault(path.lower(), path)
+            directory = posixpath.dirname(path)
+            while directory:
+                parent, _, name = directory.rpartition("/")
+                if name == "kicad-packages3D" or name.endswith(".pretty"):
+                    library_roots.add(parent)
+                directory = parent
+        library_dirs = sorted(library_roots)
+    for path, data in model_files.items():
+        containing_dir = posixpath.dirname(path)
         candidate_dirs = [
             *project_dirs,
             *(posixpath.dirname(root) for root in root_schematics),
@@ -737,30 +751,43 @@ def _analyze_design(
         while ancestor:
             ancestor = ancestor.rpartition("/")[0]
             candidate_dirs.append(ancestor)
+        candidate_dirs.extend(library_dirs)
         text = data.decode("utf-8-sig", errors="replace")
         for model in re.findall(r'\(model\s+"([^"]+\.(?:step|stp))"', text, re.I):
-            if "$" in model and not model.startswith("${KIPRJMOD}/"):
+            colon_prefix = re.match(r"^:[A-Za-z0-9_]+:", model)
+            kiprjmod = model.startswith("${KIPRJMOD}/")
+            if colon_prefix:
+                relative = model[colon_prefix.end():]
+            elif "$" in model and not kiprjmod:
                 coverage.append(
                     (path, "models", "Not checked: external library model " + model)
                 )
                 continue
-            relative = model.removeprefix("${KIPRJMOD}/")
-            if relative.startswith("/") or re.match(r"^[A-Za-z]:", relative):
-                coverage.append(
-                    (path, "models", "Not checked: absolute external model " + model)
-                )
-                continue
-            if model.startswith("${KIPRJMOD}/"):
-                targets = (
-                    posixpath.normpath(posixpath.join(base, relative))
-                    for base in candidate_dirs
-                )
-                target = next(targets)
-                if target in paths or any(candidate in paths for candidate in targets):
-                    continue
             else:
-                target = posixpath.normpath(posixpath.join(containing_dir, relative))
-            if target not in paths:
+                relative = model.removeprefix("${KIPRJMOD}/")
+                if relative.startswith("/") or re.match(r"^[A-Za-z]:", relative):
+                    coverage.append(
+                        (path, "models", "Not checked: absolute external model " + model)
+                    )
+                    continue
+            bases = candidate_dirs if kiprjmod or colon_prefix else [containing_dir]
+            targets = [posixpath.normpath(posixpath.join(base, relative)) for base in bases]
+            if any(target in paths for target in targets):
+                continue
+            for target in targets:
+                actual_path = paths_by_lowercase.get(target.lower())
+                if actual_path is not None:
+                    coverage.append(
+                        (path, "models", f"model {model} resolves as {actual_path} with different case")
+                    )
+                    break
+            else:
+                if colon_prefix:
+                    coverage.append(
+                        (path, "models", "Not checked: external library model " + model)
+                    )
+                    continue
+                target = targets[0]
                 # PCB model blocks carry no ref directly; locate containing footprint.
                 prefix = text[: text.find('(model "' + model)]
                 refs = re.findall(
