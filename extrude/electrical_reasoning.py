@@ -196,6 +196,17 @@ def _analyze_design(
             for r in resistors
         )
 
+    active_kinds = {
+        "input", "output", "bidirectional", "tri_state", "open_collector", "open_emitter",
+    }
+
+    def bus_devices(net):
+        return {
+            (pin.path, pin.reference)
+            for pin in g.nets.get(net, [])
+            if pin.kind in active_kinds
+        }
+
     for part in g.parts:
         if part.reference.startswith("#"):
             continue
@@ -403,7 +414,7 @@ def _analyze_design(
         for p in pins:
             signal = "/".join([p.name, *names(p.net)])
             net_names = "/".join(names(p.net))
-            spi = re.search(r"(?i)(?:SPI|(?:^|[_/ -])(?:SCK|MOSI|MISO)(?:$|[_/ -]))", net_names)
+            spi = re.search(r"(?i)(?:SPI|I2S|(?:^|[_/ -])(?:SCK|MOSI|MISO)(?:$|[_/ -]))", signal)
             protocol = re.search(r"(?i)(I2C|SMBUS|DDC|(?:^|[_/ -])SDA(?:$|[_/ -])|(?:^|[_/ -])SCL(?:$|[_/ -]))", net_names)
             open_drain = any(q.kind == "open_collector" for q in peers(p))
             if (protocol or open_drain) and not spi and re.search(
@@ -413,6 +424,19 @@ def _analyze_design(
                 key = ("pullup", p.net)
                 if key not in seen:
                     seen.add(key)
+                    devices = bus_devices(p.net)
+                    if len(devices) < 2:
+                        refs = ", ".join(ref for _, ref in sorted(devices)) or "none"
+                        coverage.append(
+                            (
+                                part.path,
+                                "pullup",
+                                f"Not checked: {net_names or p.name} is not an on-board I2C bus "
+                                f"({len(devices)} active device(s): {refs}); "
+                                "pull-ups, if needed, live on the connected module.",
+                            )
+                        )
+                        continue
                     emit(
                         "pullup",
                         part,
