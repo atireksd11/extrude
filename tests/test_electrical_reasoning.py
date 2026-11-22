@@ -250,7 +250,7 @@ def test_usb_uart_cc_and_corrected_usb_sink():
     assert (
         any("UART_TX" in s for s in f)
         and any("CC1" in s for s in f)
-        and any("SHIELD" in s for s in f)
+        and any("shield pins 5" in s for s in f)
     )
     usb = (
         *uart[:3],
@@ -771,3 +771,80 @@ def test_ldo_shared_rail_only_checks_regulator_on_output_side():
     findings, _ = ldo_design([ldo_cap("C1")], extra_parts=[downstream])
     assert len(findings) == 1
     assert findings[0]["summary"].startswith("U1 AMS1117 output +3V3:")
+
+
+@pytest.mark.parametrize(
+    ("case", "floating", "missing"),
+    [
+        ("floating", ("SH1", "SH2"), False),
+        ("grounded", (), False),
+        ("rc", (), False),
+        ("numbered name", ("SH1",), False),
+        ("missing", (), True),
+        ("dnp", (), False),
+        ("dnp missing", (), False),
+        ("omitted note", ("SH1", "SH2"), False),
+        ("one cc pin", (), False),
+        ("no-connect marker", ("SH1", "SH2"), False),
+        ("split", ("SH2",), False),
+        ("legacy USB", ("SH1", "SH2"), False),
+    ],
+)
+def test_usb_shield_topology(case, floating, missing):
+    symbol = "Connector:USB_B_Micro" if case == "legacy USB" else "Vendor:UJ32-C"
+    pins = [("A5", "CC1", "passive", 0, 0), ("B12", "GND__3", "passive", 50, 0)]
+    if case == "legacy USB":
+        pins += [("A6", "D+", "passive", 10, 0), ("A7", "D-", "passive", 15, 0)]
+    elif case != "one cc pin":
+        pins.append(("B5", "CC2", "passive", 10, 0))
+    if case == "numbered name":
+        pins.append(("SH1", "SH1", "passive", 20, 0))
+    elif case not in {"missing", "dnp missing"}:
+        pins += [
+            ("SH1", "SHIELD", "passive", 20, 0),
+            ("SH2", "SHIELD__1", "passive", 30, 0),
+        ]
+
+    parts = [("J3", symbol, "Receptacle", pins, {"_dnp": case.startswith("dnp")})]
+    labels = []
+    wires = []
+    if case in {"grounded", "split"}:
+        ground = ("#PWR01", "power:GND", "GND", [("1", "GND", "power_in", 20, 0)], {})
+        parts.append(ground)
+        if case == "grounded":
+            wires.append((20, 0, 30, 0))
+    elif case == "rc":
+        parts += [
+            resistor("R3", "1M", (20, 0), (60, 0)),
+            ("C4", "Device:C", "100n", [("1", "~", "passive", 20, 0),
+                                       ("2", "~", "passive", 60, 0)], {}),
+        ]
+        labels.append(("GND", 60, 0))
+        wires.append((20, 0, 30, 0))
+
+    schematic = design(parts, labels=labels, wires=wires)
+    if case == "omitted note":
+        schematic = schematic[:-1] + b' (text "J3 Omitted, insufficient space" (at 0 1 0)))'
+    if case == "no-connect marker":
+        schematic = schematic[:-1] + b' (no_connect (at 20 0) (uuid "nc")))'
+    findings, coverage = analyze({"shield.kicad_sch": schematic})
+    shields = [f for f in findings if f["rule_id"] == "electrical.usb_shield"]
+    assert len(shields) == bool(floating)
+    if floating:
+        connector = "USB" if case == "legacy USB" else "USB-C"
+        assert shields[0]["summary"] == (
+            f"J3: {connector} shield pins {', '.join(floating)} are unconnected — "
+            "the connector shell has no ground path. Provide an intentional "
+            "chassis/ground termination (direct GND, or an RC termination)."
+        )
+        assert (shields[0]["severity"], shields[0]["status"]) == ("warning", "verified")
+    missing_shield = (
+        "Not checked: J3 USB-C connector has no shield pin in its symbol; "
+        "shield termination cannot be evaluated from the schematic."
+    )
+    assert (missing_shield in [detail for _, _, detail in coverage]) == missing
+    if case == "legacy USB":
+        assert any(
+            f["rule_id"] == "electrical.protection" and "ESD" in f["summary"]
+            for f in findings
+        )
