@@ -3,6 +3,24 @@ import pytest
 from extrude.parse.kicad_pcb import BoardParseError, compare_boards, parse_board
 
 
+@pytest.mark.parametrize(("rows", "reference", "value"), [
+    (b'(fp_text reference locked "U2") (fp_text value locked "ProMicro")', "U2", "ProMicro"),
+    (b'(fp_text reference "U3")', "U3", None),
+    (b'(fp_text reference locked "U2") (property "Reference" "U4")', "U4", None),
+    (b'(fp_text user locked "GND")', None, None),
+    (b'(fp_text reference locked)', None, None),
+    (b'(fp_text reference "LOCKED1")', "LOCKED1", None),
+])
+def test_legacy_footprint_text(rows, reference, value):
+    board = parse_board(
+        b'(kicad_pcb (version 20221018) (footprint "Test:A" (at 1 2) (layer "F.Cu") '
+        + rows + b'))'
+    )
+    footprint, = board.footprints
+    assert footprint.reference == reference
+    assert dict(footprint.properties).get("Value") == value
+
+
 def test_legacy_net_codes_and_named_nets_compare_as_the_same_wiring():
     old = parse_board(b'''(kicad_pcb (version 20221018) (net 5 "GND")
        (module "Test:A" (at 1 2 -90) (layer "F.Cu") (fp_text reference "J1")

@@ -173,13 +173,15 @@ def test_pcb_only_refs_without_placeholder_marker_still_flag(ref):
     pcb = board(["U1", ref])
     if ref == "H1":
         pcb = pcb.replace(b'"Test:Part"', b'"MountingHole:MountingHole_4.3x6.2mm"')
+    expected_ref = ref
     if ref == "locked":
-        # The legacy parser reads the text modifier as the reference.
+        # The parser skips the locked modifier.
         pcb = pcb.replace(b'(property "Reference" "locked")',
                           b'(fp_text reference locked "U2" (at 0 0) (layer "F.SilkS"))')
+        expected_ref = "U2"
     summaries = assembly({"board.kicad_sch": design([device("U1")]), "board.kicad_pcb": pcb})
     assert len(summaries) == 1
-    assert summaries[0].startswith(f"{ref}:") and "no symbol" in summaries[0]
+    assert summaries[0].startswith(f"{expected_ref}:") and "no symbol" in summaries[0]
 
 
 def test_astra_placeholder_skip_preserves_all_deletion_warnings():
