@@ -832,7 +832,7 @@ def _analyze_design(
                 # PCB model blocks carry no ref directly; locate containing footprint.
                 prefix = text[: text.find('(model "' + model)]
                 refs = re.findall(
-                    r'\((?:fp_text reference|property "Reference")\s+"([^"]+)"', prefix
+                    r'\((?:fp_text reference|property "Reference")\s+(?:locked\s+)?"([^"]+)"', prefix
                 )
                 ref = refs[-1] if refs else "model"
                 from extrude.electrical_graph import Part
