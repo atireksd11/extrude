@@ -15,6 +15,7 @@ FAMILIES = (
     "usb",
     "divider",
     "capacitor",
+    "ldo",
     "clock",
     "assembly",
     "switch",
@@ -46,6 +47,30 @@ def resistance(value):
     )
 
 
+def capacitance(value):
+    """Return farads from a capacitor value with optional rating and tolerance."""
+    match = re.fullmatch(
+        r"(?i)\s*(\d+(?:\.\d+)?)\s*(?:([µunp])F?|(m)F)"
+        r"(?:\s*/?\s*\d+(?:\.\d+)?\s*V)?"
+        r"(?:\s*(?:\(\s*)?(?:±|\+/-)?\s*\d+(?:\.\d+)?\s*%(?:\s*\))?)?\s*",
+        value,
+    )
+    if not match:
+        return None
+    amount, small_unit, milli = match.groups()
+    exponent = {"µ": -6, "μ": -6, "u": -6, "n": -9, "p": -12, "m": -3}
+    return float(f"{amount}e{exponent[(small_unit or milli).lower()]}")
+
+
+def _capacitor_dielectric(footprint):
+    library, _, name = footprint.rpartition(":")
+    if name.startswith("CP_") or library == "Capacitor_Tantalum_SMD":
+        return "polarized"
+    if library in {"Capacitor_SMD", "Capacitor_THT"} and name.startswith("C_"):
+        return "ceramic"
+    return "unknown"
+
+
 def volts(text):
     m = re.search(r"(?i)(\d+(?:\.\d+)?)\s*V(\d*)", text)
     return float(m[1] + ("." + m[2] if m[2] else "")) if m else None
@@ -74,7 +99,7 @@ def _analyze_design(
     coverage = []
     seen = set()
 
-    def emit(family, part, message, pins=(), other=()):
+    def emit(family, part, message, pins=(), other=(), *, separator=": "):
         if len(findings) >= 500:
             item = (
                 "",
@@ -94,7 +119,7 @@ def _analyze_design(
                 domain="schematic",
                 status="verified",
                 severity="warning",
-                summary=f"{part.reference}: {message}",
+                summary=f"{part.reference}{separator}{message}",
                 lifecycle="present_at_head",
                 sources=[
                     (
@@ -818,6 +843,72 @@ def _analyze_design(
                     f"referenced 3D STEP file {model} does not resolve at {target}. Correct the path/case or include the model.",
                     other=[(path, model)],
                 )
+    bulk_by_net = {}
+    for part in g.parts:
+        if not (part.fitted and _designator(part.reference).startswith("C") and len(part.pins) == 2):
+            continue
+        if (capacitance(part.value) or 0) < 1e-6:
+            continue
+        a, b = (pin.net for pin in part.pins)
+        if a != b and ground(b):
+            bulk_by_net.setdefault(a, []).append(part)
+        if a != b and ground(a):
+            bulk_by_net.setdefault(b, []).append(part)
+
+    for part in g.parts:
+        identifier = f"{part.value} {part.symbol}"
+        if "1117" not in identifier or re.search(r"LDL1117|TLV1117LV", identifier, re.I):
+            continue
+        outputs = {}
+        for pin in part.pins:
+            if re.fullmatch(r"VO|VOUT|OUTPUT(?:_\d+)?|OUT", pin.name, re.I):
+                outputs.setdefault(pin.net, pin)
+        device = f"{part.reference} {part.value}"
+        if not outputs:
+            coverage.append((
+                part.path, "ldo",
+                f"Not checked: {device} has no identifiable output pin (VO/VOUT/OUTPUT); "
+                "LDO output capacitance cannot be evaluated.",
+            ))
+        emitted = False
+        for net, pin in outputs.items():
+            net_name = "/".join(names(net)) or f"unnamed ({pin.name})"
+            rail = f"{part.value} output {net_name}"
+            caps = sorted(bulk_by_net.get(net, []), key=lambda cap: (cap.reference, cap.path))
+            if not caps:
+                coverage.append((
+                    part.path, "ldo",
+                    f"Not checked: {part.reference} {rail} has no fitted bulk (≥1 µF) output "
+                    "capacitor in this schematic; output capacitance cannot be evaluated.",
+                ))
+                continue
+            dielectrics = [_capacitor_dielectric(cap.footprint) for cap in caps]
+            unknown = ", ".join(cap.reference for cap, dielectric in zip(caps, dielectrics)
+                                if dielectric == "unknown")
+            if unknown:
+                coverage.append((
+                    part.path, "ldo",
+                    f"Not checked: {part.reference} {rail} has a bulk output capacitor of "
+                    f"unknown dielectric ({unknown}); ceramic-only cannot be established.",
+                ))
+                continue
+            if emitted or "polarized" in dielectrics:
+                continue
+            cap_list = ", ".join(f"{cap.reference} {cap.value}" for cap in caps)
+            emit(
+                "ldo", part,
+                f"{rail}: fitted bulk output capacitance is ceramic-only ({cap_list}) — "
+                "the 1117 family needs tantalum/electrolytic output capacitance with ESR in the "
+                "0.3–22 Ω window (AMS1117: 22 µF solid tantalum; LM1117: ≥10 µF tantalum, "
+                "ESR 0.3–22 Ω). Ceramic MLCC ESR is a few mΩ, below the window, and the loop "
+                "can oscillate. Fit a tantalum or aluminium electrolytic bulk capacitor on "
+                "this rail, or add series resistance, or use an LDO designed for ceramics.",
+                (pin,),
+                other=[(cap.path, f"{cap.reference} {cap.value} ({cap.footprint})") for cap in caps],
+                separator=" ",
+            )
+            emitted = True
+
     if g.parts:
         coverage.append(
             (
