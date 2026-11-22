@@ -4,7 +4,7 @@ import json
 import math
 import pytest
 from extrude.electrical_graph import build
-from extrude.electrical_reasoning import analyze, resistance
+from extrude.electrical_reasoning import analyze, capacitance, resistance
 from extrude.workspace_audit import Finding, Coverage
 
 
@@ -29,8 +29,9 @@ def design(parts, labels=(), wires=(), junctions=()):
         properties = " ".join(
             f"(property {json.dumps(k)} {json.dumps(v, ensure_ascii=False)})" for k, v in fields.items()
         )
+        dnp = " (dnp yes)" if props.get("_dnp") else ""
         placed.append(
-            f'(symbol (lib_id "{symbol}") (at 0 0 0) (unit 1) (in_bom yes) (on_board yes) (uuid "{ref}") {properties})'
+            f'(symbol (lib_id "{symbol}") (at 0 0 0) (unit 1) (in_bom yes) (on_board yes){dnp} (uuid "{ref}") {properties})'
         )
     text = f'(kicad_sch (version 20250114) (generator "test") (uuid "root") (lib_symbols {" ".join(libs)}) {" ".join(placed)}'
     for name, x, y in labels:
@@ -626,3 +627,147 @@ def test_crystal_footprint_must_exist_in_paired_pcb():
         "Y90: crystal is present in the schematic but its footprint is absent" in s
         for s in summaries(files)
     )
+
+
+@pytest.mark.parametrize(
+    "value,expected",
+    [
+        ("10u", 10e-6),
+        ("10uf", 10e-6),
+        ("2.2uF", 2.2e-6),
+        ("10uF/25V(20%)", 10e-6),
+        ("100n", 100e-9),
+        ("0.1uf", 0.1e-6),
+        ("18pF", 18e-12),
+        ("1uF", 1e-6),
+        ("1 μF", 1e-6),
+        ("10mF", 10e-3),
+        ("DNP", None),
+        ("10m", None),
+        ("100foo", None),
+    ],
+)
+def test_capacitance_units(value, expected):
+    assert capacitance(value) == expected
+
+
+CERAMIC = "Capacitor_SMD:C_0805_2012Metric"
+TANTALUM = "Capacitor_Tantalum_SMD:CP_Elec_3528"
+ELECTROLYTIC = "Capacitor_SMD:CP_Elec_5x5.3"
+
+
+def ldo_cap(ref, value="10uF", footprint=CERAMIC, *, dnp=False, return_y=10):
+    return ref, f"Device:{ref}", value, [
+        ("1", "~", "passive", 10, 0),
+        ("2", "~", "passive", 10, return_y),
+    ], {"Footprint": footprint, "_dnp": dnp}
+
+
+def ldo_design(caps, *, ref="U1", value="AMS1117", symbol="Regulator_Linear:AMS1117",
+               output_pins=(("2", "VO", "power_out", 10, 0),), extra_parts=()):
+    regulator = ref, symbol, value, [
+        ("1", "ADJ", "input", 20, 0),
+        ("3", "VI", "power_in", 30, 0),
+        *output_pins,
+    ], {"Comment": "A property mentioning 1117"}
+    findings, coverage = analyze({
+        "ldo.kicad_sch": design([regulator, *caps, *extra_parts], [
+            ("GND", 10, 10), ("+3V3", 10, 0),
+        ]),
+    })
+    return [row for row in findings if row["rule_id"] == "electrical.ldo"], [
+        detail for _, family, detail in coverage if family == "ldo"
+    ]
+
+
+def test_ldo_ceramic_bulk_message():
+    findings, _ = ldo_design([ldo_cap("C11"), ldo_cap("C13", "2.2uF")])
+    assert len(findings) == 1
+    finding = findings[0]
+    assert (finding["severity"], finding["status"]) == ("warning", "verified")
+    assert finding["summary"] == (
+        "U1 AMS1117 output +3V3: fitted bulk output capacitance is ceramic-only "
+        "(C11 10uF, C13 2.2uF) — the 1117 family needs tantalum/electrolytic output "
+        "capacitance with ESR in the 0.3–22 Ω window (AMS1117: 22 µF solid tantalum; "
+        "LM1117: ≥10 µF tantalum, ESR 0.3–22 Ω). Ceramic MLCC ESR is a few mΩ, "
+        "below the window, and the loop can oscillate. Fit a tantalum or aluminium "
+        "electrolytic bulk capacitor on this rail, or add series resistance, or use "
+        "an LDO designed for ceramics."
+    )
+
+
+@pytest.mark.parametrize("footprint,dnp", [(TANTALUM, False), (ELECTROLYTIC, False),
+                                           (TANTALUM, True)])
+def test_ldo_fitted_polarized_cap_prevents_warning(footprint, dnp):
+    findings, _ = ldo_design([ldo_cap("C1", dnp=dnp), ldo_cap("C2", footprint=footprint)])
+    assert not findings
+
+
+@pytest.mark.parametrize("footprint", ["custom:Capacitor", ""])
+def test_ldo_unknown_dielectric(footprint):
+    findings, coverage = ldo_design([ldo_cap("C1"), ldo_cap("C2", footprint=footprint)])
+    assert not findings
+    assert (
+        "Not checked: U1 AMS1117 output +3V3 has a bulk output capacitor of unknown "
+        "dielectric (C2); ceramic-only cannot be established."
+    ) in coverage
+
+
+@pytest.mark.parametrize("cap", [ldo_cap("C1", dnp=True), ldo_cap("C1", "100n"),
+                                 ldo_cap("C1", return_y=40)])
+def test_ldo_no_fitted_bulk_output_cap(cap):
+    findings, coverage = ldo_design([cap])
+    assert not findings
+    assert (
+        "Not checked: U1 AMS1117 output +3V3 has no fitted bulk (≥1 µF) output "
+        "capacitor in this schematic; output capacitance cannot be evaluated."
+    ) in coverage
+
+
+def test_ldo_deduplicates_passive_output_pins_and_accepts_unannotated_reference():
+    findings, _ = ldo_design(
+        [ldo_cap("C1")], ref="U?", value="NCP1117",
+        symbol="Custom:Device",
+        output_pins=(("2", "OUTPUT_1", "passive", 10, 0),
+                     ("4", "OUTPUT_2", "passive", 10, 0)),
+    )
+    assert len(findings) == 1
+    assert findings[0]["summary"].startswith("U? NCP1117 output +3V3:")
+
+
+@pytest.mark.parametrize(
+    "value,symbol,count",
+    [
+        ("Voltage Regulator", "Custom:ldl1117s30r", 0),
+        ("tlv1117lv", "Custom:Device", 0),
+        ("TLV1117", "Custom:Device", 1),
+        ("LD1117", "Custom:Device", 1),
+        ("LM1117-ADJ", "Custom:Device", 1),
+        ("Other regulator", "Custom:Device", 0),
+        ("Voltage Regulator", "Custom:NCP1117", 1),
+    ],
+)
+def test_ldo_identifies_family_by_value_or_symbol(value, symbol, count):
+    findings, _ = ldo_design([ldo_cap("C1")], value=value, symbol=symbol)
+    assert len(findings) == count
+
+
+def test_ldo_never_uses_pin_kind_to_identify_output():
+    findings, coverage = ldo_design(
+        [ldo_cap("C1")], output_pins=(("2", "SENSE", "power_out", 10, 0),),
+    )
+    assert not findings
+    assert (
+        "Not checked: U1 AMS1117 has no identifiable output pin (VO/VOUT/OUTPUT); "
+        "LDO output capacitance cannot be evaluated."
+    ) in coverage
+
+
+def test_ldo_shared_rail_only_checks_regulator_on_output_side():
+    downstream = "U2", "Custom:Downstream", "NCP1117", [
+        ("1", "IN", "power_in", 10, 0),
+        ("2", "OUT", "power_out", 40, 0),
+    ], {}
+    findings, _ = ldo_design([ldo_cap("C1")], extra_parts=[downstream])
+    assert len(findings) == 1
+    assert findings[0]["summary"].startswith("U1 AMS1117 output +3V3:")
