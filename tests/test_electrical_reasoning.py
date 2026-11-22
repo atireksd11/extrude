@@ -848,3 +848,94 @@ def test_usb_shield_topology(case, floating, missing):
             f["rule_id"] == "electrical.protection" and "ESD" in f["summary"]
             for f in findings
         )
+
+
+@pytest.mark.parametrize(
+    "value, cap_values, crystal_dnp, cap_dnp, expected",
+    [
+        ("ABM7-12.000MHZ-D2Y-T", ("18pF", "18pF"), False, False, "12"),
+        ("ABM7-12.000MHZ-D2Y-T", ("30pF", "30pF"), False, False, ""),
+        ("ABM7-12.000MHZ-D2Y-T", ("27pF", "27pF"), False, False, ""),
+        ("ABM7-12.000MHZ-D2Y-T", ("22pF", "22pF"), False, False, "14"),
+        ("ABM7-12.000MHZ-D2Y-T", ("18pF", "27pF"), False, False, "13.8"),
+        ("ABM7-12.000MHZ-D-2-Y-T", ("18pF", "18pF"), False, False, "12"),
+        ("MAIN_XTAL", ("18pF", "18pF"), False, False, "unknown"),
+        ("12 MHz", ("18pF", "18pF"), False, False, "unknown"),
+        ("12MHz 18pF", ("18pF", "18pF"), False, False, "unknown"),
+        ("ABM7-12.000MHZ-D2Y-T", ("18pF", "18pF"), True, False, "dnp"),
+        ("ABM7-12.000MHZ-D2Y-T", ("18pF",), False, False, "optional"),
+        ("ABM7-12.000MHZ-D2Y-T", ("18pF", "18pF"), False, True, "optional"),
+        ("ABM7-12.000MHZ-D2Y-T", ("18pF", "18pF", "18pF"), False, False, "count"),
+        ("ABM7-12.000MHZ-D2Y-T", ("18pF", "50V"), False, False, "unparseable"),
+    ],
+)
+def test_crystal_load(value, cap_values, crystal_dnp, cap_dnp, expected):
+    ref = "Y?" if value == "12MHz 18pF" else "X1"
+    crystal = (
+        ref,
+        "Device:Crystal",
+        value,
+        [("1", "~", "passive", 0, 0), ("2", "~", "passive", 10, 0)],
+        {"Footprint": "Crystal:generic", "_dnp": crystal_dnp},
+    )
+    caps = [
+        (
+            f"C{8 + i}",
+            f"Device:C{i}",
+            cap_value,
+            [("1", "~", "passive", 10 * (i % 2), 0), ("2", "~", "passive", 20, 0)],
+            {"_dnp": cap_dnp and i == 1},
+        )
+        for i, cap_value in enumerate(cap_values)
+    ]
+    findings, coverage = analyze(
+        {"rtc.kicad_sch": design([crystal, *reversed(caps)], [("GND", 20, 0)])}
+    )
+    clock_coverage = [
+        (check, detail)
+        for path, check, detail in coverage
+        if path == "rtc.kicad_sch" and check in {"clock", "clock_load"}
+    ]
+    if expected in {"12", "14", "13.8"}:
+        assert [row["rule_id"] for row in findings] == ["electrical.clock_load"]
+        assert f"effective load of ~{expected} pF" in findings[0]["summary"]
+        assert findings[0]["severity"] == "warning"
+        assert not clock_coverage
+        if value == "ABM7-12.000MHZ-D2Y-T" and expected == "12":
+            assert findings[0]["summary"] == (
+                "X1 ABM7-12.000MHZ-D2Y-T: fitted load capacitors C8 18pF + C9 18pF "
+                "give an effective load of ~12 pF (series 9 pF + 3 pF stray) against "
+                "the crystal's specified 18 pF load capacitance — the crystal is underloaded "
+                "and will run off-frequency, with reduced start-up margin. Fit ~30 pF "
+                "load capacitors (2 × (CL − stray)) or a crystal specified for the fitted capacitance."
+            )
+    elif expected == "dnp":
+        assert [row["rule_id"] for row in findings] == ["electrical.clock"]
+        assert "crystal assembly is incomplete" in findings[0]["summary"]
+        assert not clock_coverage
+    else:
+        assert not findings
+        if expected == "unknown":
+            assert clock_coverage == [
+                (
+                    "clock_load",
+                    f"Not checked: {ref} crystal load capacitance cannot be evaluated — "
+                    f"load capacitance (CL) is not known for {value}; add the part "
+                    "to the crystal load-capacitance table with a datasheet reference.",
+                )
+            ]
+        elif expected == "optional":
+            assert len(clock_coverage) == 1
+            assert clock_coverage[0][0] == "clock"
+            assert "optional/unvalued external load capacitors" in clock_coverage[0][1]
+        elif expected == "count":
+            assert clock_coverage == [
+                ("clock_load", "Not checked: X1 has 3 load capacitors on its nets; "
+                 "the two-capacitor load calculation does not apply.")
+            ]
+        elif expected == "unparseable":
+            assert len(clock_coverage) == 1
+            assert clock_coverage[0][0] == "clock_load"
+            assert "from the fitted capacitor values" in clock_coverage[0][1]
+        else:
+            assert not clock_coverage
