@@ -949,3 +949,67 @@ def test_crystal_load(value, cap_values, crystal_dnp, cap_dnp, expected):
             assert "from the fitted capacitor values" in clock_coverage[0][1]
         else:
             assert not clock_coverage
+
+
+@pytest.mark.parametrize(
+    "case,pads,expected_count",
+    [
+        ("floating", '(pad "" thru_hole oval)' * 4, 4),
+        ("grounded", '(pad "" thru_hole oval (net "GND"))' * 4, 0),
+        ("mixed", '(pad "" thru_hole oval (net "GND")) (pad "" thru_hole oval)' * 2, 2),
+        ("mounting", '(pad "" np_thru_hole circle)' * 2, 0),
+        ("smd", '(pad "" smd rect)' * 11, 0),
+        ("numbered", '(pad "0" thru_hole oval)', 0),
+        ("dnp", '(pad "" thru_hole oval)', 0),
+        ("missing footprint", "", 0),
+        ("missing board", "", 0),
+        ("pseudo-net", '(pad "" thru_hole oval (net "unconnected-(J1-SH)"))', 1),
+        ("symbol gate", '(pad "" thru_hole oval)', 1),
+        ("two connectors", '(pad "" thru_hole oval)', 1),
+        ("non-usb", '(pad "" thru_hole oval)', 0),
+    ],
+)
+def test_usb_shield_pcb(case, pads, expected_count):
+    symbol = "Connector:USB_Test" if case == "symbol gate" else "Connector:Test"
+    names = {
+        "symbol gate": ("D+", "D-"),
+        "non-usb": ("IN", "OUT"),
+    }.get(case, ("CC1", "CC2"))
+    pins = [(str(i), name, "passive", i * 10, 0) for i, name in enumerate(names, 1)]
+    parts = [("J1", symbol, "connector", pins, {"_dnp": case == "dnp"})]
+
+    def footprint(ref, rows):
+        return f'(footprint "Test:A" (at 1 2) (layer "F.Cu") (property "Reference" "{ref}") {rows})'
+
+    footprints = "" if case == "missing footprint" else footprint("J1", pads)
+    if case == "two connectors":
+        parts.append(("J2", "Connector:Second", "connector",
+                      [(n, name, kind, x, 20) for n, name, kind, x, _ in pins], {}))
+        footprints += footprint("J2", '(pad "" thru_hole oval (net "GND"))')
+
+    files = {"test.kicad_sch": design(parts)}
+    if case != "missing board":
+        files["test.kicad_pcb"] = f"(kicad_pcb (version 20251028) {footprints})".encode()
+    findings, coverage = analyze(files)
+    rows = [row for row in findings if row["rule_id"] == "electrical.usb_shield_pcb"]
+    if expected_count:
+        row, = rows
+        connector = "USB" if case == "symbol gate" else "USB-C"
+        tabs = "tab has" if expected_count == 1 else "tabs have"
+        assert row["summary"] == (
+            f"J1: {connector} connector shell has no ground path on the PCB — "
+            f"{expected_count} thru-hole shield {tabs} no net. Provide an intentional "
+            "chassis/ground termination (direct GND, or an RC termination)."
+        )
+        assert (row["severity"], row["status"]) == ("warning", "verified")
+    else:
+        assert rows == []
+    shield_coverage = [row for row in coverage if row[1] == "usb_shield_pcb"]
+    if case == "missing footprint":
+        assert shield_coverage == [(
+            "test.kicad_pcb", "usb_shield_pcb",
+            "Not checked: J1 USB connector has no paired PCB footprint; "
+            "shield-tab termination cannot be evaluated from the board.",
+        )]
+    else:
+        assert shield_coverage == []
