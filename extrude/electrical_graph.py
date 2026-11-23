@@ -4,6 +4,7 @@ Embedded symbol geometry is authoritative. Crossings connect only at endpoints,
 placed pins/labels or explicit junctions. Each sheet has its own local namespace.
 """
 
+import re
 from dataclasses import dataclass, field
 from collections import defaultdict
 from kicad_tools.schema import Schematic
@@ -13,6 +14,18 @@ from extrude.parse.kicad_pcb import _PARSE_LOCK
 
 MAX_BYTES = 8 * 1024 * 1024
 MAX_POINTS = 12000
+_DNP_MARKERS = ("NA", "DNP", "DNI", "DNF", "NF", "NC")
+_DNP_PREFIXES = tuple(f"{marker}(" for marker in _DNP_MARKERS)
+_DNP_TOKEN = re.compile(r"\(\s*(" + "|".join(_DNP_MARKERS) + r")\s*\)")
+
+
+def _is_dnp_value(value: str) -> bool:
+    upper = value.strip().upper()
+    return (
+        upper in _DNP_MARKERS
+        or upper.startswith(_DNP_PREFIXES)
+        or _DNP_TOKEN.search(upper) is not None
+    )
 
 
 @dataclass
@@ -36,6 +49,7 @@ class Part:
     fitted: bool
     in_bom: bool
     pins: list = field(default_factory=list)
+    dnp: bool = False
 
 
 @dataclass
@@ -105,9 +119,9 @@ def build(files: dict[str, bytes], instance_paths: dict[str, str] | None = None)
                                 "Description", lib.properties.get("ki_description", "")
                             ),
                         },
-                        not sym.dnp
-                        and sym.value.upper() not in {"DNP", "DNI", "DNF", "NF", "NC"},
+                        (not sym.dnp) and (not _is_dnp_value(sym.value)),
                         sym.in_bom,
+                        dnp=sym.dnp,
                     )
                     for pin in [p for p in lib.pins if p.unit in {0, sym.unit}]:
                         dx, dy = symbol_to_sheet_offset(

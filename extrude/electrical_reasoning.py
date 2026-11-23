@@ -9,7 +9,7 @@ import csv
 import io
 import re
 import posixpath
-from extrude.electrical_graph import build
+from extrude.electrical_graph import _is_dnp_value, build
 from extrude.workspace_checks import evidence
 
 FAMILIES = (
@@ -478,7 +478,17 @@ def _analyze_design(
                         f"symbol specifies {declared:g}V output but fitted Value is {part.value} and output pin {p.number} {p.name} is on a {nominal:g}V net. The symbol and intended fitted output disagree. Select the fitted part symbol and verify its output and pinout.",
                         [p],
                     )
-        if "Crystal" in part.symbol:
+        is_crystal = "Crystal" in part.symbol
+        if is_crystal and (part.dnp or _is_dnp_value(part.value)):
+            coverage.append(
+                (
+                    part.path,
+                    "clock",
+                    f"Not checked: {part.reference} is marked not fitted; internal-clock "
+                    "configuration assumed - crystal and load capacitors not judged.",
+                )
+            )
+        elif is_crystal:
             if board_references is not None and part.reference not in board_references:
                 emit(
                     "clock",
