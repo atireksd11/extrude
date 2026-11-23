@@ -1,7 +1,8 @@
 """Whole-design topology checks. No chip catalogue and no inferred clean bill.
 
-Numerical limits come from explicit fields, named supply/reference nets, or
-protocol specifications. Unknown silicon capabilities remain not checked.
+Numerical limits come from explicit fields, named supply/reference nets,
+protocol specifications, or curated datasheet limits. Unknown silicon
+capabilities remain not checked.
 """
 
 import csv
@@ -18,6 +19,7 @@ FAMILIES = (
     "divider",
     "capacitor",
     "ldo",
+    "overvoltage",
     "clock",
     "clock_load",
     "assembly",
@@ -37,6 +39,10 @@ CRYSTAL_LOAD_CL = {
 
 # TI SPRS717 §6.2.2.1 load formula, assuming 3 pF stray in the 2–5 pF range.
 CRYSTAL_STRAY_CAPACITANCE = 3e-12
+
+# Silicon Labs CP2102 datasheet, per specs/2026-11-23-c2-m3-pin-overvoltage.md.
+# CP2102N has a separate datasheet and is intentionally excluded.
+PIN_SUPPLY_LIMITS = {"CP2102": {"VDD": (3.0, 3.6, 4.2)}}
 
 
 def _normalise_mpn(value):
@@ -1022,6 +1028,52 @@ def _analyze_design(
             )
             emitted = True
 
+    for part in g.parts:
+        if (
+            not part.fitted
+            or part.reference.startswith("#")
+            or part.properties.get("_on_board", "True") != "True"
+        ):
+            continue
+        family = part.value.upper().split("-", 1)[0]
+        limits = PIN_SUPPLY_LIMITS.get(family)
+        if limits is None:
+            if family.startswith("CP2102"):
+                coverage.append((
+                    part.path, "overvoltage",
+                    f"Not checked: {part.reference} {part.value} supply limits are not tabulated; "
+                    "pin voltages not judged.",
+                ))
+            continue
+        for pin in part.pins:
+            pin_name = pin.name.upper()
+            if pin_name in limits:
+                op_min, op_max, abs_max = limits[pin_name]
+                v = voltage(pin.net)
+                if v is None:
+                    coverage.append((
+                        part.path, "overvoltage",
+                        f"Not checked: {part.reference} {pin.name} net voltage is unknown; "
+                        "overvoltage cannot be judged.",
+                    ))
+                elif v > op_max:
+                    emit(
+                        "overvoltage", part,
+                        f"pin {pin.number} {pin.name} is on a {v:g} V net; "
+                        f"{family} {pin.name} is rated {op_min:g}–{op_max:g} V "
+                        f"(absolute maximum {abs_max:g} V). Move the pin to a {op_max:g} V rail "
+                        "or fit a regulator; verify against the datasheet.",
+                        [pin],
+                    )
+            elif pin_name == "REGIN" and len(peers(pin)) == 1:
+                op_max = limits["VDD"][1]
+                emit(
+                    "overvoltage", part,
+                    f"pin {pin.number} REGIN is floating; tie REGIN to the {op_max:g} V rail "
+                    "when VDD is externally powered to disable the internal regulator, per the datasheet.",
+                    [pin],
+                )
+
     if g.parts:
         coverage.append(
             (
@@ -1033,7 +1085,7 @@ def _analyze_design(
     for path, issue in g.issues:
         coverage.append((path, "graph", issue))
     for family in FAMILIES:
-        if family == "usb_shield_pcb":
+        if family in {"usb_shield_pcb", "overvoltage"}:
             continue
         if not g.parts and family != "models":
             continue
