@@ -58,6 +58,54 @@ def summaries(files):
 
 
 @pytest.mark.parametrize(
+    "value,vdd,regin_floating,vbus,dnp,expected_finding,expected_coverage",
+    [
+        ("CP2102-GMR_NRND", "5V", False, "VBUS", False,
+         "U3: pin 6 VDD is on a 5 V net; CP2102 VDD is rated 3–3.6 V "
+         "(absolute maximum 4.2 V). Move the pin to a 3.6 V rail or fit a regulator; "
+         "verify against the datasheet.", None),
+        ("CP2102-GMR_NRND", "3V3", False, "sense", False, None, None),
+        ("CP2102-GMR_NRND", "3V3", True, "VBUS", False,
+         "U3: pin 7 REGIN is floating; tie REGIN to the 3.6 V rail when VDD is "
+         "externally powered to disable the internal regulator, per the datasheet.", None),
+        ("CP2102-GMR_NRND", "3V3", False, "5V", False, None, None),
+        ("CP2102N-Axx-xQFN28", "5V", True, "VBUS", False, None,
+         "Not checked: U3 CP2102N-Axx-xQFN28 supply limits are not tabulated; "
+         "pin voltages not judged."),
+        ("CP2102-GMR_NRND", "sense", False, "VBUS", False, None,
+         "Not checked: U3 VDD net voltage is unknown; overvoltage cannot be judged."),
+        ("CP2102-GMR_NRND", "5V", True, "VBUS", True, None, None),
+        ("CH340X", "5V", True, "VBUS", False, None, None),
+    ],
+    ids=["vdd-5v", "vdd-3v3", "regin-floating", "vbus-5v",
+         "cp2102n", "vdd-unknown", "dnp", "unrelated-part"],
+)
+def test_pin_supply_overvoltage(
+    value, vdd, regin_floating, vbus, dnp, expected_finding, expected_coverage
+):
+    parts = [
+        ("U3", "Interface:Bridge", value, [
+            ("6", "VDD", "passive", 0, 0),
+            ("7", "REGIN", "power_in", 10, 0),
+            ("8", "VBUS", "input", 20, 0),
+        ], {"_dnp": dnp}),
+    ]
+    labels = [(vdd, 0, 0), (vbus, 20, 0)]
+    if not regin_floating:
+        parts.append(resistor("R1", "1k", (10, 0), (30, 0)))
+        labels.append(("3V3", 10, 0))
+
+    path = "board.kicad_sch"
+    findings, coverage = analyze({path: design(parts, labels)})
+    assert [(f["rule_id"], f["summary"]) for f in findings] == (
+        [("electrical.overvoltage", expected_finding)] if expected_finding else []
+    )
+    assert [row for row in coverage if row[1] == "overvoltage"] == (
+        [(path, "overvoltage", expected_coverage)] if expected_coverage else []
+    )
+
+
+@pytest.mark.parametrize(
     "value,expected",
     [
         ("5k6", 5600),
