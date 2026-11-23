@@ -14,6 +14,7 @@ from extrude.workspace_checks import evidence
 FAMILIES = (
     "usb",
     "usb_shield",
+    "usb_shield_pcb",
     "divider",
     "capacitor",
     "ldo",
@@ -178,13 +179,15 @@ def _analyze_design(
         return None
 
     board_references = None
+    board_by_reference = {}
     board_path = next((p for p in files if p.endswith(".kicad_pcb")), None)
     if board_path and g.parts:
         from extrude.parse.kicad_pcb import parse_board
 
         try:
             board_footprints = parse_board(files[board_path]).footprints
-            board_references = {p.reference for p in board_footprints}
+            board_by_reference = {p.reference: p for p in board_footprints}
+            board_references = set(board_by_reference)
             electrical_board_refs = {p.reference for p in board_footprints if p.pads}
         except ValueError as exc:
             coverage.append(_not_checked(
@@ -363,6 +366,32 @@ def _analyze_design(
                         f"Not checked: {part.reference} USB-C connector has no shield pin "
                         "in its symbol; shield termination cannot be evaluated from the schematic.",
                     ))
+            if part.fitted and board_references is not None:
+                footprint = board_by_reference.get(part.reference)
+                if footprint is None:
+                    coverage.append((
+                        board_path,
+                        "usb_shield_pcb",
+                        f"Not checked: {part.reference} USB connector has no paired PCB footprint; "
+                        "shield-tab termination cannot be evaluated from the board.",
+                    ))
+                else:
+                    floating = sum(
+                        pad.type == "thru_hole"
+                        and (pad.net is None or pad.net.startswith("unconnected-"))
+                        for pad in footprint.unnumbered_pads
+                    )
+                    if floating:
+                        connector = "USB-C" if usb_c else "USB"
+                        tabs = "tab has" if floating == 1 else "tabs have"
+                        emit(
+                            "usb_shield_pcb",
+                            part,
+                            f"{connector} connector shell has no ground path on the PCB — "
+                            f"{floating} thru-hole shield {tabs} no net. Provide an intentional "
+                            "chassis/ground termination (direct GND, or an RC termination).",
+                            other=[(board_path, f"{part.reference}: {floating} floating thru-hole shield tabs")],
+                        )
         if (
             part.reference.startswith("J")
             and re.search(r"(?i)(TRRS|Jack|Connector)", part.symbol)
@@ -1004,6 +1033,8 @@ def _analyze_design(
     for path, issue in g.issues:
         coverage.append((path, "graph", issue))
     for family in FAMILIES:
+        if family == "usb_shield_pcb":
+            continue
         if not g.parts and family != "models":
             continue
         if family == "assembly" and board_references is not None:
