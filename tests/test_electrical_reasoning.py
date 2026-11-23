@@ -71,6 +71,13 @@ def summaries(files):
         ("10kR 1%", 10000),
         ("22k1R 1%", 22100),
         ("5k1R 1%", 5100),
+        ("5.1K(1%)", 5100),
+        ("10K(5%)", 10000),
+        ("0(1%)", 0),
+        ("5.1K(±1%)", 5100),
+        ("5.1K(1%)x", None),
+        ("5.1K%", None),
+        ("5.1K ±1%", 5100),
     ],
 )
 def test_resistor_units(value, expected):
@@ -109,7 +116,8 @@ def test_rotation_and_mirror(angle, mirror):
     assert p.net[1:] == pytest.approx((20 + x, 30 - y), abs=1e-5)
 
 
-def test_divider_and_corrected_design_have_no_flags():
+@pytest.mark.parametrize("ten_k_value", ["10k", "10K(1%)"])
+def test_divider_and_corrected_design_have_no_flags(ten_k_value):
     adc = (
         "U99",
         "Generic:Converter",
@@ -120,12 +128,12 @@ def test_divider_and_corrected_design_have_no_flags():
     parts = [
         adc,
         resistor("R9", "5k6", (10, 0), (0, 0)),
-        resistor("R10", "10k", (0, 0), (20, 0)),
+        resistor("R10", ten_k_value, (0, 0), (20, 0)),
     ]
     labels = [("VBUS", 10, 0), ("GND", 20, 0), ("3V3", 30, 0)]
     files = {"board.kicad_sch": design(parts, labels)}
     assert any("3.37V" in s and "U99" in s and "AIN_ADC" in s for s in summaries(files))
-    parts[1] = resistor("R9", "10k", (10, 0), (0, 0))
+    parts[1] = resistor("R9", ten_k_value, (10, 0), (0, 0))
     assert summaries({"board.kicad_sch": design(parts, labels)}) == []
 
 
@@ -225,7 +233,8 @@ def test_usb_cc_pull_down_recognition(reference, value, ground_name, marker, dnp
         ]
 
 
-def test_usb_uart_cc_and_corrected_usb_sink():
+@pytest.mark.parametrize("rd_value", ["5.1k", "5.1K(1%)"])
+def test_usb_uart_cc_and_corrected_usb_sink(rd_value):
     connector = (
         "J90",
         "Connector:USB_C",
@@ -275,8 +284,8 @@ def test_usb_uart_cc_and_corrected_usb_sink():
         connector,
         usb,
         esd,
-        resistor("R90", "5.1k", (20, 0), (40, 0)),
-        resistor("R91", "5.1k", (30, 0), (40, 0)),
+        resistor("R90", rd_value, (20, 0), (40, 0)),
+        resistor("R91", rd_value, (30, 0), (40, 0)),
     ]
     assert summaries({"a.kicad_sch": design(parts, [("GND", 40, 0)])}) == []
 
@@ -594,7 +603,8 @@ def test_input_voltage_is_not_output_and_optional_crystal_loads_are_not_defects(
 
 
 @pytest.mark.parametrize("prefix", ["", "r"])
-def test_i2c_pullups_with_tolerance_notation_are_recognized(prefix):
+@pytest.mark.parametrize("pullup_value", ["10kR 1%", "5.1K(1%)"])
+def test_i2c_pullups_with_tolerance_notation_are_recognized(prefix, pullup_value):
     mcu = (
         "U90",
         "Generic:MCU",
@@ -605,8 +615,8 @@ def test_i2c_pullups_with_tolerance_notation_are_recognized(prefix):
     parts = [
         mcu,
         ("U91", "Generic:Sensor", "sensor", mcu[3], {}),
-        resistor(f"{prefix}R90", "10kR 1%", (0, 0), (20, 0)),
-        resistor(f"{prefix}R91", "10kR 1%", (10, 0), (20, 0)),
+        resistor(f"{prefix}R90", pullup_value, (0, 0), (20, 0)),
+        resistor(f"{prefix}R91", pullup_value, (10, 0), (20, 0)),
     ]
     assert not summaries({"i2c.kicad_sch": design(parts, [("+3V3", 20, 0)])})
 

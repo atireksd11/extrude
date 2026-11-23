@@ -36,7 +36,7 @@ def _designator(ref):
 def resistance(value):
     value = value.strip().replace("Ω", "").replace("ohm", "")
     m = re.fullmatch(
-        r"(\d+(?:\.\d+)?)\s*([RrKkMm]?)(\d*)(?:[Rr])?(?:\s*(?:±|\+/-)?\s*\d+(?:\.\d+)?\s*%)?",
+        r"(\d+(?:\.\d+)?)\s*([RrKkMm]?)(\d*)(?:[Rr])?(?:\s*(?:\(\s*)?(?:±|\+/-)?\s*\d+(?:\.\d+)?\s*%(?:\s*\))?)?",
         value,
     )
     if not m:
