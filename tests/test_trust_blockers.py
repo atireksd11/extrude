@@ -17,8 +17,8 @@ def device(ref="U81", name="SCL", kind="input", xy=(0, 0)):
 
 
 def test_parity_is_bidirectional_and_paired_board_is_not_backup():
-    files = {'unit.kicad_sch': design([device()]),
-             'unit.kicad_pcb': board(['U82']),
+    files = {'unit.kicad_sch': design([device(), device('U1')]),
+             'unit.kicad_pcb': board(['U1', 'U82']),
              'unit copy.kicad_pcb': board(['U81'])}
     findings, coverage = analyze(files)
     parity = [f for f in findings if f['rule_id'] == 'electrical.assembly']
