@@ -3,7 +3,7 @@
 import json
 import math
 import pytest
-from extrude.electrical_graph import build
+from extrude.electrical_graph import _is_dnp_value, build
 from extrude.electrical_reasoning import analyze, capacitance, resistance
 from extrude.workspace_audit import Finding, Coverage
 
@@ -208,6 +208,50 @@ def test_variants_do_not_share_global_nets():
         {"good.kicad_sch": design(good, labels), "bad.kicad_sch": design(bad, labels)}
     )
     assert len(f) == 1 and f[0]["sources"][0][0] == "bad.kicad_sch"
+
+
+@pytest.mark.parametrize(
+    "value,marked",
+    [
+        (marker, True) for marker in ("NA", "DNP", "DNI", "DNF", "NF", "NC")
+    ] + [
+        ("NA(47uF/6.3V)", True),
+        ("DNP(10uF)", True),
+        ("DNI(10uF)", True),
+        ("DNF(10uF)", True),
+        ("NF(10uF)", True),
+        ("NC(10uF)", True),
+        ("32.768KHz(NC)", True),
+        ("10M/0402(NC)", True),
+        ("12pF/50V(5%)(NC)", True),
+        ("10uF (DNP)", True),
+        ("na(10uf)", True),
+        ("  nc  ", True),
+        ("10uF ( dni )", True),
+        ("47uF/6.3V/20%/X5R/C0805", False),
+        ("10uF/25V(20%)", False),
+        ("12pF/50V(5%)", False),
+        ("10K(1%)", False),
+        ("5.1K(1%)", False),
+        ("SN74LVC1G04", False),
+        ("NC100", False),
+        ("10uF(NC100)", False),
+        ("10uF", False),
+        ("", False),
+    ],
+)
+def test_is_dnp_value(value, marked):
+    assert _is_dnp_value(value) is marked
+
+
+@pytest.mark.parametrize("value,derated", [("NA(47uF/6.3V)", False), ("47uF/6.3V", True)])
+def test_dnp_value_capacitor_derating(value, derated):
+    part = (
+        "C1", "Device:C", value,
+        [("1", "~", "passive", 0, 0), ("2", "~", "passive", 10, 0)], {},
+    )
+    findings, _ = analyze({"board.kicad_sch": design([part], [("5V", 0, 0), ("GND", 10, 0)])})
+    assert [row["rule_id"] for row in findings] == (["electrical.capacitor"] if derated else [])
 
 
 def test_cap_derating_and_corrected_rating():
@@ -669,6 +713,43 @@ def test_i2c_pullups_with_tolerance_notation_are_recognized(prefix, pullup_value
     assert not summaries({"i2c.kicad_sch": design(parts, [("+3V3", 20, 0)])})
 
 
+@pytest.mark.parametrize(
+    "value,checkbox,paired_pcb",
+    [
+        ("32.768KHz(NC)", True, False),
+        ("32.768KHz(NC)", True, True),
+        ("32.768KHz(NC)", False, True),
+    ],
+)
+def test_dnp_crystal_skips_clock_and_footprint_checks(value, checkbox, paired_pcb):
+    path = "board.kicad_sch"
+    crystal = (
+        "Y1", "Device:Crystal", value,
+        [("1", "1", "passive", 0, 0), ("2", "2", "passive", 10, 0)],
+        {"Footprint": "Crystal:generic", "_dnp": checkbox},
+    )
+    files = {path: design([crystal])}
+    if paired_pcb:
+        files["board.kicad_pcb"] = b"(kicad_pcb (version 20240108))"
+    findings, coverage = analyze(files)
+    assert not any(row["rule_id"].startswith("electrical.clock") for row in findings)
+    assert [row for row in coverage if row[0] == path and row[1].startswith("clock")] == [
+        (path, "clock", "Not checked: Y1 is marked not fitted; internal-clock "
+         "configuration assumed - crystal and load capacitors not judged.")
+    ]
+
+
+def test_fitted_crystal_with_incomplete_assembly_and_missing_load_caps():
+    crystal = (
+        "Y1", "Device:Crystal", "32.768KHz",
+        [("1", "1", "passive", 0, 0), ("2", "2", "passive", 10, 0)], {},
+    )
+    findings, _ = analyze({"board.kicad_sch": design([crystal])})
+    assert [row["rule_id"] for row in findings] == ["electrical.clock"]
+    assert "crystal assembly is incomplete: BOM included=True, fitted=True, footprint=missing" in findings[0]["summary"]
+    assert "missing/unvalued/DNP load capacitors: not both present" in findings[0]["summary"]
+
+
 def test_crystal_footprint_must_exist_in_paired_pcb():
     crystal = (
         "Y90",
@@ -968,9 +1049,11 @@ def test_crystal_load(value, cap_values, crystal_dnp, cap_dnp, expected):
                 "load capacitors (2 × (CL − stray)) or a crystal specified for the fitted capacitance."
             )
     elif expected == "dnp":
-        assert [row["rule_id"] for row in findings] == ["electrical.clock"]
-        assert "crystal assembly is incomplete" in findings[0]["summary"]
-        assert not clock_coverage
+        assert not findings
+        assert clock_coverage == [
+            ("clock", f"Not checked: {ref} is marked not fitted; internal-clock "
+             "configuration assumed - crystal and load capacitors not judged.")
+        ]
     else:
         assert not findings
         if expected == "unknown":
