@@ -206,8 +206,9 @@ def _analyze_design(
     if board_references is not None:
         physical = [p for p in g.parts if not p.reference.startswith("#")
                     and p.properties.get("_on_board", "True") == "True"]
-        present = len({p.reference for p in physical if p.reference in board_references})
-        total = len(physical)
+        fitted_physical = [p for p in physical if p.fitted]
+        present = len({p.reference for p in fitted_physical if p.reference in board_references})
+        total = len(fitted_physical)
         if total > 0 and present / total < MIN_ASSEMBLY_REFERENCE_FRACTION:
             root = root_schematics[0] if len(root_schematics) == 1 else board_path
             coverage.append((
