@@ -20,6 +20,7 @@ FAMILIES = (
     "capacitor",
     "ldo",
     "overvoltage",
+    "regulator",
     "clock",
     "clock_load",
     "assembly",
@@ -71,6 +72,20 @@ def resistance(value):
         float(a + ("." + b if b else ""))
         * {"": 1, "r": 1, "R": 1, "k": 1000, "K": 1000, "m": 1e-3, "M": 1e6}[scale]
     )
+
+
+def inductance(value):
+    """Return henries from an explicit inductor value with optional tolerance."""
+    match = re.fullmatch(
+        r"(?i)\s*(\d+(?:\.\d+)?)\s*([numµμ]?)H"
+        r"(?:\s*(?:\(\s*)?(?:±|\+/-)?\s*\d+(?:\.\d+)?\s*%(?:\s*\))?)?\s*",
+        value,
+    )
+    if not match:
+        return None
+    amount, prefix = match.groups()
+    exponent = {"n": -9, "u": -6, "µ": -6, "μ": -6, "m": -3, "": 0}
+    return float(f"{amount}e{exponent[prefix.lower()]}")
 
 
 def capacitance(value):
@@ -1055,12 +1070,33 @@ def _analyze_design(
             )
             emitted = True
 
+    def fitted_on_board(part):
+        return (
+            part.fitted
+            and not part.reference.startswith("#")
+            and part.properties.get("_on_board", "True") == "True"
+        )
+
+    def regulator_net_parts(net):
+        return [
+            part for key in dict.fromkeys((pin.path, pin.reference) for pin in g.nets.get(net, ()))
+            if (part := byref.get(key)) is not None and fitted_on_board(part)
+        ]
+
+    def regulator_net_name(pin):
+        # A paired pad supplies a display name; ties are determined by the schematic graph.
+        aliases = names(pin.net)
+        footprint = board_by_reference.get(pin.reference)
+        if footprint:
+            nets = set(footprint.pads.get(pin.number, ())) - {None, ""}
+            if len(nets) == 1:
+                (pcb_net,) = nets
+                if not aliases or pcb_net.lstrip("/") in aliases or pcb_net in aliases:
+                    return pcb_net
+        return ", ".join(aliases) or "(unnamed net)"
+
     for part in g.parts:
-        if (
-            not part.fitted
-            or part.reference.startswith("#")
-            or part.properties.get("_on_board", "True") != "True"
-        ):
+        if not fitted_on_board(part):
             continue
         family = part.value.upper().split("-", 1)[0]
         limits = PIN_SUPPLY_LIMITS.get(family)
@@ -1071,35 +1107,123 @@ def _analyze_design(
                     f"Not checked: {part.reference} {part.value} supply limits are not tabulated; "
                     "pin voltages not judged.",
                 ))
-            continue
-        for pin in part.pins:
-            pin_name = pin.name.upper()
-            if pin_name in limits:
-                op_min, op_max, abs_max = limits[pin_name]
-                v = voltage(pin.net)
-                if v is None:
-                    coverage.append((
-                        part.path, "overvoltage",
-                        f"Not checked: {part.reference} {pin.name} net voltage is unknown; "
-                        "overvoltage cannot be judged.",
-                    ))
-                elif v > op_max:
+        else:
+            for pin in part.pins:
+                pin_name = pin.name.upper()
+                if pin_name in limits:
+                    op_min, op_max, abs_max = limits[pin_name]
+                    v = voltage(pin.net)
+                    if v is None:
+                        coverage.append((
+                            part.path, "overvoltage",
+                            f"Not checked: {part.reference} {pin.name} net voltage is unknown; "
+                            "overvoltage cannot be judged.",
+                        ))
+                    elif v > op_max:
+                        emit(
+                            "overvoltage", part,
+                            f"pin {pin.number} {pin.name} is on a {v:g} V net; "
+                            f"{family} {pin.name} is rated {op_min:g}–{op_max:g} V "
+                            f"(absolute maximum {abs_max:g} V). Move the pin to a {op_max:g} V rail "
+                            "or fit a regulator; verify against the datasheet.",
+                            [pin],
+                        )
+                elif pin_name == "REGIN" and len(peers(pin)) == 1:
+                    op_max = limits["VDD"][1]
                     emit(
                         "overvoltage", part,
-                        f"pin {pin.number} {pin.name} is on a {v:g} V net; "
-                        f"{family} {pin.name} is rated {op_min:g}–{op_max:g} V "
-                        f"(absolute maximum {abs_max:g} V). Move the pin to a {op_max:g} V rail "
-                        "or fit a regulator; verify against the datasheet.",
+                        f"pin {pin.number} REGIN is floating; tie REGIN to the {op_max:g} V rail "
+                        "when VDD is externally powered to disable the internal regulator, per the datasheet.",
                         [pin],
                     )
-            elif pin_name == "REGIN" and len(peers(pin)) == 1:
-                op_max = limits["VDD"][1]
-                emit(
-                    "overvoltage", part,
-                    f"pin {pin.number} REGIN is floating; tie REGIN to the {op_max:g} V rail "
-                    "when VDD is externally powered to disable the internal regulator, per the datasheet.",
-                    [pin],
+
+        outputs = [pin for pin in part.pins if pin.name.upper() == "VDDOUT"]
+        pll_pins = [pin for pin in part.pins if pin.name.upper() == "VDDPLL"]
+        if not outputs or not pll_pins:
+            continue
+        core_pins = [pin for pin in part.pins if pin.name.upper() == "VDDCORE"]
+        ties = [
+            (pll, [pin for pin in (*outputs, *core_pins) if pin.net == pll.net])
+            for pll in pll_pins
+        ]
+        ties = [(pll, tied) for pll, tied in ties if tied]
+        if not ties:
+            coverage.append((
+                part.path, "regulator",
+                f"Not checked: {part.reference} VDDPLL is on a separate net from VDDOUT/VDDCORE; "
+                "the filter element's values are not judged.",
+            ))
+            continue
+
+        details = []
+        evidence_pins = []
+        other_sources = []
+        for pll, tied in ties:
+            rail = regulator_net_name(pll)
+            tied_names = []
+            for name in ("VDDOUT", "VDDCORE"):
+                numbers = sorted(
+                    (pin.number for pin in tied if pin.name.upper() == name),
+                    key=lambda number: (len(number), number),
                 )
+                if numbers:
+                    label = "pin" if len(numbers) == 1 else "pins"
+                    tied_names.append(f"{name} {label} {', '.join(numbers)}")
+            details.append(
+                f"pin {pll.number} VDDPLL is tied directly to the core rail {rail} "
+                f"(shared with {' and '.join(tied_names)}) with no series filter element."
+            )
+            evidence_pins.extend([pll, *tied])
+
+        details.append(
+            "VDDPLL needs a decoupling/filtering RLC circuit (AT03463 SAM4S Schematic Checklist); "
+            "without it, ripple can keep the 48 MHz PLL from locking and USB from working. "
+            "Route VDDPLL from the core rail through a ferrite bead or inductor, "
+            "with decoupling on the PLL side."
+        )
+        for pll in {pin.net: pin for pin, _ in ties}.values():
+            rail = regulator_net_name(pll)
+            for peer in peers(pll):
+                candidate = byref.get((peer.path, peer.reference))
+                if not candidate or candidate is part or not fitted_on_board(candidate):
+                    continue
+                if peer.name.upper() == "DVDD" or "Camera" in candidate.symbol:
+                    details.append(
+                        f"{candidate.reference} pin {peer.number} (camera DVDD) "
+                        "also loads this regulator output."
+                    )
+                    other_sources.append((candidate.path, f"{candidate.reference} pin {peer.number}"))
+                if not candidate.reference.startswith("L") or len(candidate.pins) != 2:
+                    continue
+                if inductance(candidate.value) is None:
+                    continue
+                far_pin = next((pin for pin in candidate.pins if pin.net != pll.net), None)
+                if far_pin is None:
+                    continue
+                far_parts = [
+                    p for p in regulator_net_parts(far_pin.net) if p is not candidate
+                ]
+                if any(not re.match(r"[CRL]\d", _designator(p.reference)) for p in far_parts):
+                    continue
+                passive_refs = []
+                for passive in far_parts:
+                    passive_refs.append(passive.reference)
+                    if _designator(passive.reference).startswith("R"):
+                        beyond = opposite(passive, far_pin.net)
+                        passive_refs.extend(
+                            p.reference for p in regulator_net_parts(beyond)
+                            if _designator(p.reference).startswith("C")
+                            and ground(opposite(p, beyond))
+                        )
+                refs = ", ".join(dict.fromkeys(passive_refs))
+                value = re.sub(r"(?i)[uμ]h", "µH", candidate.value)
+                details.append(
+                    f"{candidate.reference} ({value}) is not in series between the core rail "
+                    f"and VDDPLL — it connects {rail} to a capacitor-only net "
+                    f"{regulator_net_name(far_pin)}" + (f" ({refs})." if refs else ".")
+                )
+                other_sources.append((candidate.path, f"{candidate.reference} ({candidate.value})"))
+        emit("regulator", part, " ".join(dict.fromkeys(details)), evidence_pins, other_sources)
 
     if g.parts:
         coverage.append(
@@ -1112,7 +1236,7 @@ def _analyze_design(
     for path, issue in g.issues:
         coverage.append((path, "graph", issue))
     for family in FAMILIES:
-        if family in {"usb_shield_pcb", "overvoltage"}:
+        if family in {"usb_shield_pcb", "overvoltage", "regulator"}:
             continue
         if not g.parts and family != "models":
             continue
