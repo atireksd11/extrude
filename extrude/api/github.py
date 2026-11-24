@@ -152,13 +152,17 @@ def schematic(repo_id: str, revision: str, path: str = Query(min_length=1, max_l
 def start_audit(repo_id: str, body: AuditRequest) -> dict:
     with _errors():
         audit = workspace_audit.start(repo_id, body.revision, body.base, body.retry)
-        return audit.model_dump(exclude={"findings", "coverage"})
+        return audit.response(include_results=False)
 
 
-@router.get("/{repo_id}/audits/{audit_id}")
-def get_audit(repo_id: str, audit_id: str) -> workspace_audit.Audit:
+class AuditResponse(workspace_audit.Audit):
+    stale: bool
+
+
+@router.get("/{repo_id}/audits/{audit_id}", response_model=AuditResponse)
+def get_audit(repo_id: str, audit_id: str) -> dict:
     with _errors():
-        return workspace_audit.get(repo_id, audit_id)
+        return workspace_audit.get(repo_id, audit_id).response()
 
 
 class ExplainRequest(BaseModel):
