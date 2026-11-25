@@ -1061,3 +1061,94 @@ def test_usb_shield_pcb(case, pads, expected_count):
         )]
     else:
         assert shield_coverage == []
+
+
+def test_assembly_scope_guard_is_per_root():
+    from test_trust_blockers import board, device
+
+    findings, coverage = analyze({
+        "split.kicad_sch": design([device(ref) for ref in ("U1", "U2", "U3", "U4")]),
+        "split.kicad_pcb": board(["U1", "U9"]),
+        "other.kicad_sch": design([device("U3")]),
+        "other.kicad_pcb": board(["U3"]),
+    })
+
+    assert not [f for f in findings if f["rule_id"] == "electrical.assembly"]
+    assert [row for row in coverage if row[0].endswith(".kicad_pcb") and row[1] == "assembly"] == [
+        ("other.kicad_pcb", "assembly", "Compared paired schematic and PCB component inventories."),
+        ("split.kicad_pcb", "assembly",
+         "Not checked: split.kicad_sch schematic covers more hardware than the paired board "
+         "(1 of 4 fitted references present on split.kicad_pcb); "
+         "split/multi-board design — assembly comparison skipped."),
+    ]
+
+
+@pytest.mark.parametrize(
+    "schematic_refs,pcb_refs,expected_findings",
+    [
+        pytest.param(["U1", "U2", "U3"], ["U1", "U2"], ["U3"], id="missing-footprint"),
+        pytest.param(["U1", "U2"], ["U1"], ["U2"], id="exactly-half"),
+        pytest.param(["U1", "U2"], [], [], id="empty-board"),
+        pytest.param(["U1", "U1_r1", "U1_r2"], ["U1"], [], id="repeated-sheet-refs"),
+    ],
+)
+def test_assembly_scope_guard_for_single_root(schematic_refs, pcb_refs, expected_findings):
+    from test_trust_blockers import board, device
+
+    schematic_path = "main.kicad_sch"
+    board_path = "main.kicad_pcb"
+    findings, coverage = analyze({
+        schematic_path: design([device(ref) for ref in schematic_refs]),
+        board_path: board(pcb_refs),
+    })
+
+    assembly = [f["summary"] for f in findings if f["rule_id"] == "electrical.assembly"]
+    assert [summary.split(":")[0] for summary in assembly] == expected_findings
+    assert all("has no footprint on the paired board" in summary for summary in assembly)
+
+    if expected_findings:
+        detail = "Compared paired schematic and PCB component inventories."
+    else:
+        detail = (
+            f"Not checked: {schematic_path} schematic covers more hardware than the paired board "
+            f"({len(pcb_refs)} of {len(schematic_refs)} fitted references present on {board_path}); "
+            "split/multi-board design — assembly comparison skipped."
+        )
+    assert [row for row in coverage if row[1] == "assembly"] == [(board_path, "assembly", detail)]
+
+
+@pytest.mark.parametrize(
+    "fitted, dnp, present, missing",
+    [
+        pytest.param(["U1"], ["U2"], ["U1"], [], id="dnp-without-footprint"),
+        pytest.param(["U1", "U2", "U3"], ["U4", "U5", "U6", "U7"],
+                     ["U1", "U2"], ["U3"], id="dnp-heavy"),
+        pytest.param([], ["U1", "U2", "U3"], ["U1"], [], id="all-dnp"),
+        pytest.param(
+            [f"J{i}" for i in range(1, 12)]
+            + ["SW1", "SW3", "SW6", "R36", "R37", "R38", "C32", "C33", "C34", "U13", "UE1"],
+            ["U99"], [f"J{i}" for i in range(1, 12)] + ["REF**"],
+            ["SW1", "SW3", "SW6", "R36", "R37", "R38", "C32", "C33", "C34", "U13", "UE1"],
+            id="astra-fitted-boundary",
+        ),
+    ],
+)
+def test_assembly_scope_guard_uses_fitted_parts(fitted, dnp, present, missing):
+    from test_trust_blockers import board, device
+
+    parts = [device(ref) for ref in fitted]
+    parts.extend((*device(ref)[:-1], {"_dnp": True}) for ref in dnp)
+    findings, coverage = analyze({
+        "main.kicad_sch": design(parts),
+        "main.kicad_pcb": board(present),
+    })
+
+    assembly = [f["summary"] for f in findings if f["rule_id"] == "electrical.assembly"]
+    assert [summary.split(":")[0] for summary in assembly] == missing
+    assert all("has no footprint on the paired board" in summary for summary in assembly)
+    assembly_coverage = [detail for _, family, detail in coverage if family == "assembly"]
+    if "REF**" in present:
+        assert assembly_coverage.pop(0) == (
+            "Skipped 1 placeholder footprint(s) (REF**): un-annotated, no schematic symbol expected."
+        )
+    assert assembly_coverage == ["Compared paired schematic and PCB component inventories."]

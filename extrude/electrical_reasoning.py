@@ -32,6 +32,10 @@ FAMILIES = (
 )
 
 
+# A board covering less than half the schematic inventory is likely a partial design.
+MIN_ASSEMBLY_REFERENCE_FRACTION = 0.5
+
+
 CRYSTAL_LOAD_CL = {
     # Normalised MPN -> required load capacitance in farads.
     "ABM712.000MHZD2YT": 18e-12,  # Abracon ABM7 datasheet, 18 pF standard CL.
@@ -202,30 +206,43 @@ def _analyze_design(
     if board_references is not None:
         physical = [p for p in g.parts if not p.reference.startswith("#")
                     and p.properties.get("_on_board", "True") == "True"]
-        for part in physical:
-            if part.fitted and part.reference not in board_references:
-                emit("assembly", part,
-                     f"is in the schematic{' and marked for BOM inclusion' if part.in_bom else ''} but has no footprint on the paired board — {part.value or 'this component'} cannot be assembled, so its circuit function is absent. Restore the footprint or reconcile the schematic and assembly intent.",
-                     other=[(board_path, "footprint inventory: reference absent")])
-        # Missing library definitions must not become false PCB-only accusations.
-        if not g.issues and inventory_complete:
-            schematic_refs = {p.reference for p in g.parts}
-            from extrude.electrical_graph import Part
-            skipped_refs = []
-            for ref in sorted(electrical_board_refs - schematic_refs - {None, ""}):
-                if "**" in ref:
-                    skipped_refs.append(ref)
-                    continue
-                emit("assembly", Part(ref, "", "", "", board_path, {}, True, True),
-                     "has a PCB footprint but no symbol in the paired schematic — its connectivity and BOM intent are unrepresented. Reconcile the board and schematic.")
-            if skipped_refs:
-                coverage.append((
-                    board_path,
-                    "assembly",
-                    f"Skipped {len(skipped_refs)} placeholder footprint(s) ({', '.join(skipped_refs)}): "
-                    "un-annotated, no schematic symbol expected.",
-                ))
-        coverage.append((board_path, "assembly", "Compared paired schematic and PCB component inventories."))
+        fitted_physical = [p for p in physical if p.fitted]
+        present = len({p.reference for p in fitted_physical if p.reference in board_references})
+        total = len(fitted_physical)
+        if total > 0 and present / total < MIN_ASSEMBLY_REFERENCE_FRACTION:
+            root = root_schematics[0] if len(root_schematics) == 1 else board_path
+            coverage.append((
+                board_path,
+                "assembly",
+                f"Not checked: {root} schematic covers more hardware than the paired board "
+                f"({present} of {total} fitted references present on {board_path}); "
+                "split/multi-board design — assembly comparison skipped.",
+            ))
+        else:
+            for part in physical:
+                if part.fitted and part.reference not in board_references:
+                    emit("assembly", part,
+                         f"is in the schematic{' and marked for BOM inclusion' if part.in_bom else ''} but has no footprint on the paired board — {part.value or 'this component'} cannot be assembled, so its circuit function is absent. Restore the footprint or reconcile the schematic and assembly intent.",
+                         other=[(board_path, "footprint inventory: reference absent")])
+            # Missing library definitions must not become false PCB-only accusations.
+            if not g.issues and inventory_complete:
+                schematic_refs = {p.reference for p in g.parts}
+                from extrude.electrical_graph import Part
+                skipped_refs = []
+                for ref in sorted(electrical_board_refs - schematic_refs - {None, ""}):
+                    if "**" in ref:
+                        skipped_refs.append(ref)
+                        continue
+                    emit("assembly", Part(ref, "", "", "", board_path, {}, True, True),
+                         "has a PCB footprint but no symbol in the paired schematic — its connectivity and BOM intent are unrepresented. Reconcile the board and schematic.")
+                if skipped_refs:
+                    coverage.append((
+                        board_path,
+                        "assembly",
+                        f"Skipped {len(skipped_refs)} placeholder footprint(s) ({', '.join(skipped_refs)}): "
+                        "un-annotated, no schematic symbol expected.",
+                    ))
+            coverage.append((board_path, "assembly", "Compared paired schematic and PCB component inventories."))
     byref = {(p.path, p.reference): p for p in g.parts}
     resistors = [
         p

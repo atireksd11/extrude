@@ -102,7 +102,8 @@ def test_gc_restored_after_failed_form(monkeypatch):
 
 @pytest.mark.parametrize('size', [10 * MIB, 32 * MIB])
 def test_large_pcb_parses_under_memory_gate(saved_repo, tmp_path, size):
-    raw = Path('tests/fixtures/phase2/clean/board.kicad_pcb').read_bytes()
+    fixture = Path('tests/fixtures/phase2/clean')
+    raw = (fixture / 'board.kicad_pcb').read_bytes()
     padded = raw + b' ' * (size - len(raw))
     target = tmp_path / 'large.kicad_pcb'
     target.write_bytes(padded)
@@ -114,7 +115,9 @@ print([l for l in open('/proc/self/status') if l.startswith('VmHWM')][0].split()
     result = subprocess.check_output([sys.executable, '-c', script, str(target)], text=True)
     peak_bytes = int(result) * 1024  # VmHWM is KiB on Linux
     assert peak_bytes < 256_000_000
-    sha = saved_repo({**good_design(), **good_design('large'), 'large.kicad_pcb': padded})
+    sha = saved_repo({**good_design(),
+                      'large.kicad_sch': (fixture / 'board.kicad_sch').read_bytes(),
+                      'large.kicad_pcb': padded})
     findings, coverage = electrical.collect('local', sha)
     assert_good(findings)
     assert any(r['path'] == 'large.kicad_pcb' and r['check'] == 'Electrical assembly'

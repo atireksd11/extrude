@@ -82,9 +82,9 @@ def test_olimex_shared_sheet_resolves_c29_and_r23(revision):
 
 
 def test_webcam_io0_io1_desync_stays_visible():
-    schematic = annotate(design([device("IO0", name="~", kind="passive")]),
+    schematic = annotate(design([device("IO0", name="~", kind="passive"), device("U1")]),
                          "IO0", [("webcam", "/root", "IO0")])
-    missing, orphan = assembly({"board.kicad_sch": schematic, "board.kicad_pcb": board(["IO1"])})
+    missing, orphan = assembly({"board.kicad_sch": schematic, "board.kicad_pcb": board(["IO1", "U1"])})
     assert "IO0:" in missing and "has no footprint" in missing
     assert "IO1:" in orphan and "no symbol" in orphan
 
@@ -154,8 +154,8 @@ def test_repeated_sheet_remains_excluded_with_reverse_check_gated():
 
 def test_placeholder_refs_are_skipped_with_one_coverage_entry():
     files = {
-        "board.kicad_sch": design([device("U1")]),
-        "board.kicad_pcb": board(["R**1", "REF**", "REF**"]),
+        "board.kicad_sch": design([device("U1"), device("U2")]),
+        "board.kicad_pcb": board(["U2", "R**1", "REF**", "REF**"]),
     }
     findings, coverage = analyze(files)
     summaries = [f["summary"] for f in findings if f["rule_id"] == "electrical.assembly"]
@@ -186,8 +186,10 @@ def test_pcb_only_refs_without_placeholder_marker_still_flag(ref):
 
 def test_astra_placeholder_skip_preserves_all_deletion_warnings():
     refs = ["SW1", "SW3", "SW6", "R36", "R37", "R38", "C32", "C33", "C34", "U13", "UE1"]
-    schematic = design([device("U1"), *(device(ref) for ref in refs)])
-    summaries = assembly({"board.kicad_sch": schematic, "board.kicad_pcb": board(["U1", "REF**"])})
+    # Represent the retained portion of the board alongside the deleted parts.
+    retained = [f"J{i}" for i in range(1, len(refs) + 1)]
+    schematic = design([device(ref) for ref in retained + refs])
+    summaries = assembly({"board.kicad_sch": schematic, "board.kicad_pcb": board([*retained, "REF**"])})
     assert sorted(summaries) == sorted(
         f"{ref}: is in the schematic and marked for BOM inclusion but has no footprint on the paired board — "
         "bus peripheral cannot be assembled, so its circuit function is absent. "
