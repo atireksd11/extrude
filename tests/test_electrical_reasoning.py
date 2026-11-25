@@ -4,7 +4,7 @@ import json
 import math
 import pytest
 from extrude.electrical_graph import _is_dnp_value, build
-from extrude.electrical_reasoning import analyze, capacitance, resistance
+from extrude.electrical_reasoning import analyze, capacitance, inductance, resistance
 from extrude.workspace_audit import Finding, Coverage
 
 
@@ -1235,3 +1235,97 @@ def test_assembly_scope_guard_uses_fitted_parts(fitted, dnp, present, missing):
             "Skipped 1 placeholder footprint(s) (REF**): un-annotated, no schematic symbol expected."
         )
     assert assembly_coverage == ["Compared paired schematic and PCB component inventories."]
+
+
+@pytest.mark.parametrize(
+    "value,expected",
+    [
+        ("10 uH", 10e-6),
+        ("10uH", 10e-6),
+        ("1uH", 1e-6),
+        ("100nH", 100e-9),
+        ("10 µH", 10e-6),
+        ("10uH(±5%)", 10e-6),
+        ("10K", None),
+        ("10 uF", None),
+    ],
+)
+def test_inductance_units(value, expected):
+    assert inductance(value) == expected
+
+
+@pytest.mark.parametrize(
+    "pll_rail,core_rail,inductor,dnp,has_output,expected",
+    [
+        ("CORE", "CORE", "stub", False, True, "stub"),
+        ("FILTERED", "CORE", "series", False, True, "separate"),
+        ("CORE", "CORE", None, False, True, "tie"),
+        ("CORE", "CORE", "series", False, True, "tie"),
+        ("CORE", "CORE", "camera-load", False, True, "tie"),
+        ("CORE", "OTHER", None, False, True, "output-only-tie"),
+        ("OTHER", "OTHER", None, False, True, "core-only-tie"),
+        ("CORE", None, None, False, True, "output-only-tie"),
+        (None, "CORE", None, False, True, None),
+        ("CORE", "CORE", "stub", True, True, None),
+        ("CORE", "CORE", "stub", False, False, None),
+    ],
+    ids=[
+        "misplaced-inductor", "separate-nets", "no-inductor",
+        "inductor-leads-to-active-part", "inductor-leads-to-camera",
+        "pll-tied-to-output-only",
+        "pll-tied-to-core-only", "part-without-core-pin", "part-without-pll",
+        "unfitted", "unrelated-inductor",
+    ],
+)
+def test_vddpll_filter(pll_rail, core_rail, inductor, dnp, has_output, expected):
+    pin_specs = [
+        ("8", "vddout", "power_out", 0, "CORE" if has_output else None),
+        ("12", "VDDCORE", "power_in", 10, core_rail),
+        ("64", "VDDPLL", "power_in", 20, pll_rail),
+    ]
+    pins = [(num, name, kind, x, 0) for num, name, kind, x, rail in pin_specs if rail]
+    labels = [(rail, x, 0) for _, _, _, x, rail in pin_specs if rail]
+    parts = [("U1", "MCU:Fixture", "Fixture", pins, {"_dnp": dnp})]
+    if inductor:
+        far_rail = "FILTERED" if inductor == "series" else "DECOUPLING"
+        parts.append(resistor("L9", "10 uH", (30, 0), (40, 0)))
+        labels.extend([("CORE", 30, 0), (far_rail, 40, 0)])
+        if inductor == "stub":
+            parts.append(resistor("C7", "100 nF", (40, 0), (50, 0)))
+            labels.append(("GND", 50, 0))
+        elif pll_rail != far_rail:
+            ref = "CAM2" if inductor == "camera-load" else "U2"
+            parts.append((ref, "Power:Load", "Load", [
+                ("1", "SUPPLY", "power_in", 40, 0),
+            ], {}))
+
+    path = "fixture.kicad_sch"
+    findings, coverage = analyze({path: design(parts, labels)})
+    regulator_coverage = [row for row in coverage if row[1] == "regulator"]
+    if expected == "separate":
+        assert findings == []
+        assert regulator_coverage == [(
+            path, "regulator",
+            "Not checked: U1 VDDPLL is on a separate net from VDDOUT/VDDCORE; "
+            "the filter element's values are not judged.",
+        )]
+        return
+    assert not regulator_coverage
+    if expected is None:
+        assert findings == []
+        return
+
+    (finding,) = findings
+    assert finding["rule_id"] == "electrical.regulator"
+    assert finding["severity"] == "warning"
+    summary = finding["summary"]
+    assert f"pin 64 VDDPLL is tied directly to the core rail {pll_rail}" in summary
+    assert "with no series filter element" in summary
+    assert "AT03463" in summary
+    assert ("VDDOUT pin 8" in summary) == (expected != "core-only-tie")
+    assert ("VDDCORE pin 12" in summary) == (expected != "output-only-tie")
+    if expected == "stub":
+        assert "L9 (10 µH) is not in series" in summary
+        assert "capacitor-only net DECOUPLING (C7)" in summary
+    else:
+        assert "L9" not in summary
