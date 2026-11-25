@@ -223,11 +223,65 @@ def test_usb_uart_cc_and_corrected_usb_sink():
     assert summaries({"a.kicad_sch": design(parts, [("GND", 40, 0)])}) == []
 
 
-def test_model_paths_exact_case():
-    pcb = b'(kicad_pcb (footprint "X" (property "Reference" "J90") (model "${KIPRJMOD}/Models/part.STEP")))'
-    f, c = analyze({"pcb/a.kicad_pcb": pcb}, ["pcb/Models/part.step"])
-    assert len(f) == 1 and "J90" in f[0]["summary"]
-    assert not analyze({"pcb/a.kicad_pcb": pcb}, ["pcb/Models/part.STEP"])[0]
+@pytest.mark.parametrize(
+    ("model", "actual_path"),
+    [
+        ("${KIPRJMOD}/models/part.step", "pcb/Models/Part.STEP"),
+        (":MY_LIB:kicad-packages3D/part.step", "shared/kicad-packages3D/Part.STEP"),
+        ("models/part.step", "pcb/Models/Part.STEP"),
+    ],
+)
+def test_model_paths_resolve_case_insensitively(model, actual_path):
+    path = "pcb/a.kicad_pcb"
+    pcb = f'(kicad_pcb (footprint "X" (model "{model}")))'.encode()
+    findings, coverage = analyze({path: pcb}, {path, actual_path})
+    assert not findings
+    assert (path, "models", f"model {model} resolves as {actual_path} with different case") in coverage
+
+
+def test_model_exact_match_wins_over_case_fallback():
+    path = "pcb/a.kicad_pcb"
+    pcb = b'(kicad_pcb (footprint "X" (model "${KIPRJMOD}/models/part.step")))'
+    inventory = {
+        path,
+        "another/a.kicad_pro",
+        "another/models/Part.STEP",
+        "pcb/models/Part.STEP",
+        "pcb/models/part.step",
+    }
+    findings, coverage = analyze({path: pcb}, inventory)
+    assert not findings
+    assert not any("different case" in detail for _, _, detail in coverage)
+
+
+@pytest.mark.parametrize(
+    ("model", "model_path", "library_marker"),
+    [
+        (":MY_LIB:kicad-packages3D/part.step", "shared/kicad-packages3D/part.step", None),
+        ("${KIPRJMOD}/kicad-packages3D/part.step", "shared/kicad-packages3D/part.step", None),
+        ("${KIPRJMOD}/models/part.step", "shared/models/part.step", "shared/X.pretty/X.kicad_mod"),
+    ],
+)
+def test_model_paths_resolve_from_sibling_library_root(model, model_path, library_marker):
+    path = "pcb/a.kicad_pcb"
+    pcb = f'(kicad_pcb (footprint "X" (model "{model}")))'.encode()
+    inventory = {path, "pcb/a.kicad_pro", model_path}
+    if library_marker:
+        inventory.add(library_marker)
+    findings, coverage = analyze({path: pcb}, inventory)
+    assert not findings
+    assert not any(coverage_path == path for coverage_path, _, _ in coverage)
+
+
+def test_colon_model_variable_must_be_at_start():
+    path = "pcb/a.kicad_pcb"
+    model = "models/:MY_LIB:part.step"
+    pcb = f'(kicad_pcb (footprint "X" (model "{model}")))'.encode()
+    findings, coverage = analyze({path: pcb}, {path, "pcb/models/part.step"})
+    assert len(findings) == 1
+    assert findings[0]["rule_id"] == "electrical.models"
+    assert f"does not resolve at pcb/{model}." in findings[0]["summary"]
+    assert not any(coverage_path == path for coverage_path, _, _ in coverage)
 
 
 @pytest.mark.parametrize(
@@ -267,6 +321,7 @@ def test_kiprjmod_typo_keeps_warning_and_reports_first_candidate():
 @pytest.mark.parametrize(
     ("model", "coverage_detail"),
     [
+        (":MY_LIB:part.step", "external library model"),
         ("${KICAD6_3DMODEL_DIR}/part.step", "external library model"),
         ("/opt/models/part.step", "absolute external model"),
         ("C:/models/part.step", "absolute external model"),
