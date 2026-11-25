@@ -13,8 +13,11 @@ _LITERAL = re.compile(r"\(?\s*(0[xX][0-9A-Fa-f]+|\d+)\s*(?:[uU](?:[lL]{1,2})?|[l
 
 def _mask(text: str) -> str:
     # Keep newlines and offsets for evidence; quoted strings are not code.
-    pattern = r'/\*.*?\*/|//[^\n]*|"(?:\\.|[^"\\])*"|\'(?:\\.|[^\'\\])*\''
-    return re.sub(pattern, lambda m: "".join("\n" if c == "\n" else " " for c in m.group()), text, flags=re.S)
+    return _C_TOKEN.sub(_blank_token, text)
+
+
+def _blank_token(match):
+    return "".join("\n" if c == "\n" else " " for c in match[0])
 
 
 def read_constants(data: bytes, path: str) -> dict[str, dict]:
@@ -102,3 +105,80 @@ def read_constants(data: bytes, path: str) -> dict[str, dict]:
         raise ValueError("Literal pin reading supports C/C++/Arduino and Python source.")
     return {name: entries[0] if len(entries) == 1 else dict(value=None, line=entries[0]["line"], detail="Multiple assignments are ambiguous.")
             for name, entries in rows.items()}
+
+
+_PIN_BINDING = re.compile(r"\s*#define\s+(\w+?_(RESET|NET|WS|COMM)_PIN)\s+PIO_(P[A-Z]\d+)\b")
+_C_TOKEN = re.compile(r"""/\*.*?\*/|//[^\n]*|"(?:(?:\\.)|[^"\\])*"|'(?:(?:\\.)|[^'\\])*'""", re.S)
+
+
+def _source_tokens(data):
+    text = data.decode("utf-8-sig", errors="replace")
+    comments = []
+
+    def mask(token):
+        if token[0].startswith(("/*", "//")):
+            comments.append(token)
+        return _blank_token(token)
+
+    return _C_TOKEN.sub(mask, text), comments
+
+
+def read_pin_bindings(data, path, *, issues=None, define_names=None):
+    """Read literal port bindings and optionally report rejected or comment-only roles."""
+    code, comments = _source_tokens(data)
+    blocks = iter(comment for comment in comments if comment[0].startswith("/*"))
+    upcoming = next(blocks, None)
+    current = None
+    associated = set()
+    bindings = []
+    offset = 0
+    for line, source in enumerate(code.splitlines(keepends=True), 1):
+        match = _PIN_BINDING.match(source)
+        while upcoming is not None and upcoming.end() <= offset:
+            current = upcoming
+            upcoming = next(blocks, None)
+        offset += len(source)
+        if not match:
+            continue
+        name, role, sam_pin = match.groups()
+        comment = current[0] if current else ""
+        if current:
+            associated.add((current.start(), role))
+        declared = re.search(r"\bSAM4S:\s*(P[A-Z]\d+)\b", comment)
+        if declared and declared[1] != sam_pin:
+            if issues is not None:
+                issues.append(f"{path}:{line}: {name} disagrees with comment pin {declared[1]}")
+            continue
+        gpios = set(re.findall(r"\bGPIO(\d+)\b", comment))
+        gpio = int(gpios.pop()) if len(gpios) == 1 else None
+        if role in {"NET", "WS"} and gpio is None:
+            if issues is not None:
+                issues.append(f"{path}:{line}: {name} lacks a unique comment GPIO")
+            continue
+        bindings.append(dict(role=role, sam_pin=sam_pin, gpio=gpio, line=line,
+                             path=path, comment_gpio=gpio))
+        if define_names is not None:
+            define_names[path, line] = name
+    if issues is not None:
+        for comment in comments:
+            role = re.match(r"/\*+\s*(?:\*\s*)?ESP32\s+(?:EN\s*/\s*)?(RESET|NET|WS|COMM)\b", comment[0])
+            if role and (comment.start(), role[1]) not in associated:
+                issues.append(f"{path}: {role[1]} comment has no pin define")
+    return bindings
+
+
+def read_uart_gates(data, path):
+    """Return explicitly configured ESP32 USARTs with code-level setup calls."""
+    if b"ESP32" not in data or b"usart_" not in data:
+        return []
+    code, comments = _source_tokens(data)
+    if not (re.search(r"\busart_init_rs232\s*\(", code)
+            or all(re.search(rf"\busart_enable_{end}\s*\(", code) for end in ("tx", "rx"))):
+        return []
+
+    def gates(pattern, candidates):
+        return [(match[1], path, " ".join(comment[0].strip("/* \n").split()))
+                for comment in candidates for match in re.finditer(pattern, comment[0])]
+
+    return (gates(r"\bConfigures?\s+(USART\d+)\b", comments)
+            or gates(r"\b(USART\d+)\b", (c for c in comments if "ESP32" in c[0])))
