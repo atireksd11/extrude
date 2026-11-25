@@ -7,6 +7,7 @@ import re
 import threading
 import uuid
 from concurrent.futures import ThreadPoolExecutor
+from functools import cache
 from importlib.metadata import version
 from pathlib import Path, PurePosixPath
 from typing import Literal
@@ -29,6 +30,43 @@ _MAX_BOARDS = 12
 _MAX_FILES = 1000
 _MAX_BOARD_FINDINGS = 200
 _IN_PROGRESS = {"queued", "running"}
+
+
+# Paths are relative to the package's parent so the checkout location never
+# affects the hash. The workspace audit does not use extrude/checks.
+_CHECKER_ROOT = Path(__file__).resolve().parent.parent
+_CHECKER_FILES = (
+    "extrude/electrical_graph.py",
+    "extrude/electrical_reasoning.py",
+    "extrude/kicad_audit.py",
+    "extrude/kicad_snapshot.py",
+    "extrude/parse/kicad_pcb.py",
+    "extrude/parse/kicad_schematic.py",
+    "extrude/pcb_review.py",
+    "extrude/schematic_review.py",
+    "extrude/workspace_audit.py",
+    "extrude/workspace_cad.py",
+    "extrude/workspace_checks.py",
+)
+for _checker_file in _CHECKER_FILES:
+    if not (_CHECKER_ROOT / _checker_file).is_file():
+        raise FileNotFoundError(f"Missing workspace audit checker file: {_CHECKER_ROOT / _checker_file}")
+
+
+@cache
+def _code_version() -> str:
+    digest = hashlib.sha256()
+    for path in sorted(_CHECKER_FILES):
+        digest.update(path.encode("utf-8") + b"\0")
+        digest.update((_CHECKER_ROOT / path).read_bytes())
+    return digest.hexdigest()
+
+
+def __getattr__(name: str) -> str:
+    # Expose CODE_VERSION as a string while deferring file reads until first use.
+    if name == "CODE_VERSION":
+        return _code_version()
+    raise AttributeError(f"module {__name__!r} has no attribute {name!r}")
 
 
 class AuditBusy(RuntimeError):
@@ -88,6 +126,7 @@ class Audit(BaseModel):
     head_sha: str
     schema_version: int = SCHEMA_VERSION
     rule_version: int = RULE_VERSION
+    code_version: str = ""
     tool_versions: dict[str, str]
     config_hash: str
     project_settings: dict = Field(default_factory=dict)
@@ -96,6 +135,13 @@ class Audit(BaseModel):
     findings: list[Finding] = Field(default_factory=list)
     coverage: list[Coverage] = Field(default_factory=list)
     relationships: list[Relationship] = Field(default_factory=list)
+
+    def is_stale(self) -> bool:
+        return self.code_version != _code_version()
+
+    def response(self, *, include_results: bool = True) -> dict:
+        exclude = None if include_results else {"findings", "coverage"}
+        return {**self.model_dump(exclude=exclude), "stale": self.is_stale()}
 
 
 def _key(value: object) -> str:
@@ -120,9 +166,11 @@ def _descriptor(repo_id: str, revision: str, base: str | None) -> Audit:
                      kicad_snapshot.MAX_FILES, kicad_snapshot.MAX_TREE,
                      kicad_snapshot.MAX_FILE_BYTES, kicad_snapshot.MAX_BYTES,
                      workspace_checks.limit_profile()])
-    audit_id = _key([repo_id, head, base, SCHEMA_VERSION, RULE_VERSION, tools, settings])
+    code_version = _code_version()
+    audit_id = _key([repo_id, head, base, SCHEMA_VERSION, RULE_VERSION, code_version, tools, settings])
     return Audit(id=audit_id, repo_id=repo_id, head_sha=head, base_sha=base,
-                 tool_versions=tools, config_hash=settings, project_settings=project_settings)
+                 code_version=code_version, tool_versions=tools, config_hash=settings,
+                 project_settings=project_settings)
 
 
 def _save(path: Path, audit: Audit) -> None:
@@ -160,7 +208,7 @@ def get(repo_id: str, audit_id: str) -> Audit:
 def status(repo_id: str, head: str, base: str | None) -> dict | None:
     candidate = _descriptor(repo_id, head, base)
     try:
-        return get(repo_id, candidate.id).model_dump(exclude={"findings", "coverage"})
+        return get(repo_id, candidate.id).response(include_results=False)
     except KeyError:
         return None
 
@@ -175,8 +223,9 @@ def start(repo_id: str, revision: str, base: str | None, retry: bool = False) ->
             previous = get(repo_id, audit.id)
         except KeyError:
             previous = None
-        if previous and (previous.state in _IN_PROGRESS or
-                         previous.state == "complete" or (previous.state == "partial" and not retry)):
+        if previous and not previous.is_stale() and (
+            previous.state in _IN_PROGRESS or (previous.state in {"complete", "partial"} and not retry)
+        ):
             return previous
         if active_key in _ACTIVE or len(_ACTIVE) >= _MAX_PENDING:
             raise AuditBusy("An audit is already running. Try again after it finishes.")

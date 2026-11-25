@@ -145,7 +145,11 @@ def test_workspace_pins_both_revisions_and_persists_audit(pilot, monkeypatch):
     assert disconnected["status"] == "suggestion"
     assert [item["sha"] for item in disconnected["evidence"]] == [base, head]
     assert disconnected["related"] == [{"sha": head, "path": "electronics/main.kicad_sch", "basis": "same_name"}]
-    assert json.loads((workspace_audit._audit_dir() / f"{started['id']}.json").read_text()) == result
+    assert result["stale"] is False
+    assert result["code_version"] == workspace_audit.CODE_VERSION
+    assert json.loads((workspace_audit._audit_dir() / f"{started['id']}.json").read_text()) == {
+        key: value for key, value in result.items() if key != "stale"
+    }
     assert TestClient(app).get(audit_url).json() == result
     assert client.get(f"{repo}/workspace", params={"revision": head}).json()["audit"]["id"] == started["id"]
 
@@ -270,3 +274,115 @@ def test_core_audit_cache_and_file_failure(pilot, monkeypatch):
     original_collect(failed_file)
     assert any(row.path.endswith(".kicad_pcb") and row.outcome == "failed" for row in failed_file.coverage)
     assert any(row.domain == "firmware" for row in failed_file.coverage)
+
+
+def test_audit_key_tracks_only_checker_files(pilot, monkeypatch, tmp_path):
+    base, head = pilot
+    repo_id = github_history.connect("builder/robot")["id"]
+    checker = tmp_path / "extrude/electrical_reasoning.py"
+    checker.parent.mkdir()
+    checker.write_bytes(b"# A\n")
+    readme = tmp_path / "README.md"
+    readme.write_bytes(b"A\n")
+    with monkeypatch.context() as patch:
+        patch.setattr(workspace_audit, "_CHECKER_ROOT", tmp_path)
+        patch.setattr(workspace_audit, "_CHECKER_FILES", ("extrude/electrical_reasoning.py",))
+        workspace_audit._code_version.cache_clear()
+        try:
+            initial = workspace_audit._descriptor(repo_id, head, base)
+            readme.write_bytes(b"B\n")
+            workspace_audit._code_version.cache_clear()
+            assert workspace_audit._descriptor(repo_id, head, base).id == initial.id
+
+            checker.write_bytes(b"# B\n")
+            assert workspace_audit._descriptor(repo_id, head, base).id == initial.id
+            workspace_audit._code_version.cache_clear()
+            changed = workspace_audit._descriptor(repo_id, head, base)
+            assert changed.id != initial.id
+            assert changed.code_version != initial.code_version
+        finally:
+            workspace_audit._code_version.cache_clear()
+
+
+@pytest.mark.parametrize(("stored_version", "state", "retry", "expected"), [
+    ("old", "partial", False, "queued"),
+    ("old", "complete", True, "queued"),
+    ("old", "failed", False, "queued"),
+    ("", "partial", False, "queued"),
+    ("current", "partial", False, "partial"),
+    ("current", "complete", False, "complete"),
+    ("current", "complete", True, "queued"),
+])
+def test_start_checks_stored_audit_code_version(
+    pilot, monkeypatch, stored_version, state, retry, expected,
+):
+    base, head = pilot
+    repo_id = github_history.connect("builder/robot")["id"]
+    audit = workspace_audit._descriptor(repo_id, head, base)
+    previous = audit.model_copy(update={
+        "state": state,
+        "code_version": audit.code_version if stored_version == "current" else stored_version,
+    })
+    workspace_audit._save(workspace_audit._audit_dir() / f"{audit.id}.json", previous)
+
+    submitted = []
+    monkeypatch.setattr(workspace_audit._POOL, "submit", lambda *args: submitted.append(args))
+    monkeypatch.setattr(workspace_audit, "_ACTIVE", {})
+    assert workspace_audit.status(repo_id, head, base)["stale"] is (stored_version != "current")
+    started = workspace_audit.start(repo_id, head, base, retry)
+    assert started.state == expected
+    assert started.code_version == audit.code_version
+    assert len(submitted) == (1 if expected == "queued" else 0)
+
+
+def test_api_legacy_audit_stays_readable_and_is_replaced_in_cache(pilot, monkeypatch):
+    base, head = pilot
+    repo_id = github_history.connect("builder/robot")["id"]
+    audit = workspace_audit._descriptor(repo_id, head, base)
+    legacy_id = workspace_audit._key([
+        repo_id, head, base, audit.schema_version, audit.rule_version, audit.tool_versions, audit.config_hash,
+    ])
+    path = workspace_audit._audit_dir() / f"{legacy_id}.json"
+    path.parent.mkdir(parents=True)
+    legacy = audit.model_dump(exclude={"code_version"})
+    legacy.update(id=legacy_id, state="complete")
+    path.write_text(json.dumps(legacy), encoding="utf-8")
+    assert workspace_audit.Audit.model_validate_json(path.read_text()).code_version == ""
+
+    client = TestClient(app)
+    url = f"/v1/github/repositories/{repo_id}/audits"
+    stored = client.get(f"{url}/{legacy_id}").json()
+    assert stored["code_version"] == ""
+    assert stored["stale"] is True
+
+    # Run the real collection synchronously so that the next POST can test the
+    # finished cache without polling. POST still returns its initial state.
+    monkeypatch.setattr(workspace_audit._POOL, "submit", lambda run, *args: run(*args))
+    request = {"revision": head, "base": base, "retry": False}
+    started = client.post(url, json=request)
+    assert started.status_code == 202
+    fresh = started.json()
+    assert fresh["state"] == "queued"
+    assert fresh["id"] != legacy_id
+    assert fresh["code_version"] == workspace_audit.CODE_VERSION
+    assert fresh["stale"] is False
+
+    cached = client.post(url, json=request).json()
+    assert cached["id"] == fresh["id"]
+    assert cached["state"] in {"complete", "partial"}
+    assert client.get(f"{url}/{fresh['id']}").json()["state"] == cached["state"]
+    retry = client.post(url, json={**request, "retry": True}).json()
+    assert retry["id"] == fresh["id"]
+    assert retry["state"] == "queued"
+    assert json.loads(path.read_text()) == legacy
+
+
+def test_missing_checker_file_fails_on_import(tmp_path):
+    copied_module = tmp_path / "extrude/workspace_audit.py"
+    copied_module.parent.mkdir()
+    shutil.copyfile(workspace_audit.__file__, copied_module)
+    result = subprocess.run([
+        sys.executable, "-c", "import runpy, sys; runpy.run_path(sys.argv[1])", str(copied_module),
+    ], capture_output=True, text=True)
+    assert result.returncode != 0
+    assert "FileNotFoundError: Missing workspace audit checker file:" in result.stderr
