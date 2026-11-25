@@ -29,7 +29,7 @@ class Footprint:
     rotation: float
     layer: str
     pads: dict[str, tuple[str | None, ...]]
-    properties: tuple[tuple[str, str], ...] = ()
+    properties: tuple[tuple[str, str | None], ...] = ()
 
 
 @dataclass(frozen=True)
@@ -80,6 +80,14 @@ def _net(pad: SExp, nets: dict[int, str]) -> str | None:
     return name
 
 
+def _fp_text(row: SExp) -> str | None:
+    """Read footprint text after KiCad's optional locked modifier."""
+    values = row.values
+    if len(values) >= 2 and values[1] == "locked":
+        return _atom(values[2]) if len(values) >= 3 else None
+    return _atom(values[1]) if len(values) >= 2 else None
+
+
 def _reference(node: SExp) -> str | None:
     for row in _rows(node, "property"):
         values = row.values
@@ -88,7 +96,7 @@ def _reference(node: SExp) -> str | None:
     for row in _rows(node, "fp_text"):
         values = row.values
         if len(values) >= 2 and values[0] == "reference":
-            return _atom(values[1]) or None
+            return _fp_text(row) or None
     return None
 
 
@@ -119,7 +127,7 @@ def _footprint(node: SExp, nets: dict[int, str]) -> Footprint:
          for number, values in pads.items()},
         tuple(sorted((_atom(row.values[0]), _atom(row.values[1]))
                      for row in _rows(node, "property") if len(row.values) >= 2))
-        + tuple(("Value", _atom(row.values[1])) for row in _rows(node, "fp_text")
+        + tuple(("Value", _fp_text(row)) for row in _rows(node, "fp_text")
                 if len(row.values) >= 2 and row.values[0] == "value"),
     )
 
