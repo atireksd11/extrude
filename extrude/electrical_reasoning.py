@@ -59,10 +59,10 @@ def output_voltage(description):
     return None
 
 
-def _analyze_design(files, paths=None, inventory_complete=True):
+def _analyze_design(files, paths=None, inventory_complete=True, instance_paths=None):
     """Pure entry point used by production and pinned-repository evaluation."""
     paths = set(paths or files)
-    g = build(files)
+    g = build(files, instance_paths=instance_paths)
     findings = []
     coverage = []
     seen = set()
@@ -783,20 +783,23 @@ def analyze(files, paths=None):
             continue
         try:
             sheet = parse_schematic(data)
-            dependencies = [relative_dependency(path, name) for _, name in sheet.sheets]
+            dependencies = [
+                (uuid, relative_dependency(path, name)) for uuid, name in sheet.sheets
+            ]
         except (ValueError, OSError, RecursionError) as exc:
             coverage.append(_not_checked(path, "graph", exc))
             continue
         sheets[path] = sheet
         children[path] = dependencies
-    childpaths = {p for v in children.values() for p in v}
+    childpaths = {p for dependencies in children.values() for _, p in dependencies}
     roots = sorted(set(sheets) - childpaths)
     visited = set()
     for root in roots:
         selected = set()
         repeated = set()
+        instance_paths = {}
 
-        def visit(p, stack):
+        def visit(p, stack, instance_path):
             if p in stack:
                 raise ValueError("Not checked: cyclic sheet placement " + p)
             if p in selected:
@@ -808,16 +811,21 @@ def analyze(files, paths=None):
                 )
                 return
             selected.add(p)
-            for child in children[p]:
-                visit(child, stack + (p,))
+            if instance_path:
+                instance_paths[p] = instance_path
+            for uuid, child in children[p]:
+                child_instance_path = f"{instance_path}/{uuid}" if instance_path else ""
+                visit(child, stack + (p,), child_instance_path)
 
         try:
-            visit(root, ())
+            root_uuid = sheets[root].uuid
+            visit(root, (), f"/{root_uuid}" if root_uuid else "")
         except (ValueError, OSError, RecursionError) as exc:
             coverage.append(_not_checked(root, "graph", exc))
             continue
         for p in repeated:
             selected.discard(p)
+            instance_paths.pop(p, None)
             coverage.append(
                 (
                     p,
@@ -853,9 +861,11 @@ def analyze(files, paths=None):
         paired_board = root.removesuffix(".kicad_sch") + ".kicad_pcb"
         if paired_board in files:
             inputs[paired_board] = files[paired_board]
-        complete = not repeated and all(child in sheets for p in selected for child in children[p])
+        complete = not repeated and all(child in sheets for p in selected for _, child in children[p])
         try:
-            f, c = _analyze_design(inputs, paths, inventory_complete=complete)
+            f, c = _analyze_design(
+                inputs, paths, inventory_complete=complete, instance_paths=instance_paths
+            )
         except (ValueError, OSError, RecursionError) as exc:
             coverage.append(_not_checked(root, "graph", exc))
             continue
