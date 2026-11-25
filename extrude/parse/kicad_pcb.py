@@ -21,6 +21,12 @@ class BoardParseError(ValueError):
 
 
 @dataclass(frozen=True)
+class UnnumberedPad:
+    type: str
+    net: str | None
+
+
+@dataclass(frozen=True)
 class Footprint:
     reference: str | None
     uuid: str | None
@@ -30,6 +36,7 @@ class Footprint:
     layer: str
     pads: dict[str, tuple[str | None, ...]]
     properties: tuple[tuple[str, str | None], ...] = ()
+    unnumbered_pads: tuple[UnnumberedPad, ...] = ()
 
 
 @dataclass(frozen=True)
@@ -113,6 +120,7 @@ def _footprint(node: SExp, nets: dict[int, str]) -> Footprint:
     if not all(map(isfinite, (x, y, rotation))):
         raise BoardParseError("A footprint has invalid placement coordinates.")
     pads = defaultdict(list)
+    unnumbered_pads = []
     for pad in _rows(node, "pad"):
         number = pad.get_value(0)
         if number is None:
@@ -120,6 +128,8 @@ def _footprint(node: SExp, nets: dict[int, str]) -> Footprint:
         number = _atom(number)
         if number:
             pads[number].append(_net(pad, nets))
+        else:
+            unnumbered_pads.append(UnnumberedPad(type=_atom(pad.get_value(1)), net=_net(pad, nets)))
     return Footprint(
         _reference(node), _string_field(node, "uuid") or _string_field(node, "tstamp"),
         _atom(library), (x, y), rotation % 360, layer,
@@ -129,6 +139,7 @@ def _footprint(node: SExp, nets: dict[int, str]) -> Footprint:
                      for row in _rows(node, "property") if len(row.values) >= 2))
         + tuple(("Value", _fp_text(row)) for row in _rows(node, "fp_text")
                 if len(row.values) >= 2 and row.values[0] == "value"),
+        unnumbered_pads=tuple(unnumbered_pads),
     )
 
 
