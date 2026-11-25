@@ -18,6 +18,7 @@ FAMILIES = (
     "capacitor",
     "ldo",
     "clock",
+    "clock_load",
     "assembly",
     "switch",
     "pullup",
@@ -26,6 +27,19 @@ FAMILIES = (
     "models",
     "undriven",
 )
+
+
+CRYSTAL_LOAD_CL = {
+    # Normalised MPN -> required load capacitance in farads.
+    "ABM712.000MHZD2YT": 18e-12,  # Abracon ABM7 datasheet, 18 pF standard CL.
+}
+
+# TI SPRS717 §6.2.2.1 load formula, assuming 3 pF stray in the 2–5 pF range.
+CRYSTAL_STRAY_CAPACITANCE = 3e-12
+
+
+def _normalise_mpn(value):
+    return re.sub(r"[-\s]+", "", value.upper())
 
 
 def _designator(ref):
@@ -448,6 +462,56 @@ def _analyze_design(
                         part.path,
                         "clock",
                         f"Not checked: {part.reference} has optional/unvalued external load capacitors; integrated load capacitance must be checked in the oscillator documentation before a defect verdict.",
+                    )
+                )
+            elif len(caps) == 2:
+                cl = CRYSTAL_LOAD_CL.get(_normalise_mpn(part.value))
+                if cl is None:
+                    coverage.append(
+                        (
+                            part.path,
+                            "clock_load",
+                            f"Not checked: {part.reference} crystal load capacitance cannot be evaluated — load capacitance (CL) is not known for {part.value}; add the part to the crystal load-capacitance table with a datasheet reference.",
+                        )
+                    )
+                else:
+                    c1, c2 = (capacitance(cap.value) for cap in caps)
+                    if c1 is None or c2 is None or c1 + c2 == 0:
+                        coverage.append(
+                            (
+                                part.path,
+                                "clock_load",
+                                f"Not checked: {part.reference} crystal load capacitance cannot be evaluated from the fitted capacitor values.",
+                            )
+                        )
+                    else:
+                        series = c1 * c2 / (c1 + c2)
+                        effective = series + CRYSTAL_STRAY_CAPACITANCE
+                        if effective < 0.8 * cl:
+                            cap_values = " + ".join(
+                                f"{cap.reference} {cap.value}"
+                                for cap in sorted(caps, key=lambda cap: cap.reference)
+                            )
+                            suggested = 2 * (cl - CRYSTAL_STRAY_CAPACITANCE)
+                            emit(
+                                "clock_load",
+                                part,
+                                f"{part.value}: fitted load capacitors {cap_values} give an effective load of "
+                                f"~{effective * 1e12:g} pF (series {series * 1e12:g} pF + "
+                                f"{CRYSTAL_STRAY_CAPACITANCE * 1e12:g} pF stray) against the crystal's "
+                                f"specified {cl * 1e12:g} pF load capacitance — the crystal is underloaded "
+                                "and will run off-frequency, with reduced start-up margin. "
+                                f"Fit ~{suggested * 1e12:g} pF load capacitors (2 × (CL − stray)) "
+                                "or a crystal specified for the fitted capacitance.",
+                                pins,
+                                separator=" ",
+                            )
+            else:
+                coverage.append(
+                    (
+                        part.path,
+                        "clock_load",
+                        f"Not checked: {part.reference} has {len(caps)} load capacitors on its nets; the two-capacitor load calculation does not apply.",
                     )
                 )
         roles = {p.name.upper(): p for p in pins}
