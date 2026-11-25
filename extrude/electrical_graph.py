@@ -75,7 +75,7 @@ def build(files: dict[str, bytes]) -> Graph:
             continue
         try:
             with _PARSE_LOCK:
-                root = parse_string(data.decode("utf-8-sig"))
+                root = parse_string(data.decode("utf-8-sig", errors="replace"))
                 if root.name != "kicad_sch":
                     raise ValueError("Not a native schematic")
                 sch = Schematic(root)

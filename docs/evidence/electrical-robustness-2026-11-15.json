@@ -1,0 +1,128 @@
+{
+  "base_commit": "b04aad503f7e11c1ecf48a8be2f8a87451857234",
+  "mode": "fallback: tolerant decoding + per-file isolation; all caps unchanged",
+  "rule_version": 8,
+  "schema_version": 4,
+  "memory": {
+    "method": "GNU time 1.9 -v, fresh minimal Python subprocess; only repository PCB parser imported",
+    "command": "Command being timed: \".venv/bin/python -c from extrude.parse import kicad_pcb; kicad_pcb.MAX_BOARD_BYTES = 32 * 1024 * 1024; data = open(\"/workspace/work/Pro_V2.kicad_pcb\", \"rb\").read(); board = kicad_pcb.parse_board(data); print(len(data), len(board.footprints))\"",
+    "max_rss_kib": 309448,
+    "max_rss_mib": 302.1953125,
+    "gate_mb": 256,
+    "gate": "failed",
+    "size_bytes": 8892279,
+    "footprints": 312,
+    "sha256": "7cf6645dbc5ac7684f6a70af6690e9b64eef3b32c9e9be8cf89b57ff6c06a483",
+    "note": "Debian /usr/bin/time binary extracted under work/ because system /usr/bin/time is absent. MAX_BOARD_BYTES overridden only in measurement subprocess, never production."
+  },
+  "baseline": {
+    "targeted": "105 passed, 3 failed",
+    "atlas": "114 passed, 3 failed, 284 deselected",
+    "failures": [
+      "tests/test_kicad_audit.py::test_real_native_phase2_gate",
+      "tests/test_kicad_audit.py::test_native_hierarchical_sheet_evidence",
+      "tests/test_kicad_audit.py::test_native_workspace_api_gate"
+    ],
+    "error": "KiCad DRC/ERC JSON is invalid or lacks required check coverage."
+  },
+  "repositories": [
+    {
+      "label": "webcam",
+      "source": "ErenErenel/Webcam-Design",
+      "sha": "3b5b1e54f0711e720bdcf7477e6e2bbe46252c03",
+      "base": "406abc091aca861d63b88cdddc506f5a57f4741f",
+      "electrical_outcome": "ran",
+      "whole_layer_handler": [],
+      "electrical_findings": 3,
+      "total_findings": 3,
+      "input_degradation": [
+        {
+          "path": "Firmware/ErenFirmware/ErenFirmware/src/config/conf_board.h",
+          "domain": "schematic",
+          "check": "Electrical text",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: invalid UTF-8 bytes were replaced; affected text cannot be verified \u2014 other files still analysed."
+        },
+        {
+          "path": "Firmware/ErenFirmware/ErenFirmware/src/config/conf_clock.h",
+          "domain": "schematic",
+          "check": "Electrical text",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: invalid UTF-8 bytes were replaced; affected text cannot be verified \u2014 other files still analysed."
+        }
+      ]
+    },
+    {
+      "label": "hackrf",
+      "source": "greatscottgadgets/hackrf",
+      "sha": "3a63b29953a3b763f428821e02110def9fb1cade",
+      "base": "468c5d93b66032c892c95bbf9ff15ff1b803e84f",
+      "electrical_outcome": "ran",
+      "whole_layer_handler": [],
+      "electrical_findings": 3,
+      "total_findings": 3,
+      "input_degradation": [
+        {
+          "path": "firmware/common/rad1o/ubuntu18.c",
+          "domain": "schematic",
+          "check": "Electrical text",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: invalid UTF-8 bytes were replaced; affected text cannot be verified \u2014 other files still analysed."
+        }
+      ]
+    },
+    {
+      "label": "lily58",
+      "source": "kata0510/Lily58",
+      "sha": "58c649797c185b7b32b9928d4546665153cfacfd",
+      "base": "b6957432f1f4f87677700f3a0ac56e29c2dfcf6e",
+      "electrical_outcome": "ran",
+      "whole_layer_handler": [],
+      "electrical_findings": 12,
+      "total_findings": 13,
+      "input_degradation": [
+        {
+          "path": "Pro_V2/Pro_V2.kicad_pcb",
+          "domain": "schematic",
+          "check": "Electrical input",
+          "tool": "offline net graph",
+          "outcome": "unavailable",
+          "detail": "Not checked: This file exceeds the 8 MiB analysis limit \u2014 other files still analysed."
+        }
+      ]
+    },
+    {
+      "label": "crkbd",
+      "electrical_outcome": "blocked",
+      "reason": "Exact owner/repository + pinned SHA and Nov 15 findings unavailable; no substituted HEAD or baseline used."
+    },
+    {
+      "label": "esp32-poe",
+      "electrical_outcome": "blocked",
+      "reason": "Exact owner/repository + pinned SHA and Nov 15 findings unavailable; no substituted HEAD or baseline used."
+    },
+    {
+      "label": "dev-kit-clone",
+      "electrical_outcome": "blocked",
+      "reason": "Exact owner/repository + pinned SHA and Nov 15 findings unavailable; no substituted HEAD or baseline used."
+    },
+    {
+      "label": "esp32-hat",
+      "electrical_outcome": "blocked",
+      "reason": "Exact owner/repository + pinned SHA and Nov 15 findings unavailable; no substituted HEAD or baseline used."
+    }
+  ],
+  "ac3": "unmet: retained 8 MiB cap excludes Lily58 Pro_V2",
+  "ac6": "blocked: original Nov 15 findings and four pinned revisions missing",
+  "final_tests": {
+    "targeted": "132 passed, 3 failed",
+    "atlas": "141 passed, 3 failed, 284 deselected",
+    "robustness": "27 passed (included)",
+    "ui": "PASS",
+    "diff_check": "PASS",
+    "new_failures": []
+  }
+}

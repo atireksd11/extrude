@@ -139,14 +139,10 @@ def _analyze_design(files, paths=None, inventory_complete=True):
             board_footprints = parse_board(files[board_path]).footprints
             board_references = {p.reference for p in board_footprints}
             electrical_board_refs = {p.reference for p in board_footprints if p.pads}
-        except ValueError:
-            coverage.append(
-                (
-                    board_path,
-                    "clock",
-                    "Not checked: PCB footprint inventory could not be parsed.",
-                )
-            )
+        except ValueError as exc:
+            coverage.append(_not_checked(
+                board_path, "clock", f"PCB footprint inventory could not be parsed: {exc}"
+            ))
     if board_references is not None:
         physical = [p for p in g.parts if not p.reference.startswith("#")
                     and p.properties.get("_on_board", "True") == "True"]
@@ -517,7 +513,7 @@ def _analyze_design(files, paths=None, inventory_complete=True):
         for source, data in files.items():
             if not source.endswith((".ino", ".c", ".cpp", ".h")):
                 continue
-            text = data.decode("utf-8-sig")
+            text = data.decode("utf-8-sig", errors="replace")
             text = re.sub(r"/\*.*?\*/|//[^\n]*", "", text, flags=re.S)
             for p in pins:
                 role = audio_roles.get(p.name.upper())
@@ -641,12 +637,16 @@ def _analyze_design(files, paths=None, inventory_complete=True):
     for path, data in files.items():
         if not re.search(r"(?i)bom[^/]*\.(csv|tsv)$", path):
             continue
-        rows = list(
-            csv.DictReader(
-                io.StringIO(data.decode("utf-8-sig")),
-                delimiter="\t" if path.endswith(".tsv") else ",",
+        try:
+            rows = list(
+                csv.DictReader(
+                    io.StringIO(data.decode("utf-8-sig", errors="replace")),
+                    delimiter="\t" if path.endswith(".tsv") else ",",
+                )
             )
-        )
+        except csv.Error as exc:
+            coverage.append(_not_checked(path, "assembly", exc))
+            continue
         if not rows:
             continue
         col = next(
@@ -698,7 +698,7 @@ def _analyze_design(files, paths=None, inventory_complete=True):
     for path, data in files.items():
         if g.parts or not path.endswith((".kicad_pcb", ".kicad_mod")):
             continue
-        text = data.decode("utf-8-sig")
+        text = data.decode("utf-8-sig", errors="replace")
         for model in re.findall(r'\(model\s+"([^"]+\.(?:step|stp))"', text, re.I):
             if "$" in model and not model.startswith("${KIPRJMOD}/"):
                 coverage.append(
@@ -754,6 +754,11 @@ def _analyze_design(files, paths=None, inventory_complete=True):
     return findings, coverage
 
 
+def _not_checked(path, family, reason):
+    detail = str(reason).removeprefix("Not checked: ").rstrip(".")
+    return path, family, f"Not checked: {detail} — other files still analysed."
+
+
 def analyze(files, paths=None):
     """Keep independent boards/variants isolated; traverse each hierarchy once.
 
@@ -763,21 +768,29 @@ def analyze(files, paths=None):
     from extrude.parse.kicad_schematic import parse_schematic
     from extrude.kicad_snapshot import relative_dependency
 
-    sheets = {
-        p: parse_schematic(data)
-        for p, data in files.items()
-        if p.endswith(".kicad_sch")
-    }
-    children = {
-        p: [relative_dependency(p, name) for _, name in sch.sheets]
-        for p, sch in sheets.items()
-    }
-    childpaths = {p for v in children.values() for p in v}
-    roots = sorted(set(sheets) - childpaths)
     findings = []
     coverage = []
-    if sheets and not roots:
-        raise ValueError("Not checked: cyclic schematic hierarchy.")
+    sheets = {}
+    children = {}
+    for path, data in files.items():
+        # Keep usable ASCII facts, but disclose that damaged text is unverified.
+        text = data.decode("utf-8-sig", errors="replace")
+        if text.encode("utf-8") != data.removeprefix(b"\xef\xbb\xbf"):
+            coverage.append(_not_checked(
+                path, "text", "invalid UTF-8 bytes were replaced; affected text cannot be verified"
+            ))
+        if not path.endswith(".kicad_sch"):
+            continue
+        try:
+            sheet = parse_schematic(data)
+            dependencies = [relative_dependency(path, name) for _, name in sheet.sheets]
+        except (ValueError, OSError, RecursionError) as exc:
+            coverage.append(_not_checked(path, "graph", exc))
+            continue
+        sheets[path] = sheet
+        children[path] = dependencies
+    childpaths = {p for v in children.values() for p in v}
+    roots = sorted(set(sheets) - childpaths)
     visited = set()
     for root in roots:
         selected = set()
@@ -800,8 +813,8 @@ def analyze(files, paths=None):
 
         try:
             visit(root, ())
-        except ValueError as exc:
-            coverage.append((root, "graph", str(exc)))
+        except (ValueError, OSError, RecursionError) as exc:
+            coverage.append(_not_checked(root, "graph", exc))
             continue
         for p in repeated:
             selected.discard(p)
@@ -841,20 +854,26 @@ def analyze(files, paths=None):
         if paired_board in files:
             inputs[paired_board] = files[paired_board]
         complete = not repeated and all(child in sheets for p in selected for child in children[p])
-        f, c = _analyze_design(inputs, paths, inventory_complete=complete)
+        try:
+            f, c = _analyze_design(inputs, paths, inventory_complete=complete)
+        except (ValueError, OSError, RecursionError) as exc:
+            coverage.append(_not_checked(root, "graph", exc))
+            continue
         findings.extend(f)
         coverage.extend(c)
     # Even a PCB-only repo can have resolvable model references.
-    f, c = _analyze_design(
-        {p: d for p, d in files.items() if p.endswith((".kicad_pcb", ".kicad_mod"))},
-        paths,
-    )
-    findings.extend(f)
-    coverage.extend(c)
-    if set(sheets) - visited:
-        coverage.append(
-            ("", "graph", "Not checked: some hierarchy could not be analyzed.")
-        )
+    for path, data in files.items():
+        if not path.endswith((".kicad_pcb", ".kicad_mod")):
+            continue
+        try:
+            f, c = _analyze_design({path: data}, paths)
+        except (ValueError, OSError, RecursionError) as exc:
+            coverage.append(_not_checked(path, "models", exc))
+            continue
+        findings.extend(f)
+        coverage.extend(c)
+    for path in sorted(set(sheets) - visited):
+        coverage.append(_not_checked(path, "graph", "cyclic or unreachable schematic hierarchy"))
     return findings, list(dict.fromkeys(coverage))
 
 
@@ -876,16 +895,23 @@ def collect(repo, sha):
     if len(candidates) > 256:
         raise ValueError("Not checked: electrical input exceeds 256 files.")
     files = {}
+    skipped = []
     total = 0
     for path in candidates:
-        data = git.regular_blob(repo, sha, path, max_bytes=8 * 1024 * 1024)
-        if data is None:
+        try:
+            data = git.regular_blob(repo, sha, path, max_bytes=8 * 1024 * 1024)
+            if data is None:
+                raise ValueError("input disappeared from the selected revision")
+            if total + len(data) > 64 * 1024 * 1024:
+                raise ValueError("electrical inputs exceed 64 MiB")
+        except (ValueError, git.GitHubError, OSError) as exc:
+            # BlobUnavailable is a ValueError. A bad blob must not erase peers.
+            skipped.append(_not_checked(path, "input", exc))
             continue
         total += len(data)
-        if total > 64 * 1024 * 1024:
-            raise ValueError("Not checked: electrical inputs exceed 64 MiB.")
         files[path] = data
     findings, coverage = analyze(files, paths)
+    coverage = skipped + coverage
     for path in sorted(p for p in paths if p.endswith(".sch")):
         coverage.append(
             (

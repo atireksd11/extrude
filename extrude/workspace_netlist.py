@@ -18,7 +18,7 @@ TIMEOUT = 20
 def read_netlist(data: bytes) -> dict:
     if len(data) > MAX_NETLIST_BYTES:
         raise ValueError("Netlist exceeds the 2 MiB analysis limit.")
-    text = data.decode("utf-8-sig")
+    text = data.decode("utf-8-sig", errors="replace")
     with _PARSE_LOCK:
         root = parse_string(text)
     if root.name != "export":

@@ -125,7 +125,7 @@ def parse_board(data: bytes) -> Board:
     try:
         # The upstream parser temporarily pauses process-wide garbage collection.
         with _PARSE_LOCK:
-            root = parse_string(data.decode("utf-8-sig"))
+            root = parse_string(data.decode("utf-8-sig", errors="replace"))
     except (ParseError, ValueError, RecursionError) as exc:
         raise BoardParseError("Could not read the KiCad board syntax.") from exc
     if root.name != "kicad_pcb":
