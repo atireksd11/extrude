@@ -490,6 +490,7 @@ def test_i2c_pullups_with_tolerance_notation_are_recognized():
     )
     parts = [
         mcu,
+        ("U91", "Generic:Sensor", "sensor", mcu[3], {}),
         resistor("R90", "10kR 1%", (0, 0), (20, 0)),
         resistor("R91", "10kR 1%", (10, 0), (20, 0)),
     ]
