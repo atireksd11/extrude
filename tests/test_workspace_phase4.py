@@ -264,3 +264,26 @@ def test_phase4_api_consent_and_no_automatic_model_call(project, monkeypatch):
     assert result["state"] == "complete" and len(calls) == 1
     assert result["sections"]["what_changed"][0]["evidence"]
     assert client.get(root.replace(project.repo_id, "0" * 32)).status_code == 404
+
+
+def test_read_literal_firmware_pin_bindings():
+    from extrude.parse.workspace_firmware import read_pin_bindings
+
+    issues = []
+    source = (
+        b"/* ESP32 NET (GPIO22, \x93)\n * SAM4S: PA1 */\n"
+        b"#define WIFI_NET_PIO PIOA\n#define WIFI_NET_PIN PIO_PA1\n"
+        b"/* ESP32 WS (GPIO23)\n * SAM4S: PB2 */\n#define WIFI_WS_PIN PIO_PA2\n"
+        b"/* ESP32 COMM (GPIO21)\n * SAM4S: PA0 */\n"
+        b"#define ESP_COMM_GPIO 22\n"
+    )
+    rows = read_pin_bindings(source, "conf_board.h", issues=issues)
+    assert len(rows) == 1
+    assert {k: rows[0][k] for k in ("role", "sam_pin", "gpio", "line", "path", "comment_gpio")} == {
+        "role": "NET", "sam_pin": "PA1", "gpio": 22, "line": 4,
+        "path": "conf_board.h", "comment_gpio": 22,
+    }
+    assert len(issues) == 2
+    assert "disagrees" in issues[0] and "COMM comment has no pin define" in issues[1]
+    assert read_pin_bindings(b"#define ESP_NET_GPIO 21\n", "wifi.h") == []
+    assert read_pin_bindings(b"/*\n#define FAKE_RESET_PIN PIO_PB0\n*/", "wifi.h") == []

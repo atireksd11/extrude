@@ -1404,3 +1404,66 @@ def test_footprint_pin_count(case, expected):
         assert expected in row["summary"]
         assert row["severity"] == "warning"
         assert "Test:Package" in row["summary"]
+
+
+@pytest.mark.parametrize(
+    "arm, scenario, expected",
+    [
+        ("RESET", "correct", 0), ("RESET", "wrong", 1),
+        ("RESET", "unconnected", 1), ("RESET", "ambiguous", 0),
+        ("NET", "correct", 0), ("NET", "wrong", 1),
+        ("NET", "unconnected", 1), ("NET", "ambiguous", 0),
+        ("WS", "wrong", 1), ("RESET", "dnp", 0),
+        ("UART", "correct", 0), ("UART", "straight", 1),
+        ("UART", "header", 0), ("UART", "unknown", 0),
+    ],
+)
+def test_firmware_pin_crosscheck(arm, scenario, expected):
+    uart = arm == "UART"
+    mcu = [("1", "PA21", "input", 10, 10), ("2", "PA22", "output", 10, 20)] if uart else [
+        ("1", "PB0/AD4", "output", 10, 10)
+    ]
+    peer_name = {"RESET": "EN", "NET": "IO22", "WS": "GPIO22"}.get(arm)
+    peer = [("1", "RXD0", "input", 20, 10), ("2", "TXD0", "output", 20, 20)] if uart else [
+        ("1", peer_name, "input", 20, 10)
+    ]
+    parts = [
+        ("U1", "MCU", "ATSAM4S-example", mcu, {"_dnp": scenario == "dnp"}),
+        ("U2", "Peer", "Radio", peer, {}),
+    ]
+    if scenario == "ambiguous":
+        parts.append(("U3", "Other", "Alternate", [("1", peer_name, "input", 30, 10)], {}))
+
+    def footprint(ref, nets):
+        pads = " ".join(f'(pad "{i}" smd rect (at 0 0) (size 1 1) (layers "F.Cu") (net "{net}"))'
+                        for i, net in enumerate(nets, 1))
+        return f'(footprint "Connector:Test" (layer "F.Cu") (at 0 0) (property "Reference" "{ref}") {pads})'
+
+    if uart:
+        nets = {"U1": ["A", "B"], "U2": ["B", "A"] if scenario == "correct" else ["A", "B"]}
+        peripheral = "USART1" if scenario == "unknown" else "USART0"
+        source = f"/* Configures {peripheral} for ESP32 */\nvoid init(void) {{ usart_init_rs232(x); }}"
+        if scenario == "header":
+            nets = {"U1": ["A", "B"], "U2": ["C", "D"], "J1": ["A", "B", "C", "D"]}
+            source = "/* ESP32 USART0 */"
+    else:
+        nets = {"U1": ["A"], "U2": ["A" if scenario == "correct" else "B"], "J1": ["B"]}
+        if scenario == "wrong":
+            nets["J1"].append("A")
+        if scenario == "ambiguous":
+            nets["U3"] = ["C"]
+        source = f"/* ESP32 {arm} (GPIO22)\n * SAM4S: PB0 */\n#define RADIO_{arm}_PIN PIO_PB0"
+    pcb = " ".join(footprint(ref, values) for ref, values in nets.items())
+    findings, coverage = analyze({
+        "test.kicad_sch": design(parts),
+        "test.kicad_pcb": f"(kicad_pcb (version 20251028) {pcb})".encode(),
+        "firmware.c": source.encode(),
+    })
+    actual = [finding for finding in findings if finding["rule_id"] == "electrical.firmware"]
+    assert len(actual) == expected
+    rows = [detail for _, family, detail in coverage if family == "firmware"]
+    assert len(rows) == 1
+    if scenario in {"ambiguous", "header", "unknown"}:
+        assert any(word in rows[0] for word in ("ambiguous", "gate", "unsupported"))
+    if expected:
+        assert "firmware.c" in actual[0]["summary"]

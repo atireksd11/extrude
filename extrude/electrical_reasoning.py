@@ -31,6 +31,7 @@ FAMILIES = (
     "polarity",
     "models",
     "undriven",
+    "firmware",
 )
 
 
@@ -129,6 +130,140 @@ def output_voltage(description):
         if match:
             return volts(match[1])
     return None
+
+
+UART_LINK_PINS = {("ATSAM4S", "USART0"): {"RX": "PA21", "TX": "PA22"}}
+_RESET_PINS = {"EN", "RESET_N", "RESET", "RST", "CHIP_PU"}
+
+
+def fitted_on_board(part):
+    return (
+        part.fitted
+        and not part.reference.startswith("#")
+        and part.properties.get("_on_board", "True") == "True"
+    )
+
+
+def _firmware_crosscheck(files, graph, footprints, board_path, emit):
+    from extrude.parse.workspace_firmware import read_pin_bindings, read_uart_gates
+
+    issues = []
+    bindings = []
+    gates = []
+    define_names = {}
+    for path, data in files.items():
+        if path.endswith((".c", ".h")):
+            bindings.extend(read_pin_bindings(data, path, issues=issues, define_names=define_names))
+            gates.extend(read_uart_gates(data, path))
+
+    if not bindings and not gates:
+        return issues + ["No literal pin binding or firmware-required ESP32 UART gate"]
+    if not footprints:
+        return issues + ["Firmware bindings require a paired PCB"]
+
+    parts = [part for part in graph.parts
+             if fitted_on_board(part) and part.reference in footprints]
+    names = {}
+    for part in parts:
+        for pin in part.pins:
+            names.setdefault(pin.name.split("/")[0], []).append((part, pin))
+
+    members = {}
+    for footprint in footprints.values():
+        for number, nets in footprint.pads.items():
+            for net in nets:
+                if net:
+                    members.setdefault(net, set()).add((footprint.reference, number))
+
+    def candidates(tokens, *, excluding=None, on=None):
+        return [(part, pin) for token in sorted(tokens) for part, pin in names.get(token, ())
+                if part is not excluding and (on is None or part is on)]
+
+    def net(endpoint):
+        part, pin = endpoint
+        nets = set(footprints[part.reference].pads.get(pin.number, ()))
+        return next(iter(nets)) if len(nets) == 1 else None
+
+    def connected(endpoint):
+        return len(members.get(net(endpoint), ())) > 1
+
+    def describe(endpoint):
+        part, pin = endpoint
+        signal = net(endpoint)
+        wiring = signal if connected(endpoint) else f"unconnected ({signal})" if signal else "unconnected"
+        return f"{part.reference} {pin.name.split('/')[0]} (pin {pin.number}, {wiring})"
+
+    for binding in bindings:
+        path = binding["path"]
+        line = binding["line"]
+        define = define_names[path, line]
+        locator = f"{path}:{line} {define}"
+        role = binding["role"]
+        if role == "COMM":
+            issues.append(f"{locator}: COMM bindings have no supported cross-check")
+            continue
+        mcu = candidates({binding["sam_pin"]})
+        if len(mcu) != 1:
+            issues.append(f"{locator}: MCU pin is missing or ambiguous")
+            continue
+        gpio = binding["gpio"]
+        expected = "reset/enable" if role == "RESET" else f"GPIO{gpio}"
+        peer = candidates(_RESET_PINS if role == "RESET" else {f"IO{gpio}", f"GPIO{gpio}"},
+                          excluding=mcu[0][0])
+        if len(peer) != 1:
+            issues.append(f"{locator}: peer {expected} pin is missing or ambiguous")
+            continue
+        a, b = mcu[0], peer[0]
+        if net(a) == net(b) and connected(a) and connected(b):
+            continue
+        detail = ""
+        if role == "RESET":
+            actual = [describe((b[0], pin)) for pin in b[0].pins
+                      if pin is not b[1] and net(a) and net(a) == net((b[0], pin))]
+            if actual:
+                detail = " Actual wiring reaches " + ", ".join(actual) + "."
+        emit("firmware", a[0],
+             f"{locator} expects {expected}: {describe(a)} must reach {describe(b)}.{detail}",
+             (a[1],), other=[(path, f"line {line} {define}"),
+                             (board_path, f"{describe(a)}; {describe(b)}")])
+
+    usarts = {gate[0] for gate in gates}
+    if len(usarts) != 1:
+        return issues + ["ESP32 UART firmware gate absent or ambiguous"]
+    usart, path, comment = gates[0]
+    supported = [(part, mapping) for (prefix, peripheral), mapping in UART_LINK_PINS.items()
+                 for part in parts if peripheral == usart and part.value.startswith(prefix)]
+    if len(supported) != 1:
+        return issues + [f"{path}: {usart} MCU is unsupported or ambiguous"]
+    mcu, mapping = supported[0]
+    esp = [part for part in parts if part is not mcu and candidates({"RXD0"}, on=part)
+           and candidates({"TXD0"}, on=part)]
+    if len(esp) != 1:
+        return issues + [f"{path}: {usart} ESP peer is missing or ambiguous"]
+    pin_sets = [candidates({mapping["RX"]}, on=mcu), candidates({"TXD0"}, on=esp[0]),
+                candidates({mapping["TX"]}, on=mcu), candidates({"RXD0"}, on=esp[0])]
+    if any(len(group) != 1 for group in pin_sets):
+        return issues + [f"{path}: {usart} UART pins are missing or ambiguous"]
+    rx, tx_peer, tx, rx_peer = (group[0] for group in pin_sets)
+    pairs = [(rx, tx_peer), (tx, rx_peer)]
+    if all(net(a) == net(b) and connected(a) and connected(b) for a, b in pairs):
+        return issues
+    detail = ""
+    endpoints = (rx, tx_peer, tx, rx_peer)
+    branches = [members.get(net(q), set()) - {(q[0].reference, q[1].number)} for q in endpoints]
+    if all(len(branch) == 1 for branch in branches):
+        connector_pads = [next(iter(branch)) for branch in branches]
+        refs = {ref for ref, _ in connector_pads}
+        if len(refs) == 1:
+            ref = connector_pads[0][0]
+            footprint = footprints[ref]
+            if footprint.library.split(":")[0].lower().startswith("connector"):
+                detail = f" The only meeting point is {ref}, pins " + ", ".join(
+                    sorted({pad for _, pad in connector_pads}, key=lambda p: (len(p), p))) + "."
+    wiring = "; ".join(f"{describe(a)} must reach {describe(b)}" for a, b in pairs)
+    emit("firmware", mcu, f"{path}: {comment}. UART cross-connection mismatch: {wiring}.{detail}",
+         (rx[1], tx[1]), other=[(path, comment), (board_path, wiring)])
+    return issues
 
 
 def _analyze_design(
@@ -306,6 +441,11 @@ def _analyze_design(
         }
 
     footprint_units = {}
+    if g.parts:
+        firmware_issues = _firmware_crosscheck(files, g, board_by_reference, board_path, emit)
+        coverage.append(("", "firmware", " | ".join(firmware_issues)
+                         or "Checked explicit firmware pin bindings against paired PCB nets."))
+
     for part in g.parts:
         if (
             part.fitted
@@ -1134,13 +1274,6 @@ def _analyze_design(
             )
             emitted = True
 
-    def fitted_on_board(part):
-        return (
-            part.fitted
-            and not part.reference.startswith("#")
-            and part.properties.get("_on_board", "True") == "True"
-        )
-
     def regulator_net_parts(net):
         return [
             part for key in dict.fromkeys((pin.path, pin.reference) for pin in g.nets.get(net, ()))
@@ -1300,7 +1433,7 @@ def _analyze_design(
     for path, issue in g.issues:
         coverage.append((path, "graph", issue))
     for family in FAMILIES:
-        if family in {"usb_shield_pcb", "overvoltage", "regulator"}:
+        if family in {"usb_shield_pcb", "overvoltage", "regulator", "firmware"}:
             continue
         if not g.parts and family != "models":
             continue
@@ -1451,6 +1584,10 @@ def analyze(files, paths=None):
         coverage.extend(c)
     for path in sorted(set(sheets) - visited):
         coverage.append(_not_checked(path, "graph", "cyclic or unreachable schematic hierarchy"))
+    firmware = list(dict.fromkeys(detail for _, family, detail in coverage if family == "firmware"))
+    coverage = [row for row in coverage if row[1] != "firmware"]
+    detail = " | ".join(firmware)
+    coverage.append(("", "firmware", detail or "Not checked: no schematic design available."))
     return findings, list(dict.fromkeys(coverage))
 
 
