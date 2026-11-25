@@ -24,6 +24,7 @@ FAMILIES = (
     "clock",
     "clock_load",
     "assembly",
+    "footprint",
     "switch",
     "pullup",
     "protection",
@@ -304,10 +305,73 @@ def _analyze_design(
             if pin.kind in active_kinds
         }
 
+    footprint_units = {}
+    for part in g.parts:
+        if (
+            part.fitted
+            and not part.reference.startswith("#")
+            and part.properties.get("_on_board", "True") == "True"
+            and part.reference in board_by_reference
+        ):
+            footprint_units.setdefault(part.reference, []).append(part)
+    passive_value = {"R": resistance, "C": capacitance, "L": inductance}
+
     for part in g.parts:
         if part.reference.startswith("#"):
             continue
         pins = part.pins
+        units = footprint_units.get(part.reference)
+        if units and units[0] is part:
+            footprint = board_by_reference[part.reference]
+            pad_count = len(footprint.pads)
+            parse_value = passive_value.get(_designator(part.reference)[:1])
+            symbol_pins = [pin for unit in units for pin in unit.pins]
+            if (
+                parse_value is not None
+                and len(symbol_pins) == 2
+                and parse_value(part.value) is not None
+                and pad_count >= 4
+                and pad_count >= 2 * len(symbol_pins)
+            ):
+                unused = sorted(
+                    number for number, nets in footprint.pads.items()
+                    if all(net is None for net in nets)
+                )
+                if len(unused) >= 2:
+                    numbers = ", ".join(unused)
+                    emit(
+                        "footprint", part,
+                        f"is a 2-pin {part.value} in a {footprint.library} footprint "
+                        f"with {pad_count} pads; pads {numbers} have no net. A plain "
+                        f"2-pin part does not need a {pad_count}-pad package — check the "
+                        "footprint assignment (wrong package, or a multi-function part was intended).",
+                        symbol_pins, [(board_path, f"{footprint.library}, no-net pads {numbers}")],
+                        separator=" ",
+                    )
+            if pad_count:
+                connected = {}
+                for pin in symbol_pins:
+                    name = pin.name.upper()
+                    if (
+                        pin.kind not in {"no_connect", "shield"}
+                        and name not in {"NC", "DNC", "N/C"}
+                        and not re.fullmatch(r"SH(?:IELD(?:__\d+)?|\d+)?", name)
+                        and (names(pin.net) or any(
+                            (peer.reference, peer.number) != (pin.reference, pin.number)
+                            for peer in peers(pin)
+                        ))
+                    ):
+                        connected.setdefault(pin.number, pin)
+                if len(connected) > pad_count:
+                    excess = [connected[number] for number in sorted(connected.keys() - footprint.pads)]
+                    missing = ", ".join(f"{pin.number} {pin.name}".strip() for pin in excess)
+                    emit(
+                        "footprint", part,
+                        f"symbol has {len(connected)} connected pins but its {footprint.library} "
+                        f"footprint has only {pad_count} pads. Pins {missing} have no pad — "
+                        "check the footprint assignment (wrong package, or pins were meant to be unconnected).",
+                        excess, [(board_path, footprint.library)], separator=" ",
+                    )
         # Connector identities and pin functions are read from the embedded symbol.
         usb_c = {"CC1", "CC2"} <= {p.name for p in pins}
         usb = (

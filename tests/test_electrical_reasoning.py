@@ -1329,3 +1329,78 @@ def test_vddpll_filter(pll_rail, core_rail, inductor, dnp, has_output, expected)
         assert "capacitor-only net DECOUPLING (C7)" in summary
     else:
         assert "L9" not in summary
+
+
+@pytest.mark.parametrize(
+    "case,expected",
+    [
+        ("oversized", "pads 3, 4, 5, 6 have no net"),
+        ("paralleled", None),
+        ("one-unused", None),
+        ("three-pads", None),
+        ("resistor-array", None),
+        ("dnp", None),
+        ("undersized", "Pins 6 Signal"),
+        ("duplicate", None),
+        ("shield", None),
+        ("no-connect", None),
+        ("zero-pads", None),
+        ("multi-unit", None),
+        ("missing-footprint", None),
+        ("unnumbered", None),
+    ],
+)
+def test_footprint_pin_count(case, expected):
+    passive_cases = {
+        "oversized", "paralleled", "one-unused", "three-pads", "resistor-array",
+        "dnp", "missing-footprint", "unnumbered",
+    }
+    reference = "R1" if case in passive_cases else "U1"
+    pin_specs = [(str(number), "Signal", "passive") for number in range(1, 7)]
+    if case in passive_cases - {"resistor-array"}:
+        pin_specs = pin_specs[:2]
+    if case == "duplicate":
+        pin_specs[-1] = pin_specs[0]
+    if case == "shield":
+        pin_specs[-1] = ("SH1", "SHIELD__1", "passive")
+    if case == "no-connect":
+        pin_specs[-1] = ("6", "DNC", "no_connect")
+
+    pins = [(*spec, 10 * index, 0) for index, spec in enumerate(pin_specs, 1)]
+    value = "10k" if case in passive_cases else "Test device"
+    properties = {"_dnp": case == "dnp"}
+    parts = [(reference, "Test:Part", value, pins, properties)]
+    if case == "multi-unit":
+        parts = [
+            (reference, "Test:UnitA", value, pins[:3], properties),
+            (reference, "Test:UnitB", value, pins[3:], properties),
+        ]
+    schematic = design(parts, labels=[(f"NET{index}", x, y)
+                                     for index, (_, _, _, x, y) in enumerate(pins, 1)])
+    numbered = {
+        "one-unused": 4, "three-pads": 3, "zero-pads": 0,
+        "multi-unit": 6, "unnumbered": 2,
+    }.get(case, 6 if case in passive_cases else 5)
+    wired = {"paralleled": 6, "one-unused": 3, "three-pads": 1}.get(case, 2)
+    pads = []
+    for number in range(1, numbered + 1):
+        net = f' (net "NET{number}")' if number <= wired else ""
+        pads.append(f'(pad "{number}" smd rect{net})')
+    if case in {"zero-pads", "unnumbered"}:
+        pads.extend(['(pad "" np_thru_hole circle)'] * 4)
+    footprint = (
+        f'(footprint "Test:Package" (at 1 2) (layer "F.Cu") '
+        f'(property "Reference" "{reference}") {" ".join(pads)})'
+    )
+    if case == "missing-footprint":
+        footprint = ""
+    board = f"(kicad_pcb (version 20251028) {footprint})".encode()
+    findings, _ = analyze({"test.kicad_sch": schematic, "test.kicad_pcb": board})
+    rows = [f for f in findings if f["rule_id"] == "electrical.footprint"]
+    if expected is None:
+        assert rows == []
+    else:
+        row, = rows
+        assert expected in row["summary"]
+        assert row["severity"] == "warning"
+        assert "Test:Package" in row["summary"]
