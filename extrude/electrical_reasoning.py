@@ -26,6 +26,11 @@ FAMILIES = (
 )
 
 
+def _designator(ref):
+    """Reference without an optional lowercase sheet prefix."""
+    return re.sub(r"^[a-z]+", "", ref or "")
+
+
 def resistance(value):
     value = value.strip().replace("Ω", "").replace("ohm", "")
     m = re.fullmatch(
@@ -110,7 +115,7 @@ def _analyze_design(
 
     def ground(net):
         return any(
-            re.fullmatch(r"(?i)(GND|AGND|DGND|VSS|GNDA)", n)
+            re.fullmatch(r"(?i)(GND[A-Z]*|AGND|DGND|VSS)", n)
             for n in [*names(net), *(p.name for p in g.nets.get(net, []))]
         )
 
@@ -165,7 +170,7 @@ def _analyze_design(
     resistors = [
         p
         for p in g.parts
-        if p.reference.startswith("R")
+        if _designator(p.reference).startswith("R")
         and len(p.pins) == 2
         and p.fitted
         and resistance(p.value) is not None
