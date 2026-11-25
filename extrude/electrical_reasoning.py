@@ -26,6 +26,11 @@ FAMILIES = (
 )
 
 
+def _designator(ref):
+    """Reference without an optional lowercase sheet prefix."""
+    return re.sub(r"^[a-z]+", "", ref or "")
+
+
 def resistance(value):
     value = value.strip().replace("Ω", "").replace("ohm", "")
     m = re.fullmatch(
@@ -110,7 +115,7 @@ def _analyze_design(
 
     def ground(net):
         return any(
-            re.fullmatch(r"(?i)(GND|AGND|DGND|VSS|GNDA)", n)
+            re.fullmatch(r"(?i)(GND[A-Z]*|AGND|DGND|VSS)", n)
             for n in [*names(net), *(p.name for p in g.nets.get(net, []))]
         )
 
@@ -157,15 +162,26 @@ def _analyze_design(
         if not g.issues and inventory_complete:
             schematic_refs = {p.reference for p in g.parts}
             from extrude.electrical_graph import Part
+            skipped_refs = []
             for ref in sorted(electrical_board_refs - schematic_refs - {None, ""}):
+                if "**" in ref:
+                    skipped_refs.append(ref)
+                    continue
                 emit("assembly", Part(ref, "", "", "", board_path, {}, True, True),
                      "has a PCB footprint but no symbol in the paired schematic — its connectivity and BOM intent are unrepresented. Reconcile the board and schematic.")
+            if skipped_refs:
+                coverage.append((
+                    board_path,
+                    "assembly",
+                    f"Skipped {len(skipped_refs)} placeholder footprint(s) ({', '.join(skipped_refs)}): "
+                    "un-annotated, no schematic symbol expected.",
+                ))
         coverage.append((board_path, "assembly", "Compared paired schematic and PCB component inventories."))
     byref = {(p.path, p.reference): p for p in g.parts}
     resistors = [
         p
         for p in g.parts
-        if p.reference.startswith("R")
+        if _designator(p.reference).startswith("R")
         and len(p.pins) == 2
         and p.fitted
         and resistance(p.value) is not None

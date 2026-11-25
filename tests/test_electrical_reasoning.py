@@ -27,7 +27,7 @@ def design(parts, labels=(), wires=(), junctions=()):
             **{k: v for k, v in props.items() if not k.startswith("_")},
         }
         properties = " ".join(
-            f"(property {json.dumps(k)} {json.dumps(v)})" for k, v in fields.items()
+            f"(property {json.dumps(k)} {json.dumps(v, ensure_ascii=False)})" for k, v in fields.items()
         )
         placed.append(
             f'(symbol (lib_id "{symbol}") (at 0 0 0) (unit 1) (in_bom yes) (on_board yes) (uuid "{ref}") {properties})'
@@ -165,6 +165,63 @@ def test_cap_derating_and_corrected_rating():
     assert any("79.4%" in s for s in summaries({"a.kicad_sch": design([part], labels)}))
     corrected = (*part[:2], "100uF 16V", *part[3:])
     assert summaries({"a.kicad_sch": design([corrected], labels)}) == []
+
+
+@pytest.mark.parametrize(
+    "reference,value,ground_name,marker,dnp,attached",
+    [
+        ("rR1", "5.1k", "GNDR", "pin", False, None),
+        ("R1", "5.1k", "GND", "label", False, None),
+        ("lR1", "5.1kΩ", "GNDA", "label", False, None),
+        ("R1", "5.1k", "GNDR", "label", False, None),
+        ("R1", "5.1k", "GNDPWR", "label", False, None),
+        ("R1", "5.1k", "GNDREF", "label", False, None),
+        # 4.7 kΩ is within the preserved 4080–6120 Ω window.
+        ("R1", "4.7k", "GND", "label", False, None),
+        (None, None, None, "label", False, "no load"),
+        ("R1", "3.9k", "GND", "label", False, "R1 ~"),
+        ("R1", "5.1k", "SIGNAL", "label", False, "R1 ~"),
+        ("R1", "5.1k", "GND_SENSE", "label", False, "R1 ~"),
+        ("R1", "5.1k", "GND1", "label", False, "R1 ~"),
+        ("rR1", "5.1k", "GND", "label", True, "rR1 ~"),
+    ],
+)
+def test_usb_cc_pull_down_recognition(reference, value, ground_name, marker, dnp, attached):
+    connector = (
+        "J1",
+        "Connector:USB_C",
+        "USB-C",
+        [("1", "D+", "passive", 0, 0), ("2", "CC1", "passive", 10, 0)],
+        {},
+    )
+    parts = [connector]
+    labels = []
+    if reference:
+        parts.append(resistor(reference, value, (10, 0), (20, 0)))
+        if marker == "pin":
+            parts.append(
+                ("#PWR01", "Custom:Ground", ground_name,
+                 [("1", ground_name, "power_in", 20, 0)], {})
+            )
+        else:
+            labels.append((ground_name, 20, 0))
+    schematic = design(parts, labels)
+    if dnp:
+        schematic = schematic.replace(
+            f'(uuid "{reference}")'.encode(), f'(dnp yes) (uuid "{reference}")'.encode()
+        )
+    findings, _ = analyze({"usb.kicad_sch": schematic})
+    usb_findings = [f for f in findings if f["rule_id"] == "electrical.usb"]
+    if attached is None:
+        assert usb_findings == []
+    else:
+        assert [(f["summary"], f["status"]) for f in usb_findings] == [
+            (
+                "J1: CC1 has no independent 5.1kΩ Rd to GND for a USB-C sink; "
+                f"connected to {attached}. Fit separate Rd resistors and remove non-CC connections.",
+                "verified",
+            )
+        ]
 
 
 def test_usb_uart_cc_and_corrected_usb_sink():
@@ -535,7 +592,8 @@ def test_input_voltage_is_not_output_and_optional_crystal_loads_are_not_defects(
     assert any("integrated load capacitance" in d for _, _, d in c)
 
 
-def test_i2c_pullups_with_tolerance_notation_are_recognized():
+@pytest.mark.parametrize("prefix", ["", "r"])
+def test_i2c_pullups_with_tolerance_notation_are_recognized(prefix):
     mcu = (
         "U90",
         "Generic:MCU",
@@ -546,8 +604,8 @@ def test_i2c_pullups_with_tolerance_notation_are_recognized():
     parts = [
         mcu,
         ("U91", "Generic:Sensor", "sensor", mcu[3], {}),
-        resistor("R90", "10kR 1%", (0, 0), (20, 0)),
-        resistor("R91", "10kR 1%", (10, 0), (20, 0)),
+        resistor(f"{prefix}R90", "10kR 1%", (0, 0), (20, 0)),
+        resistor(f"{prefix}R91", "10kR 1%", (10, 0), (20, 0)),
     ]
     assert not summaries({"i2c.kicad_sch": design(parts, [("+3V3", 20, 0)])})
 

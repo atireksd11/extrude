@@ -150,3 +150,45 @@ def test_repeated_sheet_remains_excluded_with_reverse_check_gated():
     _, coverage = analyze(files)
     assert any(path == "common.kicad_sch" and "repeated sheet instances" in detail
                for path, _, detail in coverage)
+
+
+def test_placeholder_refs_are_skipped_with_one_coverage_entry():
+    files = {
+        "board.kicad_sch": design([device("U1")]),
+        "board.kicad_pcb": board(["R**1", "REF**", "REF**"]),
+    }
+    findings, coverage = analyze(files)
+    summaries = [f["summary"] for f in findings if f["rule_id"] == "electrical.assembly"]
+    assert len(summaries) == 1
+    assert summaries[0].startswith("U1:") and "has no footprint" in summaries[0]
+    assert [entry for entry in coverage if entry[2].startswith("Skipped ")] == [(
+        "board.kicad_pcb",
+        "assembly",
+        "Skipped 2 placeholder footprint(s) (R**1, REF**): un-annotated, no schematic symbol expected.",
+    )]
+
+
+@pytest.mark.parametrize("ref", ["locked", "H1", "123"])
+def test_pcb_only_refs_without_placeholder_marker_still_flag(ref):
+    pcb = board(["U1", ref])
+    if ref == "H1":
+        pcb = pcb.replace(b'"Test:Part"', b'"MountingHole:MountingHole_4.3x6.2mm"')
+    if ref == "locked":
+        # The legacy parser reads the text modifier as the reference.
+        pcb = pcb.replace(b'(property "Reference" "locked")',
+                          b'(fp_text reference locked "U2" (at 0 0) (layer "F.SilkS"))')
+    summaries = assembly({"board.kicad_sch": design([device("U1")]), "board.kicad_pcb": pcb})
+    assert len(summaries) == 1
+    assert summaries[0].startswith(f"{ref}:") and "no symbol" in summaries[0]
+
+
+def test_astra_placeholder_skip_preserves_all_deletion_warnings():
+    refs = ["SW1", "SW3", "SW6", "R36", "R37", "R38", "C32", "C33", "C34", "U13", "UE1"]
+    schematic = design([device("U1"), *(device(ref) for ref in refs)])
+    summaries = assembly({"board.kicad_sch": schematic, "board.kicad_pcb": board(["U1", "REF**"])})
+    assert sorted(summaries) == sorted(
+        f"{ref}: is in the schematic and marked for BOM inclusion but has no footprint on the paired board — "
+        "bus peripheral cannot be assembled, so its circuit function is absent. "
+        "Restore the footprint or reconcile the schematic and assembly intent."
+        for ref in refs
+    )
