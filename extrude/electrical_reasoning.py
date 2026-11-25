@@ -13,6 +13,7 @@ from extrude.workspace_checks import evidence
 
 FAMILIES = (
     "usb",
+    "usb_shield",
     "divider",
     "capacitor",
     "ldo",
@@ -35,7 +36,7 @@ def _designator(ref):
 def resistance(value):
     value = value.strip().replace("Ω", "").replace("ohm", "")
     m = re.fullmatch(
-        r"(\d+(?:\.\d+)?)\s*([RrKkMm]?)(\d*)(?:[Rr])?(?:\s*(?:±|\+/-)?\s*\d+(?:\.\d+)?\s*%)?",
+        r"(\d+(?:\.\d+)?)\s*([RrKkMm]?)(\d*)(?:[Rr])?(?:\s*(?:\(\s*)?(?:±|\+/-)?\s*\d+(?:\.\d+)?\s*%(?:\s*\))?)?",
         value,
     )
     if not m:
@@ -253,9 +254,11 @@ def _analyze_design(
             continue
         pins = part.pins
         # Connector identities and pin functions are read from the embedded symbol.
-        usb = "USB" in part.symbol.upper() and any(
-            p.name in {"D+", "D-", "DP", "DM"} for p in pins
-        )
+        usb_c = {"CC1", "CC2"} <= {p.name for p in pins}
+        usb = (
+            "USB" in part.symbol.upper()
+            and any(p.name in {"D+", "D-", "DP", "DM"} for p in pins)
+        ) or usb_c
         if usb:
             for p in pins:
                 if p.name in {"CC1", "CC2"}:
@@ -295,15 +298,6 @@ def _analyze_design(
                             f"{p.name} routes to {q.reference} pin {q.number} {q.name}, a UART function rather than a USB data pin. Route the pair to documented native USB D+/D- pins or a USB bridge.",
                             [p, q],
                         )
-            shield = [p for p in pins if p.name.upper() in {"SHIELD", "SH", "S"}]
-            for p in shield:
-                if len(peers(p)) == 1:
-                    emit(
-                        "protection",
-                        part,
-                        "SHIELD is unconnected. Provide an intentional chassis/ground termination.",
-                        [p],
-                    )
             data = [p for p in pins if p.name in {"D+", "D-", "DP", "DM"}]
             protected = any(
                 re.search(
@@ -329,6 +323,32 @@ def _analyze_design(
                     data,
                 )
                 findings[-1]["status"] = "suggestion"
+            if part.fitted:
+                shield = [
+                    p
+                    for p in pins
+                    if p.name.upper() in {"SHIELD", "SH", "S"}
+                    or re.fullmatch(r"SHIELD(__\d+)?|SH\d+", p.name.upper())
+                ]
+                unconnected = [p for p in shield if len(peers(p)) == 1]
+                if unconnected:
+                    numbers = ", ".join(p.number for p in unconnected)
+                    connector = "USB-C" if usb_c else "USB"
+                    emit(
+                        "usb_shield",
+                        part,
+                        f"{connector} shield pins {numbers} are unconnected — "
+                        "the connector shell has no ground path. Provide an intentional "
+                        "chassis/ground termination (direct GND, or an RC termination).",
+                        unconnected,
+                    )
+                elif usb_c and not shield:
+                    coverage.append((
+                        part.path,
+                        "usb_shield",
+                        f"Not checked: {part.reference} USB-C connector has no shield pin "
+                        "in its symbol; shield termination cannot be evaluated from the schematic.",
+                    ))
         if (
             part.reference.startswith("J")
             and re.search(r"(?i)(TRRS|Jack|Connector)", part.symbol)

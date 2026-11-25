@@ -71,6 +71,13 @@ def summaries(files):
         ("10kR 1%", 10000),
         ("22k1R 1%", 22100),
         ("5k1R 1%", 5100),
+        ("5.1K(1%)", 5100),
+        ("10K(5%)", 10000),
+        ("0(1%)", 0),
+        ("5.1K(±1%)", 5100),
+        ("5.1K(1%)x", None),
+        ("5.1K%", None),
+        ("5.1K ±1%", 5100),
     ],
 )
 def test_resistor_units(value, expected):
@@ -109,7 +116,8 @@ def test_rotation_and_mirror(angle, mirror):
     assert p.net[1:] == pytest.approx((20 + x, 30 - y), abs=1e-5)
 
 
-def test_divider_and_corrected_design_have_no_flags():
+@pytest.mark.parametrize("ten_k_value", ["10k", "10K(1%)"])
+def test_divider_and_corrected_design_have_no_flags(ten_k_value):
     adc = (
         "U99",
         "Generic:Converter",
@@ -120,12 +128,12 @@ def test_divider_and_corrected_design_have_no_flags():
     parts = [
         adc,
         resistor("R9", "5k6", (10, 0), (0, 0)),
-        resistor("R10", "10k", (0, 0), (20, 0)),
+        resistor("R10", ten_k_value, (0, 0), (20, 0)),
     ]
     labels = [("VBUS", 10, 0), ("GND", 20, 0), ("3V3", 30, 0)]
     files = {"board.kicad_sch": design(parts, labels)}
     assert any("3.37V" in s and "U99" in s and "AIN_ADC" in s for s in summaries(files))
-    parts[1] = resistor("R9", "10k", (10, 0), (0, 0))
+    parts[1] = resistor("R9", ten_k_value, (10, 0), (0, 0))
     assert summaries({"board.kicad_sch": design(parts, labels)}) == []
 
 
@@ -225,7 +233,8 @@ def test_usb_cc_pull_down_recognition(reference, value, ground_name, marker, dnp
         ]
 
 
-def test_usb_uart_cc_and_corrected_usb_sink():
+@pytest.mark.parametrize("rd_value", ["5.1k", "5.1K(1%)"])
+def test_usb_uart_cc_and_corrected_usb_sink(rd_value):
     connector = (
         "J90",
         "Connector:USB_C",
@@ -250,7 +259,7 @@ def test_usb_uart_cc_and_corrected_usb_sink():
     assert (
         any("UART_TX" in s for s in f)
         and any("CC1" in s for s in f)
-        and any("SHIELD" in s for s in f)
+        and any("shield pins 5" in s for s in f)
     )
     usb = (
         *uart[:3],
@@ -275,8 +284,8 @@ def test_usb_uart_cc_and_corrected_usb_sink():
         connector,
         usb,
         esd,
-        resistor("R90", "5.1k", (20, 0), (40, 0)),
-        resistor("R91", "5.1k", (30, 0), (40, 0)),
+        resistor("R90", rd_value, (20, 0), (40, 0)),
+        resistor("R91", rd_value, (30, 0), (40, 0)),
     ]
     assert summaries({"a.kicad_sch": design(parts, [("GND", 40, 0)])}) == []
 
@@ -594,7 +603,8 @@ def test_input_voltage_is_not_output_and_optional_crystal_loads_are_not_defects(
 
 
 @pytest.mark.parametrize("prefix", ["", "r"])
-def test_i2c_pullups_with_tolerance_notation_are_recognized(prefix):
+@pytest.mark.parametrize("pullup_value", ["10kR 1%", "5.1K(1%)"])
+def test_i2c_pullups_with_tolerance_notation_are_recognized(prefix, pullup_value):
     mcu = (
         "U90",
         "Generic:MCU",
@@ -605,8 +615,8 @@ def test_i2c_pullups_with_tolerance_notation_are_recognized(prefix):
     parts = [
         mcu,
         ("U91", "Generic:Sensor", "sensor", mcu[3], {}),
-        resistor(f"{prefix}R90", "10kR 1%", (0, 0), (20, 0)),
-        resistor(f"{prefix}R91", "10kR 1%", (10, 0), (20, 0)),
+        resistor(f"{prefix}R90", pullup_value, (0, 0), (20, 0)),
+        resistor(f"{prefix}R91", pullup_value, (10, 0), (20, 0)),
     ]
     assert not summaries({"i2c.kicad_sch": design(parts, [("+3V3", 20, 0)])})
 
@@ -771,3 +781,80 @@ def test_ldo_shared_rail_only_checks_regulator_on_output_side():
     findings, _ = ldo_design([ldo_cap("C1")], extra_parts=[downstream])
     assert len(findings) == 1
     assert findings[0]["summary"].startswith("U1 AMS1117 output +3V3:")
+
+
+@pytest.mark.parametrize(
+    ("case", "floating", "missing"),
+    [
+        ("floating", ("SH1", "SH2"), False),
+        ("grounded", (), False),
+        ("rc", (), False),
+        ("numbered name", ("SH1",), False),
+        ("missing", (), True),
+        ("dnp", (), False),
+        ("dnp missing", (), False),
+        ("omitted note", ("SH1", "SH2"), False),
+        ("one cc pin", (), False),
+        ("no-connect marker", ("SH1", "SH2"), False),
+        ("split", ("SH2",), False),
+        ("legacy USB", ("SH1", "SH2"), False),
+    ],
+)
+def test_usb_shield_topology(case, floating, missing):
+    symbol = "Connector:USB_B_Micro" if case == "legacy USB" else "Vendor:UJ32-C"
+    pins = [("A5", "CC1", "passive", 0, 0), ("B12", "GND__3", "passive", 50, 0)]
+    if case == "legacy USB":
+        pins += [("A6", "D+", "passive", 10, 0), ("A7", "D-", "passive", 15, 0)]
+    elif case != "one cc pin":
+        pins.append(("B5", "CC2", "passive", 10, 0))
+    if case == "numbered name":
+        pins.append(("SH1", "SH1", "passive", 20, 0))
+    elif case not in {"missing", "dnp missing"}:
+        pins += [
+            ("SH1", "SHIELD", "passive", 20, 0),
+            ("SH2", "SHIELD__1", "passive", 30, 0),
+        ]
+
+    parts = [("J3", symbol, "Receptacle", pins, {"_dnp": case.startswith("dnp")})]
+    labels = []
+    wires = []
+    if case in {"grounded", "split"}:
+        ground = ("#PWR01", "power:GND", "GND", [("1", "GND", "power_in", 20, 0)], {})
+        parts.append(ground)
+        if case == "grounded":
+            wires.append((20, 0, 30, 0))
+    elif case == "rc":
+        parts += [
+            resistor("R3", "1M", (20, 0), (60, 0)),
+            ("C4", "Device:C", "100n", [("1", "~", "passive", 20, 0),
+                                       ("2", "~", "passive", 60, 0)], {}),
+        ]
+        labels.append(("GND", 60, 0))
+        wires.append((20, 0, 30, 0))
+
+    schematic = design(parts, labels=labels, wires=wires)
+    if case == "omitted note":
+        schematic = schematic[:-1] + b' (text "J3 Omitted, insufficient space" (at 0 1 0)))'
+    if case == "no-connect marker":
+        schematic = schematic[:-1] + b' (no_connect (at 20 0) (uuid "nc")))'
+    findings, coverage = analyze({"shield.kicad_sch": schematic})
+    shields = [f for f in findings if f["rule_id"] == "electrical.usb_shield"]
+    assert len(shields) == bool(floating)
+    if floating:
+        connector = "USB" if case == "legacy USB" else "USB-C"
+        assert shields[0]["summary"] == (
+            f"J3: {connector} shield pins {', '.join(floating)} are unconnected — "
+            "the connector shell has no ground path. Provide an intentional "
+            "chassis/ground termination (direct GND, or an RC termination)."
+        )
+        assert (shields[0]["severity"], shields[0]["status"]) == ("warning", "verified")
+    missing_shield = (
+        "Not checked: J3 USB-C connector has no shield pin in its symbol; "
+        "shield termination cannot be evaluated from the schematic."
+    )
+    assert (missing_shield in [detail for _, _, detail in coverage]) == missing
+    if case == "legacy USB":
+        assert any(
+            f["rule_id"] == "electrical.protection" and "ESD" in f["summary"]
+            for f in findings
+        )
