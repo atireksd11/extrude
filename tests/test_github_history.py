@@ -1,6 +1,7 @@
 """Exercise the actual Git cache against a controlled local remote."""
 
 import subprocess
+from pathlib import Path
 
 import pytest
 from fastapi.testclient import TestClient
@@ -16,6 +17,14 @@ def board_source(x: int, net: str) -> str:
         (uuid "26a9ce10-32a1-41f6-94ca-67b1e8290eb8") (property "Reference" "J1")
         (pad "1" thru_hole circle (at 0 0) (size 2 2) (drill 1)
           (layers "*.Cu" "*.Mask") (net 1 "{net}"))))\n'''
+
+
+def _fetch_local(run, command, url, source, **kwargs):
+    local = command.copy()
+    local[local.index(url)] = str(source)
+    fetch = local.index("fetch")
+    local[fetch:fetch] = ["-c", "protocol.file.allow=always", "-c", "fetch.unpackLimit=1"]
+    return run(local, **kwargs)
 
 
 def test_rejects_non_github_sources_and_paths():
@@ -42,10 +51,16 @@ def test_import_sync_and_compare_saved_history(tmp_path, monkeypatch):
             "-c", "commit.gpgsign=false", "commit", "-m", message)
         return git("rev-parse", "HEAD")
 
-    def fetch(repo, _source):
-        store._git(repo, "fetch", "--no-tags", str(source), "+HEAD:refs/atlas/fetched")
+    run = subprocess.run
+    remote_url = "https://github.com/owner/robot.git"
 
-    monkeypatch.setattr(store, "_fetch", fetch)
+    def fetch_local(command, **kwargs):
+        if remote_url in command:
+            return _fetch_local(run, command, remote_url, source, **kwargs)
+        return run(command, **kwargs)
+
+    monkeypatch.delenv("EXTRUDE_GITHUB_OFFLINE")
+    monkeypatch.setattr(store.subprocess, "run", fetch_local)
     git("init", "--template=")
     board = source / "main.kicad_pcb"
     before_board = board_source(10, "GND")
@@ -123,3 +138,83 @@ def test_import_sync_and_compare_saved_history(tmp_path, monkeypatch):
     monkeypatch.setattr(store, "_fetch", fail)
     assert client.post(f"{url}/sync").status_code == 502
     assert client.get(root).json()[0]["head"] == first
+
+
+_STALL = b"error: RPC failed; curl 28 Operation too slow. Less than 1000 bytes/sec transferred the last 60 seconds"
+_503 = b"fatal: unable to access remote: The requested URL returned error: 503"
+_UNAVAILABLE = "Repository, commit, or file unavailable."
+
+
+@pytest.mark.parametrize(("failures", "backoff", "outcomes", "detail"), [
+    ([_STALL], [10], ["stall", "ok"], None),
+    ([_STALL, _STALL, _STALL], [10, 30], ["stall"] * 3,
+     "Fetch retries exhausted: fetch stalled after 3 attempts."),
+    ([b"fatal: couldn't find remote ref HEAD"], [], ["not-found"], _UNAVAILABLE),
+    ([b"fatal: The requested URL returned error: 404"], [], ["not-found"], _UNAVAILABLE),
+    ([b"fatal: Authentication failed"], [], ["not-found"], _UNAVAILABLE),
+    ([b"fatal: Could not resolve host: github.com"], [], ["not-found"], _UNAVAILABLE),
+    ([_503], [10], ["5xx", "ok"], None),
+    ([subprocess.TimeoutExpired], [10], ["timeout", "ok"], None),
+    ([], [], ["ok"], None),
+])
+def test_fetch_attempts(tmp_path, monkeypatch, caplog, failures, backoff, outcomes, detail):
+    monkeypatch.setenv("EXTRUDE_DATA_DIR", str(tmp_path / "state"))
+    monkeypatch.delenv("EXTRUDE_GITHUB_OFFLINE")
+    upstream = tmp_path / "upstream"
+    subprocess.run(["git", "init", "--quiet", "--template=", str(upstream)], check=True)
+    (upstream / "README.md").write_text("fixture\n", encoding="utf-8")
+    subprocess.run(["git", "-C", str(upstream), "add", "README.md"], check=True)
+    subprocess.run(["git", "-C", str(upstream), "-c", "user.name=Builder",
+                    "-c", "user.email=builder@example.invalid", "-c", "commit.gpgsign=false",
+                    "commit", "--quiet", "-m", "Fixture"], check=True)
+    revision = subprocess.check_output(["git", "-C", str(upstream), "rev-parse", "HEAD"],
+                                       text=True).strip()
+    run = subprocess.run
+    attempts = []
+    waits = []
+
+    def git(command, **kwargs):
+        url = "https://github.com/owner/fixture.git"
+        if url not in command:
+            return run(command, **kwargs)
+        staging = Path(command[1].removeprefix("--git-dir="))
+        assert not any(path.exists() for path in attempts)
+        assert set(staging.parent.glob(".fetch-*")) == {staging}
+        assert "http.lowSpeedLimit=1000" in command and "http.lowSpeedTime=60" in command
+        assert kwargs["timeout"] == 300
+        index = len(attempts)
+        attempts.append(staging)
+        if index < len(failures):
+            (staging / "objects/pack/tmp_pack_partial").write_bytes(b"partial")
+            if failures[index] is subprocess.TimeoutExpired:
+                raise subprocess.TimeoutExpired(command, kwargs["timeout"])
+            return subprocess.CompletedProcess(command, 128, b"", failures[index])
+        return _fetch_local(run, command, url, upstream, **kwargs)
+
+    def sleep(seconds):
+        assert not any(path.exists() for path in attempts)
+        waits.append(seconds)
+
+    monkeypatch.setattr(store.subprocess, "run", git)
+    monkeypatch.setattr(store, "sleep", sleep)
+    caplog.set_level("INFO", logger="uvicorn.error")
+    client = TestClient(app)
+    response = client.post("/v1/github/repositories", json={"source": "owner/fixture"})
+    assert len(attempts) == len(outcomes)
+    assert not any(path.exists() for path in attempts)
+    assert waits == backoff
+    lines = [record.message for record in caplog.records if record.message.startswith("Git fetch attempt")]
+    assert len(lines) == len(outcomes)
+    for number, (line, outcome) in enumerate(zip(lines, outcomes), 1):
+        assert line.startswith(f"Git fetch attempt {number}/3 duration=")
+        assert line.endswith(f"s outcome={outcome}")
+
+    if detail:
+        assert response.status_code == 502
+        assert response.json() == {"detail": detail}
+        assert store.repositories() == []
+    else:
+        assert response.status_code == 200, response.text
+        assert response.json()["head"] == revision
+        repo_id = response.json()["id"]
+        assert store.regular_blob(repo_id, revision, "README.md", max_bytes=100) == b"fixture\n"
