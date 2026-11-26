@@ -2,11 +2,14 @@
 
 import base64
 import hashlib
+import logging
 import os
 import re
 import subprocess
+import tempfile
 import threading
 from pathlib import Path
+from time import monotonic, sleep
 
 from extrude.project_map import KINDS
 from extrude.runtime import data_dir
@@ -19,10 +22,41 @@ _HEAD = "refs/atlas/head"
 _PREVIOUS = "refs/atlas/previous"
 _FETCHED = "refs/atlas/fetched"
 _MAX_PREVIEW = 128_000
+FETCH_TIMEOUT_S = 300
+FETCH_MAX_ATTEMPTS = 3
+FETCH_RETRY_BACKOFF_S = (10, 30)
+
+_LOG = logging.getLogger("uvicorn.error")
+_HTTP_ERROR = re.compile(rb"the requested url returned error: (\d{3})\b")
+_FETCH_UNAVAILABLE = "Repository, commit, or file unavailable."
+_FETCH_FAILED = "GitHub import failed. Check the repository URL and read access, then try again."
+_RETRYABLE_FETCH = {"stall": "stalled", "timeout": "timed out", "5xx": "received an HTTP 5xx error"}
 
 
 class GitHubError(RuntimeError):
     """A GitHub operation failed with a message safe to show in Atlas."""
+
+
+class _FetchError(GitHubError):
+    def __init__(self, outcome: str, detail: str = _FETCH_FAILED):
+        super().__init__(detail)
+        self.outcome = outcome
+
+
+def _fetch_error(stderr: bytes) -> _FetchError:
+    error = stderr.lower()
+    status = _HTTP_ERROR.search(error)
+    if (status and status[1] in {b"401", b"403", b"404"}) or any(message in error for message in (
+        b"couldn't find remote ref", b"could not find remote ref", b"unknown revision",
+        b"repository not found", b"authentication failed", b"could not read username",
+        b"could not read password", b"could not resolve host", b"not our ref",
+    )):
+        return _FetchError("not-found", _FETCH_UNAVAILABLE)
+    if b"operation too slow" in error:
+        return _FetchError("stall")
+    if status and status[1].startswith(b"5"):
+        return _FetchError("5xx")
+    return _FetchError("error")
 
 
 def normalize(source: str) -> str:
@@ -46,7 +80,9 @@ def _git(repo: Path, *args: str, remote: bool = False, stdin: bytes | None = Non
                GIT_NO_REPLACE_OBJECTS="1")
     command = ["git", f"--git-dir={repo}", "-c", "core.hooksPath=" + os.devnull]
     if remote:
+        env["LC_ALL"] = "C"
         command += ["-c", "http.followRedirects=false", "-c", "credential.helper=",
+                    "-c", "http.lowSpeedLimit=1000", "-c", "http.lowSpeedTime=60",
                     "-c", "protocol.allow=never", "-c", "protocol.https.allow=always"]
         token = os.environ.get("EXTRUDE_GITHUB_TOKEN", "").strip()
         if token:
@@ -55,15 +91,19 @@ def _git(repo: Path, *args: str, remote: bool = False, stdin: bytes | None = Non
                        GIT_CONFIG_VALUE_0=f"Authorization: Basic {credential}")
     try:
         result = subprocess.run([*command, *args], env=env, input=stdin or b"",
-                                capture_output=True, timeout=90 if remote else 20, check=False)
+                                capture_output=True, timeout=FETCH_TIMEOUT_S if remote else 20, check=False)
     except FileNotFoundError as exc:
         raise GitHubError("Install Git on the computer running Extrude.") from exc
-    except (OSError, subprocess.TimeoutExpired):
+    except subprocess.TimeoutExpired:
+        if remote:
+            raise _FetchError("timeout") from None
+        raise GitHubError("Git did not finish. Try again.") from None
+    except OSError:
         # Avoid exception text containing remote output or Git arguments.
         raise GitHubError("Git did not finish. Try again.") from None
     if result.returncode:
         if remote:
-            raise GitHubError("GitHub import failed. Check the repository URL and read access, then try again.")
+            raise _fetch_error(result.stderr)
         raise GitHubError("Git could not read the requested repository data.")
     return result.stdout
 
@@ -109,8 +149,50 @@ def repositories() -> list[dict]:
 def _fetch(repo: Path, source: str) -> None:
     if os.environ.get("EXTRUDE_GITHUB_OFFLINE") == "1":
         raise GitHubError("Remote GitHub imports are disabled in this process.")
-    _git(repo, "fetch", "--no-tags", "--no-recurse-submodules", "--no-auto-maintenance",
-         f"https://github.com/{source}.git", f"+HEAD:{_FETCHED}", remote=True)
+    objects = repo / "objects"
+    for attempt in range(1, FETCH_MAX_ATTEMPTS + 1):
+        started = monotonic()
+        outcome = "error"
+        try:
+            # Borrow existing objects for negotiation without writing into the saved cache.
+            with tempfile.TemporaryDirectory(prefix=".fetch-", dir=repo) as directory:
+                staging = Path(directory)
+                _git(staging, "init", "--bare", "--template=")
+                (staging / "objects/info/alternates").write_text(
+                    f"{objects.resolve()}\n", encoding="utf-8")
+                _git(staging, "fetch", "--no-tags", "--no-recurse-submodules",
+                     "--no-auto-maintenance", f"https://github.com/{source}.git",
+                     f"+HEAD:{_FETCHED}", remote=True)
+                revision = _ref(staging, _FETCHED)
+                if not revision or not _SHA.fullmatch(revision):
+                    raise _FetchError("not-found", _FETCH_UNAVAILABLE)
+
+                # Publish immutable objects before updating the ref. Pack indexes go last,
+                # so readers cannot discover a pack before its data file is available.
+                staged_objects = (staging / "objects").glob("*/*")
+                for path in sorted(staged_objects, key=lambda candidate: candidate.suffix == ".idx"):
+                    if path.parent.name == "info":
+                        continue
+                    destination = objects / path.parent.name / path.name
+                    destination.parent.mkdir(exist_ok=True)
+                    if not destination.exists():
+                        path.replace(destination)
+                _git(repo, "update-ref", _FETCHED, revision)
+            outcome = "ok"
+            return
+        except _FetchError as exc:
+            outcome = exc.outcome
+            if outcome not in _RETRYABLE_FETCH:
+                raise
+            if attempt == FETCH_MAX_ATTEMPTS:
+                reason = _RETRYABLE_FETCH[outcome]
+                raise GitHubError(
+                    f"Fetch retries exhausted: fetch {reason} after {attempt} attempts."
+                ) from None
+        finally:
+            _LOG.info("Git fetch attempt %d/%d duration=%.3fs outcome=%s",
+                      attempt, FETCH_MAX_ATTEMPTS, monotonic() - started, outcome)
+        sleep(FETCH_RETRY_BACKOFF_S[attempt - 1])
 
 
 def _sync(repo: Path, source: str) -> None:
