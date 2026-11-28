@@ -4,7 +4,9 @@ import json
 import math
 import pytest
 from extrude.electrical_graph import _is_dnp_value, build
-from extrude.electrical_reasoning import analyze, capacitance, inductance, resistance
+from extrude.electrical_reasoning import (
+    _dedupe_findings, _revision_base, analyze, capacitance, inductance, resistance,
+)
 from extrude.workspace_audit import Finding, Coverage
 
 
@@ -1467,3 +1469,119 @@ def test_firmware_pin_crosscheck(arm, scenario, expected):
         assert any(word in rows[0] for word in ("ambiguous", "gate", "unsupported"))
     if expected:
         assert "firmware.c" in actual[0]["summary"]
+
+
+def _dedupe_example(*sources, **changes):
+    finding = dict(
+        rule_id="project.example", summary="Example finding", severity="warning",
+        status="verified", domain="project", lifecycle="present_at_head",
+        before={"value": 1}, after={"value": 2}, related=[],
+        sources=list(sources),
+    )
+    finding.update(changes)
+    return finding
+
+
+def test_dedupe_identical_findings_preserves_all_evidence_and_order():
+    first = _dedupe_example(("board.kicad_sch", "pin 2"), ("board.kicad_sch", "pin 1"))
+    second = _dedupe_example(("board.kicad_sch", "pin 3"), summary="Second finding")
+    duplicate = json.loads(json.dumps(first))
+    duplicate["sources"] = [tuple(source) for source in duplicate["sources"]]
+    result = _dedupe_findings([first, second, duplicate])
+    assert json.dumps(result) == json.dumps([first, second])
+
+
+def test_dedupe_revisions_unions_evidence_in_first_seen_order():
+    paths = ["board-v3.kicad_sch", "board-v1.kicad_sch", "board-v2.kicad_sch"]
+    sources = [(path, "pin 1") for path in paths]
+    first, second, third = [_dedupe_example(source) for source in sources]
+    result = _dedupe_findings([first, second, first, third])
+    assert result == [{**first, "sources": sources}]
+    assert first["sources"] == sources[:1]
+
+
+@pytest.mark.parametrize(
+    "changes",
+    [
+        {"rule_id": "project.other"},
+        {"summary": "Different finding"},
+        {"severity": "info"},
+        {"status": "suggestion"},
+        {"domain": "schematic"},
+        {"lifecycle": "new"},
+        {"before": {"value": 0}},
+        {"after": {"value": 3}},
+        {"related": [{"path": "notes.txt"}]},
+        {"sources": [("pcb/left/board.kicad_sch", "pin 2")]},
+        {"sources": [("pcb/left/board.kicad_sch", "pin 1")] * 2},
+        {"sources": [("pcb/right/board.kicad_sch", "pin 1")]},
+        {"sources": [("pcb/right/board-v2.kicad_sch", "pin 1")]},
+    ],
+)
+def test_dedupe_keeps_distinct_findings(changes):
+    first = _dedupe_example(("pcb/left/board.kicad_sch", "pin 1"))
+    second = {**first, **changes}
+    assert _dedupe_findings([first, second]) == [first, second]
+
+
+@pytest.mark.parametrize("locator", ["", None])
+def test_dedupe_skips_findings_with_any_missing_locator(locator):
+    finding = _dedupe_example(("board.kicad_sch", "pin 1"), ("board.kicad_sch", locator))
+    assert _dedupe_findings([finding, finding]) == [finding, finding]
+
+
+@pytest.mark.parametrize(
+    "path,expected",
+    [
+        *[
+            (
+                f"HARDWARE/ESP32-PoE-hardware-revision-{revision}/ESP32-PoE_Rev_{revision}.kicad_sch",
+                "HARDWARE/ESP32-PoE-hardware/ESP32-PoE.kicad_sch",
+            )
+            for revision in ("M", "M1", "M2")
+        ],
+        ("foo-revision-M.kicad_sch", "foo.kicad_sch"),
+        ("foo-rev2.kicad_sch", "foo.kicad_sch"),
+        ("foo_revB.kicad_sch", "foo.kicad_sch"),
+        ("foo_rev2.kicad_sch", "foo.kicad_sch"),
+        ("foo_RevA.kicad_sch", "foo.kicad_sch"),
+        ("foo_revision-M.kicad_sch", "foo.kicad_sch"),
+        ("foo-v3.kicad_sch", "foo.kicad_sch"),
+        *[(path, path) for path in (
+            "pcb/left/keyboard_pcb.kicad_sch",
+            "pcb/right/keyboard_pcb.kicad_sch",
+            "pcbs/common/left.kicad_sch",
+            "pcbs/common/right.kicad_sch",
+            "corne-cherry.kicad_sch",
+            "foo-RevA.kicad_sch",
+            "foo-Revision-M.kicad_sch",
+            "v1.2/board.kicad_sch",
+            "./../board.kicad_sch",
+        )],
+    ],
+)
+def test_revision_base(path, expected):
+    assert _revision_base(path) == expected
+
+
+@pytest.mark.parametrize(
+    "roots,source_paths",
+    [
+        (["board_Rev_A.kicad_sch", "board_Rev_B.kicad_sch"], [["board_Rev_A.kicad_sch", "board_Rev_B.kicad_sch"]]),
+        (["left/board.kicad_sch", "right/board.kicad_sch"], [["left/board.kicad_sch"], ["right/board.kicad_sch"]]),
+        (
+            [f"board-revision-{rev}/board_Rev_{rev}.kicad_sch" for rev in ("A", "B", "C")],
+            [[f"board-revision-{rev}/board_Rev_{rev}.kicad_sch" for rev in ("A", "B", "C")]],
+        ),
+    ],
+    ids=["two-revisions", "two-boards", "three-revisions"],
+)
+def test_analyze_dedupes_only_matching_roots(roots, source_paths):
+    part = (
+        "C1", "Device:C", "47uF/6.3V",
+        [("1", "~", "passive", 0, 0), ("2", "~", "passive", 10, 0)], {},
+    )
+    schematic = design([part], [("5V", 0, 0), ("GND", 10, 0)])
+    findings, _ = analyze(dict.fromkeys(reversed(roots), schematic))
+    assert [row["rule_id"] for row in findings] == ["electrical.capacitor"] * len(source_paths)
+    assert [[path for path, _ in row["sources"]] for row in findings] == source_paths

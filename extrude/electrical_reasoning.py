@@ -7,8 +7,9 @@ capabilities remain not checked.
 
 import csv
 import io
-import re
+import json
 import posixpath
+import re
 from extrude.electrical_graph import _is_dnp_value, build
 from extrude.workspace_checks import evidence
 
@@ -32,6 +33,12 @@ FAMILIES = (
     "models",
     "undriven",
     "firmware",
+)
+
+
+REVISION_SUFFIX_RE = re.compile(
+    r"(?:-revision-[A-Za-z0-9]+|-rev[A-Za-z0-9]*|_rev[A-Za-z0-9]*"
+    r"|_Rev[_A-Za-z0-9]*|_revision-[A-Za-z0-9]+|-v[0-9]+)$"
 )
 
 
@@ -1454,6 +1461,49 @@ def _not_checked(path, family, reason):
     return path, family, f"Not checked: {detail} — other files still analysed."
 
 
+def _revision_base(path):
+    """Strip supported revision suffixes from each path segment's stem."""
+    return "/".join(
+        REVISION_SUFFIX_RE.sub("", stem) + extension
+        for stem, extension in map(posixpath.splitext, path.split("/"))
+    )
+
+
+def _dedupe_findings(findings):
+    """Keep the first finding and union the sources of matching copies."""
+    survivors = []
+    by_key = {}
+    for finding in findings:
+        sources = finding["sources"]
+        if not all(locator for _, locator in sources):
+            survivors.append(finding)
+            continue
+        key = (
+            finding["rule_id"],
+            finding["summary"],
+            finding["severity"],
+            finding["status"],
+            finding["domain"],
+            finding.get("lifecycle"),
+            json.dumps(finding.get("before"), sort_keys=True),
+            json.dumps(finding.get("after"), sort_keys=True),
+            json.dumps(finding.get("related"), sort_keys=True),
+            tuple(sorted(locator for _, locator in sources)),
+            tuple(sorted(_revision_base(path) for path, _ in sources)),
+        )
+        if key not in by_key:
+            by_key[key] = len(survivors)
+            survivors.append(finding)
+            continue
+        index = by_key[key]
+        first = survivors[index]
+        # collect() hashes repo, SHA, path and locator into the evidence ID.
+        # Repo and SHA are shared by every source in this analyze() call.
+        merged = list(dict.fromkeys([*first["sources"], *sources]))
+        survivors[index] = {**first, "sources": merged}
+    return survivors
+
+
 def analyze(files, paths=None):
     """Keep independent boards/variants isolated; traverse each hierarchy once.
 
@@ -1588,6 +1638,7 @@ def analyze(files, paths=None):
     coverage = [row for row in coverage if row[1] != "firmware"]
     detail = " | ".join(firmware)
     coverage.append(("", "firmware", detail or "Not checked: no schematic design available."))
+    findings = _dedupe_findings(findings)
     return findings, list(dict.fromkeys(coverage))
 
 
